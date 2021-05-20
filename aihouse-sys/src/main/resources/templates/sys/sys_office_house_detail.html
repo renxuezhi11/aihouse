@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <script type="text/javascript" th:src="@{/js/viewer/viewer.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/viewer/viewer.min.css}" />
+    <style type="text/css">
+        .close{
+            position: absolute;
+            top:-9px;
+            right:-10px;
+            width:20px;
+            height:20px;
+            line-height: 18px;
+            text-align: center;
+            transform: rotate(40deg);
+            border-radius: 50%;
+            background:red;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .item{
+            width:100px;
+            height:100px;
+            position: relative;
+            display: inline-block;
+            margin:0 20px 20px 0;
+        }
+    </style>
+</head>
+<body class="body-common">
+    <div class="page-container">
+        <form class="layui-form layui-form-pane" action="">
+            <input type="hidden" name="id" th:value="${officehouse.id }" />
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>写字楼名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" maxlength="50" lay-verify="required" autocomplete="off"
+                           placeholder="写字楼名称" class="layui-input" th:value="${officehouse.name}" >
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>标题</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="title" id="title" maxlength="50"  autocomplete="off" lay-verify="required"
+                           class="layui-input" th:value="${officehouse.title}" >
+                </div>
+
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>楼层第</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="floorLevels" id="floorLevels" maxlength="50"  autocomplete="off"
+                                                                                       class="layui-input" th:value="${officehouse.floorLevels}" >
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>共</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="totalFloor" id="totalFloor" maxlength="50"  autocomplete="off"
+                           class="layui-input" th:value="${officehouse.totalFloor}" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>面积(平方)</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="coveredArea" id="coveredArea" maxlength="50" lay-verify="required" autocomplete="off"
+                           placeholder="请输入建筑面积" class="layui-input" th:value="${officehouse.coveredArea}" >
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>租金(元/月)</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="monthlyRent" id="monthlyRent" lay-verify="required" maxlength="50" autocomplete="off"
+                           class="layui-input" th:value="${officehouse.monthlyRent}" >
+                </div>
+            </div>
+            <!--<div class="layui-form-item">-->
+                <!--<label class="layui-form-label"><span style="color: red">*</span>物业费(元/m².月)</label>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<input type="number" name="propertyFee" id="propertyFee" lay-verify="required" maxlength="50" autocomplete="off"-->
+                           <!--class="layui-input" th:value="${officehouse.propertyFee}" >-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">房源描述</label>
+                <textarea id="description" name="description" placeholder="请输入内容" class="layui-textarea" th:text="${officehouse.description}"></textarea>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>写字楼类型</label>
+                <div class="layui-input-inline">
+                    <select name="type" lay-verify="required" id="type" th:value="${officehouse.type}">
+                        <option value=""></option>
+                        <option value="1" th:selected="${officehouse.type == 1}">纯写字楼</option>
+                        <option value="2" th:selected="${officehouse.type== 2}">商住两用楼</option>
+                        <option value="3" th:selected="${officehouse.type==3}">商业综合体楼</option>
+                        <option value="4" th:selected="${officehouse.type == 4}">酒店写字楼</option>
+                        <option value="5" th:selected="${officehouse.type == 5}">产业园区</option>
+                    </select>
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>装修</label>
+                <div class="layui-input-inline">
+                    <select name="fixture" lay-verify="required" id="fixture" th:value="${officehouse.fixture}">
+                        <option value=""></option>
+                        <option value="毛坯" th:selected="${officehouse.fixture == '毛坯'}">毛坯</option>
+                        <option value="简装修" th:selected="${officehouse.fixture=='简装修'}">简装修</option>
+                        <option value="精装修" th:selected="${officehouse.fixture== '精装修'}">精装修</option>
+                        <option value="豪华装修" th:selected="${officehouse.fixture== '豪华装修'}">豪华装修</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>支付方式</label>
+                <div class="layui-input-inline">
+                    <select name="rentWay" lay-verify="required" id="rentWay" th:value="${officehouse.rentWay}">
+                        <option value=""></option>
+                        <option value="1" th:selected="${officehouse.rentWay == 1}">押一付三</option>
+                        <option value="2" th:selected="${officehouse.rentWay== 2}">押一付一</option>
+                        <option value="3" th:selected="${officehouse.rentWay==3}">押一付二</option>
+                        <option value="4" th:selected="${officehouse.rentWay == 4}">押二付一</option>
+                        <option value="5" th:selected="${officehouse.rentWay== 5}">半年付</option>
+                        <option value="6" th:selected="${officehouse.rentWay==6}">年付</option>
+                        <option value="7" th:selected="${officehouse.rentWay==7}">面议</option>
+                    </select>
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>入住时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rentTime" id="rentTime" maxlength="50" lay-verify="required" autocomplete="off"
+                           placeholder="入住时间" class="layui-input" th:value="${officehouse.rentTime}" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>联系人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="contacts" id="contacts" maxlength="50" lay-verify="required" autocomplete="off"
+                           placeholder="联系人" class="layui-input" th:value="${officehouse.contacts}" >
+                    <input type="radio" name="sex" value="0" lay-verify="required" title="男" th:checked="${officehouse.sex==0}">
+                    <input type="radio" name="sex" value="1" lay-verify="required" title="女" th:checked="${officehouse.sex==1}">
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>我是</label>
+                <div class="layui-input-inline">
+                    <input type="radio" name="userType" value="0" lay-verify="required" title="业主" th:checked="${officehouse.userType==0}">
+                    <input type="radio" name="userType" value="1" lay-verify="required" title="经纪人" th:checked="${officehouse.userType==1}">
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>手机号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="telephone" id="telephone" maxlength="50" lay-verify="required" autocomplete="off"
+                           placeholder="手机号" class="layui-input" th:value="${officehouse.telephone}" >&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                    预览图：
+                    <div class="layui-upload-list " id="imageWatchJt">
+                        <div class="item" th:each="s:${imgList}" >
+                            <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}" th:src="${'http://aihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg(this)">
+                            <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                        </div>
+                    </div>
+                </blockquote>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>实勘状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="houseReal" value="0" lay-verify="required" title="未实勘" th:checked="${officehouse.houseReal==0}">
+                    <input type="radio" name="houseReal" value="1" lay-verify="required" title="已实勘" th:checked="${officehouse.houseReal==1}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>审核状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="checkStatus" value="0" lay-verify="required" title="未审核" th:checked="${officehouse.checkStatus==0}">
+                    <input type="radio" name="checkStatus" value="1" lay-verify="required" title="审核通过" th:checked="${officehouse.checkStatus==1}">
+                    <input type="radio" name="checkStatus" value="2" lay-verify="required" title="审核不通过" th:checked="${officehouse.checkStatus==2}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>审核回复</label>
+                <div class="layui-input-block">
+                    <input type="text" name="statusContent" id="statusContent" maxlength="50" lay-verify="required" autocomplete="off"
+                           placeholder="审核回复" class="layui-input" th:value="${officehouse.statusContent}" >&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">删除状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="isDel" value="0" lay-verify="required" title="正常" th:checked="${officehouse.isDel==0 ||officehouse.isDel==null}">
+                    <input type="radio" name="isDel" value="1" lay-verify="required" title="删除" th:checked="${officehouse.isDel==1}">
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'officehouse/checkOffice')}">
+                    <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+                </span>
+                <input type="button" class="layui-btn"  onclick="closeI()" value="返回" />
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    var viewer;
+    layui.use(['form', 'layedit','laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit;
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#rentTime'
+            , type: 'date'
+        });
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"officehouse/updateStatus",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        closeI();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+    });
+    function closeI() {
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+    function delXg(a,b) {
+        var id=a;
+        if(id){
+            $.post(rootPath + "officehouse/deleteImg", {"id":id}, function (data) {
+                if (data.code == 0) {
+                    b.parentElement.remove()
+                }
+            });
+        }else{
+            b.parentElement.remove()
+        }
+    }
+    function previewImg(obj) {
+        var galley = document.getElementById("imageWatchJt");
+        if(viewer){
+            viewer.destroy();
+        }
+        viewer = new Viewer(galley, {
+            toolbar: {
+                oneToOne: true,
+
+                prev: function() {
+                    viewer.prev(true);
+                },
+                play: true,
+                next: function() {
+                    viewer.next(true);
+                },
+                download: function() {
+                    var a = document.createElement('a');
+                    var src=viewer.image.src.replace(imgsl1,imgsl2);
+                    a.href = src;
+                    a.download = viewer.image.alt;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+            },
+            url:'data'
+        });
+        viewer.update();
+    }
+</script>
+</html>

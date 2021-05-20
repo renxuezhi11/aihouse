@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <script type="text/javascript" th:src="@{/js/jquery.EasyInsert-4.0.min.js}"></script>
+    <style>
+        p,div,ul,ol,li{
+            margin:0;
+            padding:0;
+        }
+
+        ul,ol,li{list-style: none;}
+        .f_ul{
+            margin-bottom:8px;
+        }
+        .f_ul li{
+            margin-bottom: 10px;
+        }
+        .f_ul li .remove{
+            text-decoration:none;
+            margin-left:4px;
+            font-size:12px;
+            color: #ff5722;
+            padding:1px 10px;
+        }
+        .f_ul li .i-text{
+            line-height: 27px;
+            height:26px;
+        }
+        .f_a{
+            text-decoration:none;
+            border:1px solid #009688;
+            font-size:13px;
+            padding:4px 10px;
+            border-radius:3px;
+            color:#fff;
+            background: #009688;
+        }
+    </style>
+</head>
+
+<script th:inline="javascript">
+    var feature=[[${sys_newhouse_type.feature}]];
+</script>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${sys_newhouse_type.id }" />
+        <input type="hidden" name="newHouseId" th:value="${sys_newhouse_type.newHouseId }" />
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red">*</span>户型名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="typeName" id="typeName" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入户型名称" class="layui-input" th:value="${sys_newhouse_type.typeName}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <input type="hidden" name="typeImg" id="typeImg" th:src="${sys_newhouse_type.typeImg}">
+            <div class="layui-upload-drag" id="fileUpload">
+                <i class="layui-icon"></i>
+                <p>点击上传户型图，或将文件拖拽到此处</p>
+            </div>
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                户型图：
+                <div class="layui-upload-list" id="imageWatch">
+                    <img th:if="${!#strings.isEmpty(sys_newhouse_type.typeImg)}" th:src="@{'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+${sys_newhouse_type.typeImg}+'/app_picture2'}" />
+                </div>
+            </blockquote>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red">*</span>建筑面积（m²）</label>
+            <div class="layui-input-inline">
+                <input type="number" name="coveredArea" id="coveredArea" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入建筑面积（m²）" class="layui-input" th:value="${sys_newhouse_type.coveredArea}" oninput="if(value<0)value=0">
+            </div>
+            <label class="layui-form-label">户型总价(万元)</label>
+            <div class="layui-input-inline">
+                <input type="number" name="totalPrice" id="totalPrice" maxlength="11"  autocomplete="off"
+                       placeholder="请输入户型总价(万元)" class="layui-input" th:value="${sys_newhouse_type.totalPrice}" oninput="if(value<0)value=0">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">户型均价(元)</label>
+            <div class="layui-input-inline">
+                <input type="number" name="averagePrice" id="averagePrice" maxlength="11"  autocomplete="off"
+                       placeholder="请输入户型均价(元)" class="layui-input" th:value="${sys_newhouse_type.averagePrice}" oninput="if(value<0)value=0">
+            </div>
+            <label class="layui-form-label"><span style="color: red">*</span>户型</label>
+            <div class="layui-input-inline">
+                <input type="text" name="houseType" id="houseType" maxlength="11" lay-verify="required" autocomplete="off"
+                       placeholder="请输入户型" class="layui-input" th:value="${sys_newhouse_type.houseType}" >
+            </div>
+            <label class="layui-form-label">户型分布</label>
+            <div class="layui-input-inline">
+                <input type="text" name="spread" id="spread" maxlength="50"  autocomplete="off"
+                       placeholder="请输入户型分布" class="layui-input" th:value="${sys_newhouse_type.spread}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">房</label>
+            <div class="layui-input-inline">
+                <input type="text" name="room" id="room" maxlength="11"  autocomplete="off"
+                       placeholder="请输入房" class="layui-input" th:value="${sys_newhouse_type.room}" >
+            </div>
+            <label class="layui-form-label">厅</label>
+            <div class="layui-input-inline">
+                <input type="text" name="hall" id="hall" maxlength="11"  autocomplete="off"
+                       placeholder="请输入厅" class="layui-input" th:value="${sys_newhouse_type.hall}" >
+            </div>
+            <label class="layui-form-label">厨房</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cookroom" id="cookroom" maxlength="11"  autocomplete="off"
+                       placeholder="请输入厨房" class="layui-input" th:value="${sys_newhouse_type.cookroom}" >
+            </div>
+            <label class="layui-form-label">卫生间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="toilet" id="toilet" maxlength="11"  autocomplete="off"
+                       placeholder="请输入卫生间" class="layui-input" th:value="${sys_newhouse_type.toilet}" >
+            </div>
+            <label class="layui-form-label">阳台</label>
+            <div class="layui-input-inline">
+                <input type="text" name="gallery" id="gallery" maxlength="11"  autocomplete="off"
+                       placeholder="请输入阳台" class="layui-input" th:value="${sys_newhouse_type.gallery}" >
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">销售进度</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sellStage" value="0" lay-verify="required" title="在售" th:checked="${sys_newhouse_type.sellStage==0 ||sys_newhouse_type.sellStage==null}">
+                <input type="radio" name="sellStage" value="1" lay-verify="required" title="待售" th:checked="${sys_newhouse_type.sellStage==1}">
+                <input type="radio" name="sellStage" value="2" lay-verify="required" title="售罄" th:checked="${sys_newhouse_type.sellStage==2}">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">销售状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isDel" value="0" lay-verify="required" title="正常" th:checked="${sys_newhouse_type.isDel==0 ||sys_newhouse_type.isDel==null}">
+                <input type="radio" name="isDel" value="1" lay-verify="required" title="删除" th:checked="${sys_newhouse_type.isDel==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">户型特色</label>
+            <div class="layui-input-block">
+                        <!--<textarea placeholder="请输入户型特色" class="layui-textarea"-->
+                                  <!--th:text="${sys_newhouse_type.feature}" name="feature" id="feature"></textarea>-->
+                <ul id="demo1" class="f_ul">
+                    <!-- <li><input name="i-text" type="text" maxlength="20" class="i-text"></li> -->
+                </ul>
+                <a href="#" class="f_a">+ 添加</a>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysNewHouseType/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate','upload'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate,
+            upload=layui.upload;
+        form.render();
+
+        upload.render({
+            elem: '#fileUpload'
+            ,url: rootPath+"sysNewHouseType/upload"
+            ,done: function(res){
+                layer.msg('上传成功');
+                $("#typeImg").val(res.data);
+                $("#imageWatch").html("<img src='"+'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+res.data+'/app_picture2'+"'>")
+            }
+        });
+
+
+        laydate.render({
+            elem: '#createTime'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateTime'
+            , type: 'datetime'
+        });
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            // var roles=[];
+            // $("input[name='roles']:checked").each(function () {
+            //     roles.push(this.value);
+            // })
+            // data.field['roles']=roles;
+            var feature;
+            $("input[name='feature']").each(function () {
+                if(!feature){
+                    feature=this.value;
+                }else{
+                    feature=feature+" "+this.value;
+                }
+            })
+            data.field['feature']=feature;
+            $.post(rootPath+"sysNewHouseType/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+    });
+    var laert
+    function selectIcon() {
+        laert=layer.open({
+            type: 2,
+            title: '选择头像',
+            shadeClose: true,
+            maxmin: true,
+            shade: 0.8,
+            area: ['1000px', '700px'],
+            content: rootPath+'fileImages/selectList'
+        });
+    }
+
+    function imageWatch(urls) {
+        $("#icon").val(urls)
+        $("#imageWatch").html("<img src='"+rootPath+"fileImages/watch?path="+urls+"'>")
+        layer.close(laert)
+    }
+    feature=feature.split(' ');
+    var ss=[];
+    for(var s in feature){
+        var kk=[];
+        kk.push(feature[s]);
+        ss.push(kk)
+    }
+    $("#demo1").easyinsert({
+        name: "feature",
+        toplimit: 10,
+        initValue:ss
+    });
+</script>
+
+</body>
+</html>

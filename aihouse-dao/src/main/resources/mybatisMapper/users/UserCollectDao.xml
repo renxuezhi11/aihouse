@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserCollectDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserCollect">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="collect_type" jdbcType="INTEGER" property="collectType" />
+
+		<result column="house_id" jdbcType="INTEGER" property="houseId" />
+
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+		<result column="is_del" jdbcType="INTEGER" property="isDel" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_collect (
+		user_id,
+		collect_type,
+		house_id
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{collectType,jdbcType=INTEGER},
+		 #{houseId,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_collect 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_user_collect
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="collectType!=null">collect_type = #{collectType,jdbcType=INTEGER}, </if>
+			<if test="houseId!=null">house_id = #{houseId,jdbcType=INTEGER}, </if>
+			<if test="createtime!=null">createtime = #{createtime,jdbcType=TIMESTAMP}, </if>
+			<if test="isDel!=null">is_del = #{isDel,jdbcType=INTEGER}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		collect_type,
+		house_id,
+		createtime,
+		is_del
+		from ahs_user_collect
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		collect_type,
+		house_id,
+		createtime,
+		is_del
+		from ahs_user_collect
+		<where>
+		<if test="id!=null "> and ahs_user_collect.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_collect.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="collectType!=null "> and ahs_user_collect.collect_type = #{collectType,jdbcType=INTEGER}</if>
+		<if test="houseId!=null "> and ahs_user_collect.house_id = #{houseId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_user_collect.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="isDel!=null "> and ahs_user_collect.is_del = #{isDel,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		collect_type,
+		house_id,
+		createtime,
+		is_del
+		from ahs_user_collect
+		<where>
+		<if test="id!=null "> and ahs_user_collect.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_collect.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="collectType!=null "> and ahs_user_collect.collect_type = #{collectType,jdbcType=INTEGER}</if>
+		<if test="houseId!=null "> and ahs_user_collect.house_id = #{houseId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_user_collect.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="isDel!=null "> and ahs_user_collect.is_del = #{isDel,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteUserCollectByUsers" >
+		delete from  ahs_user_collect
+		where user_id=#{userId}
+	</delete>
+	<delete id="deleteUserCollect" >
+		delete from ahs_user_collect
+		where user_id=#{userId,jdbcType=INTEGER} and id in
+		<foreach collection="ids" item="arr" index="no" open="("
+				 separator="," close=")">
+			#{arr}
+		</foreach>
+	</delete>
+
+</mapper>

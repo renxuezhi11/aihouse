@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.VillageDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.Village">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="village_name" jdbcType="VARCHAR" property="villageName"/>
+
+		<result column="cityid" jdbcType="INTEGER" property="cityid" />
+
+		<result column="areaid" jdbcType="INTEGER" property="areaid" />
+
+		<result column="streesid" jdbcType="INTEGER" property="streesid" />
+
+		<result column="address" jdbcType="VARCHAR" property="address" />
+
+		<result column="provinceid" jdbcType="INTEGER" property="provinceid" />
+
+		<result column="floor_space" jdbcType="DECIMAL" property="floorSpace" />
+
+		<result column="covered_area" jdbcType="DECIMAL" property="coveredArea" />
+
+		<result column="plot_ratio" jdbcType="DECIMAL" property="plotRatio" />
+
+		<result column="greening_rate" jdbcType="DECIMAL" property="greeningRate" />
+
+		<result column="car_place_up" jdbcType="INTEGER" property="carPlaceUp" />
+
+		<result column="car_place_down" jdbcType="INTEGER" property="carPlaceDown" />
+
+		<result column="building" jdbcType="INTEGER" property="building" />
+
+		<result column="total_house" jdbcType="INTEGER" property="totalHouse" />
+
+		<result column="property_company" jdbcType="VARCHAR" property="propertyCompany" />
+
+		<result column="property_fee" jdbcType="DECIMAL" property="propertyFee" />
+
+		<result column="property_year" jdbcType="INTEGER" property="propertyYear" />
+
+		<result column="developer" jdbcType="VARCHAR" property="developer" />
+
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+		<result column="covered_type" jdbcType="VARCHAR" property="coveredType" />
+
+		<result column="lng" jdbcType="VARCHAR" property="lng"/>
+
+		<result column="lat" jdbcType="VARCHAR" property="lat"/>
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_village (
+		village_name,
+		cityid,
+		areaid,
+		streesid,
+		address,
+		provinceid,
+		floor_space,
+		covered_area,
+		plot_ratio,
+		greening_rate,
+		car_place_up,
+		car_place_down,
+		building,
+		total_house,
+		property_company,
+		property_fee,
+		property_year,
+		developer,
+		covered_type,
+		lng,
+		lat
+		)
+ 	   values (
+ 	   	 #{villageName,jdbcType=VARCHAR},
+		 #{cityid,jdbcType=INTEGER},
+		 #{areaid,jdbcType=INTEGER},
+		 #{streesid,jdbcType=INTEGER},
+		 #{address,jdbcType=VARCHAR},
+		 #{provinceid,jdbcType=INTEGER},
+		 #{floorSpace,jdbcType=DECIMAL},
+		 #{coveredArea,jdbcType=DECIMAL},
+		 #{plotRatio,jdbcType=DECIMAL},
+		 #{greeningRate,jdbcType=DECIMAL},
+		 #{carPlaceUp,jdbcType=INTEGER},
+		 #{carPlaceDown,jdbcType=INTEGER},
+		 #{building,jdbcType=INTEGER},
+		 #{totalHouse,jdbcType=INTEGER},
+		 #{propertyCompany,jdbcType=VARCHAR},
+		 #{propertyFee,jdbcType=DECIMAL},
+		 #{propertyYear,jdbcType=INTEGER},
+		 #{developer,jdbcType=VARCHAR},
+		 #{coveredType,jdbcType=VARCHAR},
+		 #{lng,jdbcType=VARCHAR},
+		 #{lat,jdbcType=VARCHAR}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_village 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_village
+		<set>
+			<if test="villageName!=null and villageName!=''">village_name=#{villageName,jdbcType=VARCHAR},</if>
+			<if test="cityid!=null">cityid = #{cityid,jdbcType=INTEGER}, </if>
+			<if test="areaid!=null">areaid = #{areaid,jdbcType=INTEGER}, </if>
+			<if test="streesid!=null">streesid = #{streesid,jdbcType=INTEGER}, </if>
+			<if test="address!=null and address!=''">address = #{address,jdbcType=VARCHAR}, </if>
+			<if test="provinceid!=null">provinceid = #{provinceid,jdbcType=INTEGER}, </if>
+			<if test="floorSpace!=null">floor_space = #{floorSpace,jdbcType=DECIMAL}, </if>
+			<if test="coveredArea!=null">covered_area = #{coveredArea,jdbcType=DECIMAL}, </if>
+			<if test="plotRatio!=null">plot_ratio = #{plotRatio,jdbcType=DECIMAL}, </if>
+			<if test="greeningRate!=null">greening_rate = #{greeningRate,jdbcType=DECIMAL}, </if>
+			<if test="carPlaceUp!=null">car_place_up = #{carPlaceUp,jdbcType=INTEGER}, </if>
+			<if test="carPlaceDown!=null">car_place_down = #{carPlaceDown,jdbcType=INTEGER}, </if>
+			<if test="building!=null">building = #{building,jdbcType=INTEGER}, </if>
+			<if test="totalHouse!=null">total_house = #{totalHouse,jdbcType=INTEGER}, </if>
+			<if test="propertyCompany!=null and propertyCompany!=''">property_company = #{propertyCompany,jdbcType=VARCHAR}, </if>
+			<if test="propertyFee!=null">property_fee = #{propertyFee,jdbcType=DECIMAL}, </if>
+			<if test="propertyYear!=null">property_year = #{propertyYear,jdbcType=INTEGER}, </if>
+			<if test="developer!=null and developer!=''">developer = #{developer,jdbcType=VARCHAR}, </if>
+			<if test="createtime!=null">createtime = #{createtime,jdbcType=TIMESTAMP}, </if>
+			<if test="coveredType!=null and coveredType!=''">covered_type = #{coveredType,jdbcType=VARCHAR}, </if>
+			<if test="lng!=null and lng!=''">lng = #{lng,jdbcType=VARCHAR}, </if>
+			<if test="lat!=null and lat!=''">lat = #{lat,jdbcType=VARCHAR}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		village_name,
+		cityid,
+		areaid,
+		streesid,
+		address,
+		provinceid,
+		floor_space,
+		covered_area,
+		plot_ratio,
+		greening_rate,
+		car_place_up,
+		car_place_down,
+		building,
+		total_house,
+		property_company,
+		property_fee,
+		property_year,
+		developer,
+		createtime,
+		covered_type,
+		lng,
+		lat
+		from ahs_village
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		village_name,
+		cityid,
+		areaid,
+		streesid,
+		address,
+		provinceid,
+		floor_space,
+		covered_area,
+		plot_ratio,
+		greening_rate,
+		car_place_up,
+		car_place_down,
+		building,
+		total_house,
+		property_company,
+		property_fee,
+		property_year,
+		developer,
+		createtime,
+		covered_type,
+		lng,
+		lat
+		from ahs_village
+		<where>
+		<if test="id!=null "> and ahs_village.id = #{id,jdbcType=INTEGER}</if>
+		<if test="villageName!=null and villageName!=''"> and village_name like #{villageName,jdbcType=VARCHAR}</if>
+		<if test="cityid!=null "> and ahs_village.cityid = #{cityid,jdbcType=INTEGER}</if>
+		<if test="areaid!=null "> and ahs_village.areaid = #{areaid,jdbcType=INTEGER}</if>
+		<if test="streesid!=null "> and ahs_village.streesid = #{streesid,jdbcType=INTEGER}</if>
+		<if test="address!=null and address!=''"> and ahs_village.address = #{address,jdbcType=VARCHAR}</if>
+		<if test="provinceid!=null "> and ahs_village.provinceid = #{provinceid,jdbcType=INTEGER}</if>
+		<if test="floorSpace!=null "> and ahs_village.floor_space = #{floorSpace,jdbcType=DECIMAL}</if>
+		<if test="coveredArea!=null "> and ahs_village.covered_area = #{coveredArea,jdbcType=DECIMAL}</if>
+		<if test="plotRatio!=null "> and ahs_village.plot_ratio = #{plotRatio,jdbcType=DECIMAL}</if>
+		<if test="greeningRate!=null "> and ahs_village.greening_rate = #{greeningRate,jdbcType=DECIMAL}</if>
+		<if test="carPlaceUp!=null "> and ahs_village.car_place_up = #{carPlaceUp,jdbcType=INTEGER}</if>
+		<if test="carPlaceDown!=null "> and ahs_village.car_place_down = #{carPlaceDown,jdbcType=INTEGER}</if>
+		<if test="building!=null "> and ahs_village.building = #{building,jdbcType=INTEGER}</if>
+		<if test="totalHouse!=null "> and ahs_village.total_house = #{totalHouse,jdbcType=INTEGER}</if>
+		<if test="propertyCompany!=null and propertyCompany!=''"> and ahs_village.property_company = #{propertyCompany,jdbcType=VARCHAR}</if>
+		<if test="propertyFee!=null "> and ahs_village.property_fee = #{propertyFee,jdbcType=DECIMAL}</if>
+		<if test="propertyYear!=null "> and ahs_village.property_year = #{propertyYear,jdbcType=INTEGER}</if>
+		<if test="developer!=null and developer!=''"> and ahs_village.developer = #{developer,jdbcType=VARCHAR}</if>
+		<if test="createtime!=null "> and ahs_village.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="coveredType!=null and coveredType!=''"> and ahs_village.covered_type = #{coveredType,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		village_name,
+		cityid,
+		areaid,
+		streesid,
+		address,
+		provinceid,
+		floor_space,
+		covered_area,
+		plot_ratio,
+		greening_rate,
+		car_place_up,
+		car_place_down,
+		building,
+		total_house,
+		property_company,
+		property_fee,
+		property_year,
+		developer,
+		createtime,
+		covered_type,
+		lng,
+		lat
+		from ahs_village
+		<where>
+		<if test="id!=null "> and ahs_village.id = #{id,jdbcType=INTEGER}</if>
+		<if test="villageName!=null and villageName!=''">and village_name = #{villageName,jdbcType=VARCHAR}</if>
+		<if test="cityid!=null "> and ahs_village.cityid = #{cityid,jdbcType=INTEGER}</if>
+		<if test="areaid!=null "> and ahs_village.areaid = #{areaid,jdbcType=INTEGER}</if>
+		<if test="streesid!=null "> and ahs_village.streesid = #{streesid,jdbcType=INTEGER}</if>
+		<if test="address!=null and address!=''"> and ahs_village.address = #{address,jdbcType=VARCHAR}</if>
+		<if test="provinceid!=null "> and ahs_village.provinceid = #{provinceid,jdbcType=INTEGER}</if>
+		<if test="floorSpace!=null "> and ahs_village.floor_space = #{floorSpace,jdbcType=DECIMAL}</if>
+		<if test="coveredArea!=null "> and ahs_village.covered_area = #{coveredArea,jdbcType=DECIMAL}</if>
+		<if test="plotRatio!=null "> and ahs_village.plot_ratio = #{plotRatio,jdbcType=DECIMAL}</if>
+		<if test="greeningRate!=null "> and ahs_village.greening_rate = #{greeningRate,jdbcType=DECIMAL}</if>
+		<if test="carPlaceUp!=null "> and ahs_village.car_place_up = #{carPlaceUp,jdbcType=INTEGER}</if>
+		<if test="carPlaceDown!=null "> and ahs_village.car_place_down = #{carPlaceDown,jdbcType=INTEGER}</if>
+		<if test="building!=null "> and ahs_village.building = #{building,jdbcType=INTEGER}</if>
+		<if test="totalHouse!=null "> and ahs_village.total_house = #{totalHouse,jdbcType=INTEGER}</if>
+		<if test="propertyCompany!=null and propertyCompany!=''"> and ahs_village.property_company = #{propertyCompany,jdbcType=VARCHAR}</if>
+		<if test="propertyFee!=null "> and ahs_village.property_fee = #{propertyFee,jdbcType=DECIMAL}</if>
+		<if test="propertyYear!=null "> and ahs_village.property_year = #{propertyYear,jdbcType=INTEGER}</if>
+		<if test="developer!=null and developer!=''"> and ahs_village.developer = #{developer,jdbcType=VARCHAR}</if>
+		<if test="createtime!=null "> and ahs_village.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="coveredType!=null and coveredType!=''"> and ahs_village.covered_type = #{coveredType,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectAllByName" resultType="map">
+		select id,village_name
+		from ahs_village
+		<where>
+			<if test="cityid!=null "> and ahs_village.cityid = #{cityid,jdbcType=INTEGER}</if>
+			<if test="villageName!=null and villageName!=''"> and INSTR (village_name,#{villageName,jdbcType=VARCHAR})>0 </if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getSource" resultType="map">
+		select * from view_source_5710968 limit #{start},#{limit}
+	</select>
+</mapper>

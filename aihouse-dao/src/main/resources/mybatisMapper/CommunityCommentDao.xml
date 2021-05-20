@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.CommunityCommentDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.CommunityComment">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="community_id" jdbcType="INTEGER" property="communityId" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="content" jdbcType="LONGVARCHAR" property="content" />
+
+		<result column="to_uid" jdbcType="INTEGER" property="toUid" />
+
+		<result column="type" jdbcType="INTEGER" property="type" />
+
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+		<result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_community_comment (
+		community_id,
+		user_id,
+		content,
+		type,
+		to_uid
+		)
+ 	   values (
+		 #{communityId,jdbcType=INTEGER},
+		 #{userId,jdbcType=INTEGER},
+		 #{content,jdbcType=LONGVARCHAR},
+		 #{type,jdbcType=INTEGER},
+		 #{toUid,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_community_comment 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_community_comment
+		<set>
+			<if test="communityId!=null">community_id = #{communityId,jdbcType=INTEGER}, </if>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="content!=null and content!=''">content = #{content,jdbcType=LONGVARCHAR}, </if>
+			<if test="toUid!=null">to_uid = #{toUid,jdbcType=INTEGER}, </if>
+			<if test="createtime!=null">createtime = #{createtime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		community_id,
+		user_id,
+		content,
+		to_uid,
+		type,
+		createtime,
+		(select nickname from ahs_users where id=ahs_community_comment.user_id) as nickname
+		from ahs_community_comment
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		community_id,
+		user_id,
+		content,
+		to_uid,
+		type,
+		createtime,
+		(select nickname from ahs_users where id=ahs_community_comment.user_id) as nickname
+		from ahs_community_comment
+		<where>
+		<if test="id!=null "> and ahs_community_comment.id = #{id,jdbcType=INTEGER}</if>
+		<if test="communityId!=null "> and ahs_community_comment.community_id = #{communityId,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_community_comment.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="content!=null and content!=''"> and ahs_community_comment.content = #{content,jdbcType=LONGVARCHAR}</if>
+		<if test="type!=null and type!=''">and ahs_community_comment.type = #{type,jdbcType=INTEGER} </if>
+		<if test="toUid!=null "> and ahs_community_comment.to_uid = #{toUid,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_community_comment.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id asc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		community_id,
+		user_id,
+		content,
+		to_uid,
+		type,
+		createtime,
+		(select nickname from ahs_users where id=ahs_community_comment.user_id) as nickname
+		from ahs_community_comment
+		<where>
+		<if test="id!=null "> and ahs_community_comment.id = #{id,jdbcType=INTEGER}</if>
+		<if test="communityId!=null "> and ahs_community_comment.community_id = #{communityId,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_community_comment.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="content!=null and content!=''"> and ahs_community_comment.content = #{content,jdbcType=LONGVARCHAR}</if>
+		<if test="type!=null and type!=''">and ahs_community_comment.type = #{type,jdbcType=INTEGER} </if>
+		<if test="toUid!=null "> and ahs_community_comment.to_uid = #{toUid,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_community_comment.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id asc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteCommunityCommentByCommunity" >
+		delete from  ahs_community_comment
+		where community_id=#{communityId}
+	</delete>
+	
+	<delete id="deleteCommentReplyByComment">
+         delete from  ahs_community_comment
+         where community_id=#{communityId}
+         AND type=#{type}
+	</delete>
+
+	<select id="indexList" resultMap="BaseResultMap" >
+        select
+		id,
+		community_id,
+		user_id,
+		content,
+		to_uid,
+		type,
+		createtime,
+		(select nickname from ahs_users where id=ahs_community_comment.user_id) as nickname
+		from ahs_community_comment
+		where community_id = #{communityId,jdbcType=INTEGER}
+			ORDER BY createtime ASC
+		limit 2
+	</select>
+
+	<select id="countCommentReplayByCommunityId" resultType="Integer">
+		SELECT count(accr.id) FROM ahs_community_comment acc
+		LEFT JOIN ahs_community_comment accr
+		ON acc.id  = accr.community_id
+		WHERE acc.community_id =  #{communityId,jdbcType=INTEGER}
+	</select>
+
+	<select id="countCommentReplayByCommentId" resultType="Integer">
+		SELECT count(0) FROM  ahs_community_comment
+		WHERE community_id = #{id,jdbcType=INTEGER}
+		AND type = 2
+	</select>
+
+	<select id="selectCommentAndReplayByCommunityId" resultMap="BaseResultMap">
+        select
+		id,
+		community_id,
+		user_id,
+		content,
+		to_uid,
+		type,
+		createtime
+		from ahs_community_comment
+		where community_id = #{communityId,jdbcType=INTEGER}
+	    ORDER BY createtime ASC
+	</select>
+
+</mapper>

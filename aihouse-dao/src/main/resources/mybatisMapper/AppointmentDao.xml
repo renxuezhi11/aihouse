@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.AppointmentDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.Appointment">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_id" jdbcType="INTEGER" property="userId"/>
+		<result column="house_type" jdbcType="INTEGER" property="houseType"/>
+		<result column="house_id" jdbcType="INTEGER" property="houseId"/>
+		<result column="appointment_date" jdbcType="VARCHAR" property="appointmentDate"/>
+		<result column="appointment_time" jdbcType="VARCHAR" property="appointmentTime"/>
+		<result column="broker_id" jdbcType="INTEGER" property="borkerId"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<result column="user_telephone" jdbcType="VARCHAR" property="userTelephone"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+		<result column="username" jdbcType="VARCHAR" property="username"/>
+		<result column="brokername" jdbcType="VARCHAR" property="brokername"/>
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_appointment (
+		user_id,house_type,house_id,appointment_time,user_telephone,name,appointment_date
+		)
+ 	   values (
+ 	   	 #{userId,jdbcType=INTEGER},
+		 #{houseType,jdbcType=INTEGER},
+		 #{houseId,jdbcType=INTEGER},
+		 #{appointmentTime,jdbcType=VARCHAR},
+		 #{userTelephone,jdbcType=VARCHAR},
+		 #{name,jdbcType=VARCHAR},
+		 #{appointmentDate,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_appointment
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_appointment
+		<set>
+			<if test="houseType!=null">house_type=#{houseType,jdbcType=INTEGER},</if>
+			<if test="houseId!=null">house_id = #{houseId,jdbcType=INTEGER}, </if>
+			<if test="appointmentTime!=null and appointmentTime!=''">appointment_time = #{appointmentTime,jdbcType=VARCHAR}, </if>
+			<if test="borkerId!=null">broker_id = #{borkerId,jdbcType=INTEGER}, </if>
+			<if test="status!=null ">status = #{status,jdbcType=INTEGER}, </if>
+			<if test="userTelephone!=null and userTelephone!=''">user_telephone = #{userTelephone,jdbcType=VARCHAR}, </if>
+			<if test="name!=null and name!=''">name = #{name,jdbcType=VARCHAR}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+			select id,user_id,house_type,house_id,appointment_time,broker_id,status,user_telephone,appointment_date,createtime,
+		(select nickname from ahs_users where id=ahs_appointment.user_id) as username,
+		(select nickname from ahs_users where id=ahs_appointment.broker_id) as brokername,
+		(select name from ahs_new_house where id=ahs_appointment.house_id) as name
+		from ahs_appointment
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select id,user_id,house_type,house_id,appointment_time,broker_id,status,user_telephone,appointment_date,createtime,
+		(select nickname from ahs_users where id=ahs_appointment.user_id) as username,
+		(select nickname from ahs_users where id=ahs_appointment.broker_id) as brokername,
+		(select name from ahs_new_house where id=ahs_appointment.house_id) as name
+		from ahs_appointment
+		<where>
+			<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+			<if test="houseType!=null"> and house_type=#{houseType,jdbcType=INTEGER}</if>
+			<if test="userId!=null"> and user_id=#{userId,jdbcType=INTEGER}</if>
+			<if test="borkerId!=null"> and broker_id = #{borkerId,jdbcType=INTEGER}</if>
+			<if test="appointmentDate!=null and appointmentDate!=''"> and appointment_date = #{appointmentDate,jdbcType=INTEGER}</if>
+			<if test="status!=null "> and status = #{status,jdbcType=INTEGER}</if>
+			<if test="houseId!=null "> and house_id = #{houseId,jdbcType=INTEGER}</if>
+			<if test="userTelephone!=null and userTelephone!=''">and user_telephone = #{userTelephone,jdbcType=VARCHAR} </if>
+			<if test="name!=null and name!=''">and name = #{name,jdbcType=VARCHAR} </if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select id,user_id,house_type,house_id,appointment_time,broker_id,status,user_telephone,appointment_date,createtime,
+		(select nickname from ahs_users where id=ahs_appointment.user_id) as username,
+		(select nickname from ahs_users where id=ahs_appointment.broker_id) as brokername,
+		(select name from ahs_new_house where id=ahs_appointment.house_id) as name
+		from ahs_appointment
+		<where>
+			<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+			<if test="houseType!=null"> and house_type=#{houseType,jdbcType=INTEGER}</if>
+			<if test="userId!=null"> and user_id=#{userId,jdbcType=INTEGER}</if>
+			<if test="borkerId!=null"> and broker_id = #{borkerId,jdbcType=INTEGER}</if>
+			<if test="status!=null "> and status = #{status,jdbcType=INTEGER}</if>
+			<if test="userTelephone!=null and userTelephone!=''">and user_telephone = #{userTelephone,jdbcType=VARCHAR} </if>
+			<if test="name!=null and name!=''">and name = #{name,jdbcType=VARCHAR} </if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+	</select>
+
+
+</mapper>

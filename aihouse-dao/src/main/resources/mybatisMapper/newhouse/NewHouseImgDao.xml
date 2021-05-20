@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.newhouse.NewHouseImgDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.NewHouseImg">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="img_type" jdbcType="INTEGER" property="imgType"/>
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+      <result column="img_desc" jdbcType="VARCHAR" property="imgDesc"/>
+      <result column="new_house_id" jdbcType="INTEGER" property="newHouseId"/>
+      <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+      <result column="Is_del" jdbcType="INTEGER" property="IsDel"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_new_house_img
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, img_type,img_url,img_desc,new_house_id,createtime,Is_del
+    from ahs_new_house_img
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, img_type,img_url,img_desc,new_house_id,createtime,Is_del
+    from ahs_new_house_img
+    <where>
+      <if test="newHouseId!=null "> and new_house_id = #{newHouseId,jdbcType=INTEGER}</if>
+      <if test="imgType!=null "> and img_type = #{imgType,jdbcType=INTEGER}</if>
+    </where>
+     <if test="orderByString!=null and orderByString!=''">
+         ${orderByString}
+     </if>
+
+  </select>
+  <select id="queryByCondition" resultMap="BaseResultMap">
+    select id, img_type,img_url,img_desc,new_house_id,createtime,Is_del
+ 	from  ahs_new_house_img
+     <if test="orderByString!=null and orderByString!=''">
+         ${orderByString}
+     </if>
+  </select>
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into ahs_new_house_img(img_type,img_url,img_desc,new_house_id)values(#{imgType,jdbcType=INTEGER},#{imgUrl,jdbcType=VARCHAR},#{imgDesc,jdbcType=VARCHAR},#{newHouseId,jdbcType=INTEGER})
+  </insert>
+  <update id="update">
+    update  	ahs_new_house_img
+	<set>
+		1=1
+ 	</set>
+	where id=#{id}
+  </update>
+  <delete id="deleteByNewHouseId">
+      delete from ahs_new_house_img  where new_house_id=#{newHouseId} and img_type=#{imgType}
+  </delete>
+  <insert id="insertBatch">
+      insert into ahs_new_house_img(img_type,img_url,new_house_id)
+      VALUES
+    <foreach collection="list" item="a" separator=",">
+      (
+      #{imgType},#{a},#{newHouseId}
+      )
+    </foreach>
+  </insert>
+  
+  <select id="queryImgType" parameterType="java.lang.Integer" resultType="map">
+    select img_type as id,(CASE img_type
+	WHEN 1 THEN
+		'效果图'
+		WHEN 2 THEN
+		'交通图'
+		WHEN 3 THEN
+		'实景图'
+		WHEN 4 THEN
+		'户型图'
+		WHEN 5 THEN
+		'样板间'
+		WHEN 6 THEN
+		'周边配套'
+END
+)  as name from ahs_new_house_img where new_house_id=#{newHouseId,jdbcType=INTEGER} group by img_type
+  </select>
+
+  <select id="queryImgByTypeAndHouseId" resultType="map">
+    select id,img_url as img,img_desc as title from
+    ahs_new_house_img
+    <where>
+      <if test="newHouseId!=null "> and new_house_id = #{newHouseId,jdbcType=INTEGER}</if>
+      <if test="imgType!=null "> and img_type = #{imgType,jdbcType=INTEGER}</if>
+      <if test="isDel!=null ">and is_del = #{isDel,jdbcType=INTEGER}</if>
+    </where>
+  </select>
+</mapper>

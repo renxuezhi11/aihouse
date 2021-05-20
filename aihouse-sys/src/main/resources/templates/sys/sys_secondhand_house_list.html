@@ -1,0 +1,314 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <blockquote class="layui-elem-quote">
+        <form id="dataForm" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline" >
+                    <input type="text" name="villageName" id="villageName" placeholder="小区名称" class="layui-input">
+                </div>
+                <div class="layui-inline" >
+                    <select name="houseType" id="houseType">
+                        <option value="">房屋类型</option>
+                        <option value="住宅">住宅</option>
+                        <option value="公寓">公寓</option>
+                        <option value="别墅">别墅</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div class="layui-inline" >
+                    <select name="room" id="room">
+                        <option value="">房型</option>
+                        <option value="1">一室</option>
+                        <option value="2">二室</option>
+                        <option value="3">三室</option>
+                        <option value="4">四室</option>
+                    </select>
+                </div>
+                <div class="layui-inline" >
+                    <select name="fixture" id="fixture">
+                        <option value="">装修情况</option>
+                        <option value="毛坯">毛坯</option>
+                        <option value="简装修">简装修</option>
+                        <option value="精装修">精装修</option>
+                        <option value="豪华装修">豪华装修</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="orientations"  id="orientations" >
+                        <option value="">朝向</option>
+                        <option value="南北" >南北</option>
+                        <option value="南" >南</option>
+                        <option value="东南" >东南</option>
+                        <option value="东" >东</option>
+                        <option value="西南" >西南</option>
+                        <option value="北" >北</option>
+                        <option value="西" >西</option>
+                        <option value="东西" >东西</option>
+                        <option value="东北" >东北</option>
+                        <option value="西北" >西北</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="status" id="status">
+                        <option value="" selected>审核状态</option>
+                        <option value="0">未审核</option>
+                        <option value="1">审核通过</option>
+                        <option value="2">审核不通过</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="flag" id="flag">
+                        <option value="">上架状态</option>
+                        <option value="0">未上架</option>
+                        <option value="1">上架</option>
+                        <option value="2">下架</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <select name="isTop" id="isTop">
+                        <option value="">置顶状态</option>
+                        <option value="0">未置顶</option>
+                        <option value="1">已置顶</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="startDate" id="startDate" placeholder="开始时间" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="endDate" id="endDate" placeholder="结束时间" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <input type="button" name="" class="layui-btn" onclick="loadMyData()" data-type="reload"
+                           th:value="搜索"/>
+                </div>
+            </div>
+        </form>
+    </blockquote>
+    <div class="mt-20">
+        <table id="table-data" lay-filter="table-data"></table>
+    </div>
+</div>
+<script type="text/html" id="barDemo">
+    {{#  if(d.flag_ =='上架'){ }}
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon layui-icon-delete"></i>下架</a>
+        </span>
+    {{# } else { }}
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="nodel" ><i class="layui-icon layui-icon-delete"></i>上架</a>
+        </span>
+    {{# } }}
+    {{#  if(d.isTop_ =='已置顶'){ }}
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+            <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="nisTop" ><i class="layui-icon layui-icon-delete"></i>取消置顶</a>
+        </span>
+    {{# } else { }}
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+            <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="isTop" ><i class="layui-icon layui-icon-top"></i>置顶</a>
+        </span>
+    {{# } }}
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+        <a class="layui-btn layui-btn-xs " lay-event="edit"><i class="layui-icon layui-icon-edit"></i>审核</a>
+    </span>
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+            <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="picture"><i class="layui-icon layui-icon-file"></i>图片</a>
+        </span>
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="history"><i class="layui-icon layui-icon-edit"></i>浏览记录</a>
+    </span>
+</script>
+<script type="text/html" id="toolbar-data">
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+    <a class="layui-btn layui-btn-normal layui-btn-sm" th:href="@{/secondHandHouse/gotoDetail }"><i class="layui-icon layui-icon-add-1"></i>  新增</a>
+    </span>
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/export')}">
+    <a href="javascript:void(0)" onclick="exports()" class="layui-btn layui-btn-warm layui-btn-sm"><i  class="layui-icon layui-icon-download-circle"></i> 导出</a>
+    </span>
+</script>
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:inline="javascript">
+    var table;
+    var newHouseId = $("#newHouseId").val();
+    layui.use(['form', 'table', 'laydate'], function () {
+        var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+        //但是，如果你的HTML是动态生成的，自动渲染就会失效
+        //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+        form.render();
+        table = layui.table;
+        //第一个实例
+        table.render({
+            elem: '#table-data'
+            , toolbar: '#toolbar-data'
+            , url: rootPath + "secondHandHouse/selectAllByPaging" //数据接口
+            , method: "post"
+            , page: true //开启分页
+            , cols: [[ //表头
+                {field: 'id', title: 'id', type: "checkbox"}
+                ,{field: 'id', title: '二手房'}
+                ,{field: 'title', title: '标题'}
+                ,{field: 'villageName', title: '小区名称'}
+                ,{field: 'isLift_', title: '是否有电梯'}
+                ,{field: 'price', title: '售价(万元)'}
+                ,{field: 'coveredArea', title: '建筑面积(m2)'}
+                ,{field: 'address', title: '地址'}
+                ,{field: 'fixture', title: '装修情况'}
+                // ,{field: 'age', title: '房龄'}
+                ,{field: 'createTime_', title: '发布时间'}
+                ,{field: 'updateTime_', title: '更新时间'}
+                ,{field: 'status_', title: '审核状态'}
+                ,{field: 'userType_', title: '发布人类型'}
+                ,{field: 'houseReal_', title: '是否实勘'}
+                ,{field: 'isTop_', title: '是否置顶'}
+                ,{field: 'isSale_', title: '是否在售'}
+                ,{field: 'flag_', title: '上架状态'}
+                ,{field: 'isDel_', title: '删除状态'}
+                ,{fixed: 'right', width:300 ,title: '操作', toolbar: '#barDemo'}
+            ]],
+            parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.rows //解析数据列表
+                };
+            },
+            "request": {
+                pageName: 'page' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            },
+            "response": {
+                statusName: 'code' //规定数据状态的字段名称，默认：code
+                , statusCode: 0 //规定成功的状态码，默认：0
+            }
+        });
+        //监听行工具事件
+        table.on('tool(table-data)', function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                myConfirm("确定要下架该房源吗?", function (index) {
+                    obj.del();
+                    $.post(rootPath + "secondHandHouse/save", {"id": data.id,"flag": 2}, function (data) {
+                        myAlert("下架成功");
+                        setTimeout(function () {
+                            loadMyData1()
+                        }, 1000)
+                    });
+                    layer.close(index);
+                })
+            } else if (obj.event === 'edit') {
+                var laert
+                laert=layer.open({
+                    type: 2,
+                    title: '审核',
+                    shadeClose: true,
+                    maxmin: true,
+                    shade: 0.8,
+                    area: ['1000px', '700px'],
+                    content: rootPath+'secondHandHouse/gotoDetail?id='+ data.id,
+                    end:function () {
+                        loadMyData1();
+                    }
+                });
+            }else if(obj.event=='nodel') {
+                if (data.status_=='审核通过'&&data.isDel_=="正常") {
+                    var text = "确定要上架该房源吗?";
+                    myConfirm(text, function (index) {
+                        $.post(rootPath + "secondHandHouse/save", {"id": data.id, "flag": 1}, function (data) {
+                            setTimeout(function () {
+                                loadMyData1()
+                            }, 1000)
+                        });
+                        layer.close(index);
+                    })
+                }else{
+                    myConfirm("房源未审核或审核不通过或房源已删除暂不能上架", function (index) {
+                        layer.close(index);
+                    })
+                }
+            } else  if (obj.event === 'nisTop') {
+                myConfirm("确定要取消置顶房源吗?", function (index) {
+                    obj.del();
+                    $.post(rootPath + "secondHandHouse/save", {"id": data.id,"isTop": 0}, function (data) {
+                        myAlert("取消成功");
+                        setTimeout(function () {
+                            loadMyData1()
+                        }, 1000)
+                    });
+                    layer.close(index);
+                })
+            }else if(obj.event=='isTop') {
+                if (data.status_=='审核通过'&&data.isDel_=="正常") {
+                    var text = "确定要置顶该房源吗?";
+                    myConfirm(text, function (index) {
+                        $.post(rootPath + "secondHandHouse/save", {"id": data.id, "isTop": 1}, function (data) {
+                            setTimeout(function () {
+                                loadMyData1()
+                            }, 1000)
+                        });
+                        layer.close(index);
+                    })
+                }else{
+                    myConfirm("房源未审核或审核不通过或房源已删除暂不能置顶", function (index) {
+                        layer.close(index);
+                    })
+                }
+            }else if(obj.event=='history'){
+                var laert
+                laert=layer.open({
+                    type: 2,
+                    title: '房源浏览记录',
+                    shadeClose: true,
+                    maxmin: true,
+                    shade: 0.8,
+                    area: ['1000px', '700px'],
+                    content: rootPath+'userHistory/gotoList?houseId='+ data.id+'&historyType='+2
+                });
+            }else if(obj.event=='picture'){
+                window.location.href = rootPath + "secondHandHouseImg/gotoList?id=" + data.id;
+            }
+        });
+
+        /*初始化日期选择框 begin*/
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#startDate'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endDate'
+            , type: 'datetime'
+        });
+
+        /*初始化日期选择框 end*/
+    });
+
+    function loadMyData() {
+        table.reload("table-data", {
+            where: $("#dataForm").serializeObject()
+            , page: {
+                curr:1//重新从第 1 页开始
+            }
+        });
+    }
+    function loadMyData1() {
+        table.reload("table-data", {
+            where: $("#dataForm").serializeObject()
+            , page: {
+                curr:$(".layui-laypage-skip").find("input").val()//重新从第 当前页 页开始
+            }
+        });
+    }
+    //导出
+    function exports() {
+        window.location.href = rootPath + "secondHandHouse/export?" + $("#dataForm").serialize()
+    }
+
+</script>
+</body>
+</html>

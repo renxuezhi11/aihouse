@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.SysMarketDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.SysMarket">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="average_price" jdbcType="DOUBLE" property="averagePrice" />
+
+		<result column="price_jump" jdbcType="DOUBLE" property="priceJump" />
+
+		<result column="cityID" jdbcType="INTEGER" property="cityID" />
+
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_market (
+		average_price,
+		price_jump,
+		cityID
+		)
+ 	   values (
+		 #{averagePrice,jdbcType=DOUBLE},
+		 #{priceJump,jdbcType=DOUBLE},
+		 #{cityID,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_market 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_market
+		<set>
+			<if test="averagePrice!=null">average_price = #{averagePrice,jdbcType=DOUBLE}, </if>
+			<if test="priceJump!=null">price_jump = #{priceJump,jdbcType=DOUBLE}, </if>
+			<if test="cityID!=null">cityID = #{cityID,jdbcType=INTEGER}, </if>
+			<if test="createTime!=null">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		average_price,
+		price_jump,
+		cityID,
+		create_time
+		from ahs_market
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		average_price,
+		price_jump,
+		cityID,
+		create_time
+		from ahs_market
+		<where>
+		<if test="id!=null "> and ahs_market.id = #{id,jdbcType=INTEGER}</if>
+		<if test="averagePrice!=null "> and ahs_market.average_price = #{averagePrice,jdbcType=DOUBLE}</if>
+		<if test="priceJump!=null "> and ahs_market.price_jump = #{priceJump,jdbcType=DOUBLE}</if>
+		<if test="cityID!=null "> and ahs_market.cityID = #{cityID,jdbcType=INTEGER}</if>
+		<if test="createTime!=null "> and ahs_market.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_market.create_time BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		average_price,
+		price_jump,
+		cityID,
+		create_time
+		from ahs_market
+		<where>
+		<if test="id!=null "> and ahs_market.id = #{id,jdbcType=INTEGER}</if>
+		<if test="averagePrice!=null "> and ahs_market.average_price = #{averagePrice,jdbcType=DOUBLE}</if>
+		<if test="priceJump!=null "> and ahs_market.price_jump = #{priceJump,jdbcType=DOUBLE}</if>
+		<if test="cityID!=null "> and ahs_market.cityID = #{cityID,jdbcType=INTEGER}</if>
+		<if test="createTime!=null "> and ahs_market.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_market.create_time BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+</mapper>

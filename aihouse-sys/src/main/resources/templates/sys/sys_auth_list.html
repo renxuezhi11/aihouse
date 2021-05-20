@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <div class="text-c">
+        <form id="dataForm" class="layui-form">
+            <div class="layui-form-item">
+
+            </div>
+        </form>
+    </div>
+    <div class="mt-20">
+        <table id="table-data" lay-filter="table-data"></table>
+    </div>
+</div>
+<script type="text/html" id="barDemo">
+
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysAuth/save')}">
+    <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+    </span>
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysAuth/save')}">
+    <a class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>新增</a>
+    </span>
+
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysAuth/deleteByPrimaryKey')}">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+    </span>
+</script>
+<script type="text/html" id="toolbar-data">
+    <!-- http://www.h-ui.net/Hui-3.7-Hui-iconfont.shtml 图标库-->
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysAuth/save')}">
+    <a class="layui-btn layui-btn-normal layui-btn-sm" th:href="@{/sysAuth/gotoDetail }"><i class="layui-icon layui-icon-add-1"></i> 新增根节点</a>
+    </span>
+</script>
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:inline="javascript">
+    var ptable=null,treeGrid=null,tableId='table-data',layer=null;
+    layui.config({
+        base: rootPath+'js/layui/extend/'
+    }).extend({
+        treeGrid:'treeGrid'
+    }).use(['jquery','treeGrid','layer'], function(){
+        var $=layui.jquery;
+        treeGrid = layui.treeGrid;//很重要
+        layer=layui.layer;
+        ptable=treeGrid.render({
+            id:tableId
+            ,elem: '#'+tableId
+            , toolbar: '#toolbar-data'
+            ,url:rootPath+'sysAuth/selectAll'
+            ,cellMinWidth: 100
+            ,idField:'id'//必須字段
+            ,treeId:'id'//树形id字段名称
+            ,treeUpId:'parentAuthId'//树形父id字段名称
+            ,treeShowName:'name'//以树形式显示的字段
+            ,heightRemove:[".dHead",10]//不计算的高度,表格设定的是固定高度，此项不生效
+            ,height:'100%'
+            ,isFilter:false
+            ,iconOpen:false//是否显示图标【默认显示】
+            ,isOpenDefault:true//节点默认是展开还是折叠【默认展开】
+            ,loading:true
+            ,sort:false
+            ,method:'get'
+            ,isPage:false
+            ,cols: [ [
+                {type:'numbers'}
+                ,{type:'checkbox'}
+                ,{field:'name', width:300, title: '菜单名称',templet: function(d){
+                    return "<i class=\""+d.icon+"\"></i>"+d.name;
+                }}
+                ,{field:'id',width:100, title: 'id'}
+                ,{field:'sort', title: '排序'}
+                ,{field:'createTime_', title: '创建时间'}
+                ,{field:'href', title: '链接'}
+                ,{field:'shows_', title: '显示'}
+                ,{title: '操作', align:'center',toolbar: '#barDemo'}
+            ] ]
+            ,parseData: function (res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.message, //解析提示文本
+                    "data": res.data //解析数据列表
+                };
+            }
+            ,"response": {
+                statusName: 'code' //规定数据状态的字段名称，默认：code
+                , statusCode: 0 //规定成功的状态码，默认：0
+            }
+            ,onClickRow:function (index, o) {
+                console.log(index,o,"单击！");
+            }
+            ,onDblClickRow:function (index, o) {
+                console.log(index,o,"双击");
+            }
+            ,onCheck:function (obj,checked,isAll) {//复选事件
+                console.log(obj,checked,isAll);
+            }
+            ,onRadio:function (obj) {//单选事件
+                console.log(obj);
+            }
+        });
+        treeGrid.on('tool('+tableId+')',function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                myConfirm("确定要删除吗?", function (index) {
+                    obj.del();
+                    $.post(rootPath + "sysAuth/deleteByPrimaryKey", {"id": data.id}, function (data) {
+                        myAlert("删除成功");
+                        setTimeout(function () {
+                            loadMyData()
+                        }, 2000)
+                    });
+                    layer.close(index);
+                })
+            } else if (obj.event === 'edit') {
+                window.location.href = rootPath + "sysAuth/gotoDetail?id=" + data.id;
+            } else if (obj.event === 'add') {
+                window.location.href = rootPath + "sysAuth/gotoDetail?parentAuthId=" + data.id;
+            }
+        });
+    });
+</script>
+</body>
+</html>

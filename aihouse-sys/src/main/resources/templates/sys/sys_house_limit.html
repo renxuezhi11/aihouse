@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${houseLimit.id }" />
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">楼盘入驻限制人数</label>
+            <div class="layui-input-inline" style="width: 300px">
+                <input type="number" name="limitNewHouse" id="limitNewHouse" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入楼盘入驻限制人数" class="layui-input" th:value="${houseLimit.limitNewHouse}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">合伙人入驻楼盘数量限制</label>
+            <div class="layui-input-inline" style="width: 300px">
+                <input type="number" name="limitBroker" id="limitBroker" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入合伙人入驻楼盘数量限制" class="layui-input" th:value="${houseLimit.limitBroker}" >
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">保存</button>
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit'], function () {
+        var form = layui.form
+            , layer = layui.layer
+        form.render();
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"houseLimit/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback("houseLimit/gotoList");
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+    });
+</script>
+
+</body>
+</html>

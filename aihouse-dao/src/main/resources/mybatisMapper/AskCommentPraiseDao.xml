@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.AskCommentPraiseDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.AskCommentPraise">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="ask_comment_id" jdbcType="INTEGER" property="askCommentId" />
+
+		<result column="is_checked" jdbcType="VARCHAR" property="isChecked" />
+
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_ask_comment_praise (
+		user_id,
+		ask_comment_id
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{askCommentId,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_ask_comment_praise 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_ask_comment_praise
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="askCommentId!=null">ask_comment_id = #{askCommentId,jdbcType=INTEGER}, </if>
+			<if test="isChecked!=null and isChecked!=''">is_checked = #{isChecked,jdbcType=VARCHAR}, </if>
+			<if test="createTime!=null">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_comment_id,
+		is_checked,
+		create_time
+		from ahs_ask_comment_praise
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_comment_id,
+		is_checked,
+		create_time
+		from ahs_ask_comment_praise
+		<where>
+		<if test="id!=null "> and ahs_ask_comment_praise.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_ask_comment_praise.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="askCommentId!=null "> and ahs_ask_comment_praise.ask_comment_id = #{askCommentId,jdbcType=INTEGER}</if>
+		<if test="isChecked!=null and isChecked!=''"> and ahs_ask_comment_praise.is_checked = #{isChecked,jdbcType=VARCHAR}</if>
+		<if test="createTime!=null "> and ahs_ask_comment_praise.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask_comment_praise.create_time BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_comment_id,
+		is_checked,
+		create_time
+		from ahs_ask_comment_praise
+		<where>
+		<if test="id!=null "> and ahs_ask_comment_praise.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_ask_comment_praise.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="askCommentId!=null "> and ahs_ask_comment_praise.ask_comment_id = #{askCommentId,jdbcType=INTEGER}</if>
+		<if test="isChecked!=null and isChecked!=''"> and ahs_ask_comment_praise.is_checked = #{isChecked,jdbcType=VARCHAR}</if>
+		<if test="createTime!=null "> and ahs_ask_comment_praise.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask_comment_praise.create_time BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteAskCommentPraiseByAppAskComent" >
+		delete from  ahs_ask_comment_praise
+		where ask_comment_id=#{askCommentId}
+	</delete>
+	<delete id="deleteAppAskCommentPraiseByAskId">
+		delete from ahs_ask_comment_praise where ask_comment_id in (select id from ahs_ask_comment where ask_id=#{id})
+	</delete>
+
+</mapper>

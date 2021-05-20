@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.CommunityPraiseDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.CommunityPraise">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="community_id" jdbcType="INTEGER" property="communityId" />
+
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_comment_praise (
+		user_id,
+		community_id
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{communityId,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_comment_praise 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_comment_praise
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="communityId!=null">community_id = #{communityId,jdbcType=INTEGER}, </if>
+			<if test="createtime!=null">createtime = #{createtime,jdbcType=TIMESTAMP}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		community_id,
+		createtime
+		from ahs_comment_praise
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		community_id,
+		createtime
+		from ahs_comment_praise
+		<where>
+		<if test="id!=null "> and ahs_comment_praise.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_comment_praise.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="communityId!=null "> and ahs_comment_praise.community_id = #{communityId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_comment_praise.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		community_id,
+		createtime
+		from ahs_comment_praise
+		<where>
+		<if test="id!=null "> and ahs_comment_praise.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_comment_praise.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="communityId!=null "> and ahs_comment_praise.community_id = #{communityId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_comment_praise.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteCommunityPraiseByCommunity" >
+		delete from  ahs_comment_praise
+		where community_id=#{communityId}
+	</delete>
+
+
+</mapper>

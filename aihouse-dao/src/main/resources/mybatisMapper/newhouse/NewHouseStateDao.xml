@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.newhouse.NewHouseStateDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.NewHouseState">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="new_house_id" jdbcType="INTEGER" property="newHouseId"/>
+      <result column="type" jdbcType="INTEGER" property="type"/>
+      <result column="title" jdbcType="VARCHAR" property="title"/>
+      <result column="content" jdbcType="VARCHAR" property="content"/>
+      <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+      <result column="building" jdbcType="VARCHAR" property="building"/>
+      <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+      <result column="publictime" jdbcType="VARCHAR" property="publictime"/>
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_new_house_state
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id,new_house_id,type,title,content,createtime,building,is_del,publictime
+    from ahs_new_house_state
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+      select id,new_house_id,type,title,content,createtime,building,is_del,publictime
+      from ahs_new_house_state
+      <where>
+        <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+        <if test="newHouseId!=null"> and new_house_id=#{newHouseId,jdbcType=INTEGER}</if>
+        <if test="type!=null"> and type=#{type,jdbcType=INTEGER}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate} and #{endDate}</if>
+ 	</where> 
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+
+  </select>
+  <select id="queryByCondition" resultMap="BaseResultMap">
+      select id,new_house_id,type,title,content,createtime,building,is_del,publictime
+      from ahs_new_house_state
+	<where>
+        <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+        <if test="newHouseId!=null"> and new_house_id=#{newHouseId,jdbcType=INTEGER}</if>
+        <if test="type!=null"> and type=#{type,jdbcType=INTEGER}</if>
+        <if test=" +startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and create_time BETWEEN #{startDate} and #{endDate}</if>
+    </where>
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+  </select>
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into ahs_new_house_state (new_house_id,type,title,content,building,publictime)
+    values (#{newHouseId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{building,jdbcType=VARCHAR},#{publictime,jdbcType=VARCHAR})
+  </insert>
+  <update id="update">
+    update  	ahs_new_house_state
+	<set>
+        <if test="type!=null ">type = #{type,jdbcType=INTEGER}, </if>
+		<if test="title!=null and title!=''">title = #{title,jdbcType=VARCAHR}, </if>
+		<if test="content!=null and content!=''">content = #{content,jdbcType=VARCAHR}, </if>
+        <if test="building!=null and building!='' ">building = #{building,jdbcType=VARCHAR}, </if>
+        <if test="publictime!=null and publictime!=''">publictime = #{publictime,jdbcType=VARCHAR}, </if>
+ 	</set>
+	where id=#{id}
+  </update>
+
+</mapper>

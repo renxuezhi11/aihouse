@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${sys_market.id }" />
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">均价</label>
+            <div class="layui-input-block">
+                <input type="text" name="averagePrice" id="averagePrice" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入均价" class="layui-input" th:value="${sys_market.averagePrice}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 220px;">较上月百分比(单位：%)</label>
+            <div class="layui-input-inline">
+                <input type="text" name="priceJump" id="priceJump" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入百分比" class="layui-input" th:value="${sys_market.priceJump}" >
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">保存</button>
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+        form.render();
+
+
+        laydate.render({
+            elem: '#createTime'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateTime'
+            , type: 'datetime'
+        });
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"sysMarket/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback("sysMarket/gotoPage");
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+    });
+</script>
+
+</body>
+</html>

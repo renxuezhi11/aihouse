@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.AppUpdateDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.AppUpdate">
+    <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="version" jdbcType="VARCHAR" property="version"/>
+      <result column="android_url" jdbcType="VARCHAR" property="androidUrl"/>
+      <result column="ios_url" jdbcType="VARCHAR" property="iosUrl"/>
+      <result column="note" jdbcType="VARCHAR" property="note"/>
+      <result column="appid" jdbcType="VARCHAR" property="appid"/>
+      <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_app_update
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, android_url, ios_url, note, appid,createtime,version
+    from ahs_app_update
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, android_url, ios_url, note, appid,createtime,version
+    from ahs_app_update
+      <where>
+		<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+		<if test="appid!=null"> and appid = #{appid,jdbcType=VARCHAR}</if>
+ 	</where> 
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+
+  </select>
+  <select id="queryByCondition" resultMap="BaseResultMap">
+      select id, android_url, ios_url, note, appid,createtime,version
+      from ahs_app_update
+	<where>
+        <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+        <if test="appid!=null"> and appid = #{appid,jdbcType=VARCHAR}</if>
+ 	</where> 
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+  </select>
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        select id, android_url, ios_url, note, appid,createtime,version
+        from ahs_app_update
+        <where>
+            <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+            <if test="appid!=null"> and appid = #{appid,jdbcType=VARCHAR}</if>
+        </where>
+        <choose>
+            <when test="orderByString!=null and orderByString!=''">
+                ${orderByString}
+            </when>
+            <otherwise>
+                order by id asc
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+        insert into ahs_app_update (
+         android_url, ios_url, note, appid,version
+        )
+        values (
+        #{androidUrl,jdbcType=VARCHAR},
+        #{iosUrl,jdbcType=VARCHAR},
+        #{note,jdbcType=VARCHAR},
+        #{appid,jdbcType=VARCHAR},
+         #{version,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" >
+        update ahs_app_update
+        <set>
+            <if test="androidUrl!=null and iosUrl!=''">android_url = #{androidUrl,jdbcType=VARCHAR}, </if>
+            <if test="iosUrl!=null and iosUrl!=''">ios_url = #{iosUrl,jdbcType=VARCHAR}, </if>
+            <if test="note!=null and note!=''">note = #{note,jdbcType=VARCHAR}, </if>
+            <if test="appid!=null and appid!=''">appid = #{appid,jdbcType=VARCHAR}, </if>
+            <if test="version!=null">version = #{version,jdbcType=VARCHAR}, </if>
+        </set>
+        where id=#{id}
+
+    </update>
+</mapper>

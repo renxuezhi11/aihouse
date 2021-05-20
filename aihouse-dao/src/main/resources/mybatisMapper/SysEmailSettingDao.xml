@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.SysEamilSettingDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.SysEmailSetting">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="email_account" jdbcType="VARCHAR" property="emailAccount"/>
+      <result column="email_password" jdbcType="VARCHAR" property="emailPassword"/>
+      <result column="smtp_host" jdbcType="VARCHAR" property="smtpHost"/>
+      <result column="smtp_port" jdbcType="VARCHAR" property="smtpPort"/>
+      <result column="email_name" jdbcType="VARCHAR" property="emailName"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_sys_email_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, email_account,email_password,smtp_host,smtp_port,email_name
+    from ahs_sys_email_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+      select id, email_account,email_password,smtp_host,smtp_port,email_name
+      from ahs_sys_email_setting
+      <where>
+		<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+ 	</where>
+  </select>
+
+  <select id="queryByCondition" resultMap="BaseResultMap">
+      select id, email_account,email_password,smtp_host,smtp_port,email_name
+      from ahs_sys_email_setting
+	<where>
+        <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+ 	</where> 
+
+  </select>
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        select id, email_account,email_password,smtp_host,smtp_port,email_name
+        from ahs_sys_email_setting
+        <where>
+            <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+        </where>
+
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+        insert into ahs_sys_email_setting (
+         email_account,email_password,smtp_host,smtp_port,email_name
+        )
+        values (
+        #{emailAccount,jdbcType=VARCHAR},
+        #{emailPassword,jdbcType=VARCHAR},
+        #{smtpHost,jdbcType=VARCHAR},
+        #{smtpPort,jdbcType=VARCHAR},
+        #{emailName,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" >
+        update ahs_sys_email_setting
+        <set>
+            <if test="emailAccount!=null and emailAccount!=''">email_account = #{emailAccount,jdbcType=VARCHAR}, </if>
+            <if test="emailPassword!=null and emailPassword!=''">email_password = #{emailPassword,jdbcType=VARCHAR}, </if>
+            <if test="smtpHost!=null and smtpHost!=''">smtp_host = #{smtpHost,jdbcType=VARCHAR}, </if>
+            <if test="smtpPort!=null and smtpPort!=''">smtp_port = #{smtpPort,jdbcType=VARCHAR}, </if>
+            <if test="emailName!=null and emailName!=''">email_name = #{emailName,jdbcType=VARCHAR}, </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

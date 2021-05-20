@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <blockquote class="layui-elem-quote">
+        <form id="dataForm" class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <input type="text" name="shopName" id="shopName" placeholder="商铺名称" class="layui-input">
+                </div>
+                <div class="layui-input-inline">
+                    <select name="type"  id="type" >
+                        <option value="">商铺类型</option>
+                        <option value="1" >住宅底商</option>
+                        <option value="2" >商业街商铺</option>
+                        <option value="3" >临街门面</option>
+                        <option value="4" >写字楼配套底商</option>
+                        <option value="5" >购物中心</option>
+                        <option value="6" >其他</option>
+                    </select>
+                </div>
+                <div class="layui-input-inline">
+                    <select name="fixture"  id="fixture" >
+                        <option value="">装修情况</option>
+                        <option value="毛坯" >毛坯</option>
+                        <option value="精装修" >精装修</option>
+                        <option value="简装修" >简装修</option>
+                        <option value="豪华装修" >豪华装修</option>
+                    </select>
+                </div>
+                <div class="layui-inline" >
+                    <label class="layui-form-label">审核状态</label>
+                    <div class="layui-input-inline">
+                        <select name="checkStatus" id="checkStatus">
+                            <option value="">请选择状态</option>
+                            <option value="0" selected>未审核</option>
+                            <option value="1">审核通过</option>
+                            <option value="2">审核不通过</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <select name="flag" id="flag">
+                        <option value="">上架状态</option>
+                        <option value="0">未上架</option>
+                        <option value="1">上架</option>
+                        <option value="2">下架</option>
+                    </select>
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="startDate" id="startDate" placeholder="开始时间" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <input type="text" name="endDate" id="endDate" placeholder="结束时间" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <input type="button" name="" class="layui-btn" onclick="loadMyData()" data-type="reload"
+                           th:value="搜索"/>
+                </div>
+            </div>
+        </form>
+    </blockquote>
+    <div class="mt-20">
+        <table id="table-data" lay-filter="table-data"></table>
+    </div>
+    <script type="text/html" id="barDemo" >
+
+        <!--<span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'shophouse/saveShop')}">-->
+            <!--<a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>-->
+        <!--</span>-->
+        {{#  if(d.flag_ =='上架'){ }}
+        <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'shophouse/saveShop')}">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon layui-icon-delete"></i>下架</a>
+        </span>
+        {{# } else { }}
+        <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'shophouse/saveShop')}">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="nodel" ><i class="layui-icon layui-icon-delete"></i>上架</a>
+        </span>
+        {{# } }}
+        <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'shophouse/checkShop')}">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="check"><i class="layui-icon layui-icon-form"></i>审核</a>
+        </span>
+    </script>
+    <script type="text/html" id="toolbar-data">
+        <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'shophouse/export')}">
+            <a href="javascript:void(0)" onclick="exports()" class="layui-btn layui-btn-warm layui-btn-sm"><i  class="layui-icon layui-icon-download-circle"></i> 导出 </a>
+        </span>
+    </script>
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" th:inline="javascript">
+        var table;
+        layui.use(['form', 'table', 'laydate'], function () {
+            var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+            //但是，如果你的HTML是动态生成的，自动渲染就会失效
+            //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+            form.render();
+            table = layui.table;
+            //第一个实例
+            table.render({
+                elem: '#table-data'
+                , toolbar: '#toolbar-data'
+                , url: rootPath + "shophouse/selectAll" //数据接口
+                , method: "post"
+                , page: true //开启分页
+                ,where:{checkStatus:0}
+                , cols: [[ //表头
+                    {field: 'id', title: 'id', type: "checkbox"}
+                    , {field: 'id', title: 'ID'}
+                    , {field: 'shopName', title: '商铺名称'}
+                    , {field: 'contacts', title: '联系人'}
+                    , {field: 'telephone', title: '电话'}
+                    , {field: 'adress', title: '地址'}
+                    , {field: 'coveredArea', title: '面积(m²)'}
+                    , {field: 'monthlyRent', title: '租金(元/月)'}
+                    , {field: 'propertyFee', title: '物业费(元/m².月)'}
+                    , {field: 'type_', title: '商铺类型'}
+                    , {field: 'fixture', title: '装修情况'}
+                    , {field: 'flag_', title: '房源状态'}
+                    , {field: 'checkStatus_', title: '审核状态'}
+                    ,{field: 'isDel_', title: '删除状态'}
+                    ,{field: 'createTime_', title: '上传时间'}
+                    , {fixed: 'right',width:200 , title: '操作', toolbar: '#barDemo'}
+                ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "count": res.data.total, //解析数据长度
+                        "data": res.data.rows //解析数据列表
+                    };
+                },
+                "request": {
+                    pageName: 'page' //页码的参数名称，默认：page
+                    , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+                },
+                "response": {
+                    statusName: 'code' //规定数据状态的字段名称，默认：code
+                    , statusCode: 0 //规定成功的状态码，默认：0
+                }
+            });
+            //监听行工具事件
+            table.on('tool(table-data)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'del') {
+                    var text = "确定要下架该房源吗?";
+                    myConfirm(text, function (index) {
+                        $.post(rootPath + "shophouse/updateFlag", {"id": data.id, "flag": 2}, function (data) {
+                            loadMyData1()
+                        });
+                        layer.close(index);
+                    })
+                } else if (obj.event === 'edit') {
+                    window.location.href = rootPath + "shophouse/gotoCheck?id=" + data.id;
+                }else if(obj.event=='nodel'){
+                    if(data.checkStatus_=='审核通过'&&data.isDel_=="正常") {
+                        var text = "确定要上架该房源吗?";
+                        myConfirm(text, function (index) {
+                            $.post(rootPath + "shophouse/updateFlag", {"id": data.id, "flag": 1}, function (data) {
+                                loadMyData1()
+                            });
+                            layer.close(index);
+                        })
+                    }else{
+                        myConfirm("房源未审核或审核不通过暂不能上架", function (index) {
+                            layer.close(index);
+                        })
+                    }
+                }else if(obj.event=='check'){
+                    layer.open({
+                        type: 2,
+                        title: '审核房源',
+                        shadeClose: true,
+                        maxmin: true,
+                        shade: 0.8,
+                        area: ['1000px', '700px'],
+                        content:rootPath+ 'shophouse/gotoCheck?id='+data.id,
+                        end:function () {
+                            loadMyData1()
+                        }
+                    });
+                }
+            });
+
+            /*初始化日期选择框 begin*/
+            var laydate = layui.laydate;
+            laydate.render({
+                elem: '#startDate'
+                , type: 'datetime'
+            });
+            laydate.render({
+                elem: '#endDate'
+                , type: 'datetime'
+            });
+
+            laydate.render({
+                elem: '#createTime'
+                , type: 'datetime'
+            });
+            laydate.render({
+                elem: '#updateTime'
+                , type: 'datetime'
+            });
+        })
+        function loadMyData() {
+            table.reload("table-data", {
+                where: $("#dataForm").serializeObject()
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        }
+        function loadMyData1() {
+            table.reload("table-data", {
+                where: $("#dataForm").serializeObject()
+                , page: {
+                    curr: $(".layui-laypage-skip").find("input").val()//重新从第 当前页 页开始
+                }
+            });
+        }
+        //导出
+        function exports() {
+            window.location.href = rootPath + "shophouse/export?" + $("#dataForm").serialize()
+        }
+    </script>
+</div>
+</body>
+</html>

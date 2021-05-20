@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.newhouse.NewHouseCommentDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.NewHouseComment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="new_house_id" jdbcType="INTEGER" property="newHouseId"/>
+    <result column="user_id" jdbcType="INTEGER" property="userId"/>
+      <result column="price_score" jdbcType="INTEGER" property="priceScore"/>
+      <result column="place_score" jdbcType="INTEGER" property="placeScore"/>
+      <result column="mating_score" jdbcType="INTEGER" property="matingScore"/>
+      <result column="traffic_score" jdbcType="INTEGER" property="trafficScore"/>
+      <result column="env_score" jdbcType="INTEGER" property="envScore"/>
+      <result column="score" jdbcType="DECIMAL" property="score"/>
+      <result column="content" jdbcType="VARCHAR" property="content"/>
+      <result column="img_url" jdbcType="VARCHAR" property="imgUrl"/>
+      <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+      <result column="status" jdbcType="INTEGER" property="status"/>
+      <result column="thumbs_up" jdbcType="INTEGER" property="thumbsUp"/>
+      <result column="statusContent" jdbcType="VARCHAR" property="statusContent"/>
+      <result column="userPhoto" jdbcType="VARCHAR" property="userPhoto"/>
+      <result column="username" jdbcType="VARCHAR" property="username"/>
+
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_new_house_comment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id,new_house_id,user_id,price_score,place_score,mating_score,traffic_score,env_score,score,content,img_url,createtime,status,thumbs_up
+    from ahs_new_house_comment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+      select id,new_house_id,user_id,price_score,place_score,mating_score,traffic_score,env_score,score,content,img_url,createtime,status,thumbs_up,
+      (select username from ahs_users where id=ahs_new_house_comment.user_id) as username,
+      (select userphoto from ahs_users where id=ahs_new_house_comment.user_id) as userPhoto
+      from ahs_new_house_comment
+      <where>
+        <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null"> and user_id = #{userId,jdbcType=INTEGER}</if>
+        <if test="newHouseId!=null"> and new_house_id=#{newHouseId,jdbcType=INTEGER}</if>
+        <if test="status!=null"> and status=#{status,jdbcType=INTEGER}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate} and #{endDate}</if>
+ 	</where> 
+     <if test="orderByString!=null and orderByString!=''">
+         ${orderByString}
+     </if>
+
+  </select>
+  <select id="queryByCondition" resultMap="BaseResultMap">
+      select id,new_house_id,user_id,price_score,place_score,mating_score,traffic_score,env_score,score,content,img_url,createtime,status,thumbs_up
+      from ahs_new_house_comment
+	<where>
+        <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+        <if test="userId!=null"> and user_id = #{userId,jdbcType=INTEGER}</if>
+        <if test="status!=null"> and status=#{status,jdbcType=INTEGER}</if>
+        <if test="newHouseId!=null"> and new_house_id=#{newHouseId,jdbcType=INTEGER}</if>
+        <if test=" +startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and create_time BETWEEN #{startDate} and #{endDate}</if>
+    </where>
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+  </select>
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into ahs_new_house_comment (new_house_id,user_id,price_score,place_score,mating_score,traffic_score,env_score,score,content,img_url)
+    values (#{newHouseId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{priceScore,jdbcType=INTEGER},#{placeScore,jdbcType=INTEGER},#{matingScore,jdbcType=INTEGER},#{trafficScore,jdbcType=INTEGER},
+    #{envScore,jdbcType=INTEGER},#{score,jdbcType=DECIMAL},#{content,jdbcType=VARCHAR},#{imgUrl,jdbcType=VARCHAR})
+  </insert>
+  <update id="update">
+    update  	ahs_new_house_comment
+	<set>
+        <if test="priceScore!=null ">price_score = #{priceScore,jdbcType=INTEGER}, </if>
+		<if test="placeScore!=null ">place_score = #{placeScore,jdbcType=INTEGER}, </if>
+		<if test="matingScore!=null ">mating_score = #{matingScore,jdbcType=INTEGER}, </if>
+		<if test="trafficScore!=null">traffic_score = #{trafficScore,jdbcType=INTEGER}, </if>
+		<if test="envScore!=null ">env_score = #{envScore,jdbcType=INTEGER}, </if>
+		<if test="score!=null ">score = #{score,jdbcType=DECIMAL}, </if>
+        <if test="content!=null and content!='' ">content = #{content,jdbcType=VARCHAR}, </if>
+        <if test="imgUrl!=null and imgUrl!=''">img_url = #{imgUrl,jdbcType=VARCHAR}, </if>
+        <if test="thumbsUp!=null">thumbs_up = #{thumbsUp,jdbcType=INTEGER}, </if>
+ 	</set>
+	where id=#{id}
+  </update>
+
+    
+    <select id="selectAllComment" parameterType="java.lang.Integer" resultType="map">
+      select id,new_house_id,user_id,price_score,place_score,mating_score,traffic_score,env_score,score,content,img_url,DATE_FORMAT(createtime,'%Y-%m-%d %H:%i:%S') as createtime,status,thumbs_up,
+      (select username from ahs_users where id=ahs_new_house_comment.user_id) as username,
+      (select userphoto from ahs_users where id=ahs_new_house_comment.user_id) as userPhoto,
+      (select count(*) from ahs_new_house_comment_praise where comment_id=ahs_new_house_comment.id and user_id=#{userId}) as isPraise
+      from ahs_new_house_comment where new_house_id=#{houseId} order by createtime desc
+    </select>
+    
+    <update id="updateNewHouseCommentCnt" >
+      UPDATE ahs_new_house set comment_count=comment_count+1 where id=#{houseId}
+    </update>
+</mapper>

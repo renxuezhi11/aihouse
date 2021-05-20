@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${loginRegister.id }" />
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" style="width: 200px">注册是否需要推广码</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isNeedSpread" value="0" lay-verify="required" title="否" th:checked="${loginRegister.isNeedSpread==0 ||loginRegister.isNeedSpread==null}">
+                <input type="radio" name="isNeedSpread" value="1" lay-verify="required" title="是" th:checked="${loginRegister.isNeedSpread==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" style="width: 200px">注册是否需要审核</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isNeedCheck" value="0" lay-verify="required" title="否" th:checked="${loginRegister.isNeedCheck==0 ||loginRegister.isNeedCheck==null}">
+                <input type="radio" name="isNeedCheck" value="1" lay-verify="required" title="是" th:checked="${loginRegister.isNeedCheck==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" style="width: 200px">前端是否需要登录</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isNeedLogin" value="0" lay-verify="required" title="否" th:checked="${loginRegister.isNeedLogin==0 ||loginRegister.isNeedLogin==null}">
+                <input type="radio" name="isNeedLogin" value="1" lay-verify="required" title="是" th:checked="${loginRegister.isNeedLogin==1}">
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">保存</button>
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit'], function () {
+        var form = layui.form
+            , layer = layui.layer
+        form.render();
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"loginRegisterSetting/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback("loginRegisterSetting/gotoList");
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+    });
+</script>
+
+</body>
+</html>

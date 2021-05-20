@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
+
+    <script  th:inline="javascript">
+        $(function () {
+            var datas=[[${session.auths}]];
+            var text="";
+            for (var i=0;i<datas.length;i++){
+                var data=datas[i];
+                if(data.shows==0){
+                    text+='<li class="layui-nav-item" >';
+                    text+='<a href="javascript:void(0)"  data-url="'+data.href+'">';
+                    text+='<i class="'+data.icon+'" data-icon="'+data.icon+'"></i>';
+                    text+='<cite >'+data.name+'</cite>';
+                    if(data.children!=null){
+                        text+='<span  class="layui-nav-more"></span>';
+                    }
+                    text+='</a>';
+                    text+=cMenu(data.children);
+                }
+                text+='<span class="layui-nav-bar" style="top: 157.5px; height: 0px; opacity: 0;"></span></li>';
+                text+='';
+                text+='';
+            }
+            $("#menus").html(text);
+        })
+
+        //递归菜单
+        function cMenu(data) {
+            var text="";
+            if(data!=null){
+                text+='<dl class="layui-nav-child" >';
+                for (var j=0;j<data.length;j++){
+                    var cd=data[j];
+                    text+='<dd>';
+                    text+='<a href="javascript:void(0)" data-url="'+cd.href+'">';
+                    text+='<i class="'+cd.icon+'" data-icon="'+cd.icon+'"></i>';
+                    text+='<cite >'+cd.name+'</cite>';
+                    if(cd.children!=null){
+                        text+='<span  class="layui-nav-more"></span>';
+                    }
+                    text+='</a>';
+                    if(cd.children!=null){
+                        text+=cMenu(cd.children);
+                    }
+                    text+='</dd>';
+                }
+                text+='</dl>';
+                return text;
+            }
+            return "";
+        }
+
+        /**
+         * 修改密码
+         */
+        function myselfinfo() {
+            layer.open({
+                type: 2,
+                title: '修改密码',
+                shadeClose: true,
+                maxmin: true,
+                shade: 0.8,
+                area: ['500px', '500px'],
+                content: 'sysUser/gotoChangePassword'
+            });
+        }
+        function defaultImage(obj) {
+            obj.src="/images/face.jpg?v="+new Date().getTime();
+        }
+
+        function closeWin() {
+            myConfirm("确定要关闭所有窗口吗?",function () {
+                window.sessionStorage.removeItem("menu");
+                window.location.reload();
+            })
+        }
+    </script>
+
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+</head>
+<body class="main_body" >
+<div class="layui-layout layui-layout-admin">
+    <!-- 顶部 -->
+    <div class="layui-header header">
+        <div class="layui-main">
+            <a href="#" class="logo">爱好室管理后台</a>
+            <div class="layui-form component">
+                <select name="modules" lay-verify="required" lay-search="">
+                    <option value="">直接选择或搜索选择</option>
+                </select>
+                <i class="layui-icon">&#xe615;</i>
+            </div>
+            <!-- 顶部右侧菜单 -->
+            <ul class="layui-nav top_menu">
+                <li class="layui-nav-item showNotice" id="showNotice" pc>
+                    <a href="javascript:closeWin()"><i class="layui-icon layui-icon-close-fill"></i><cite>关闭所有窗口</cite></a>
+                </li>
+                <li class="layui-nav-item" mobile>
+                    <a th:href="@{/login/loginout}"><i class="layui-icon layui-icon-close"></i> 退出</a>
+                </li>
+                <li class="layui-nav-item" pc>
+                    <a href="javascript:;">
+                        <img th:src="@{/fileImages/watch(path=${session.sysUserSession?.icon})}" onerror="defaultImage(this)"  class="layui-circle" width="35" height="35">
+                        <cite>[[${session.sysUserSession?.name}]]</cite>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0)" onClick="myselfinfo()" ><i class="layui-icon layui-icon-password" ></i><cite>修改密码</cite></a>
+                        </dd>
+                        <dd><a th:href="@{/login/loginout}"><i class="layui-icon layui-icon-close"></i><cite>退出</cite></a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 左侧导航 -->
+    <div class="layui-side layui-bg-black">
+        <div class="user-photo">
+            <a class="img" title="我的头像">
+                <img th:src="@{/fileImages/watch(path=${session.sysUserSession?.icon})}" onerror="defaultImage(this)" /></a>
+            <p>你好！<span class="userName">[[${session.sysUserSession?.name}]]</span>, 欢迎登录</p>
+        </div>
+        <div class="navBar layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree" id="menus"></ul>
+        </div>
+    </div>
+    <!-- 右侧内容 -->
+    <div class="layui-body layui-form">
+        <div class="layui-tab marg0" lay-filter="bodyTab">
+            <ul class="layui-tab-title top_tab">
+                <li class="layui-this" lay-id=""><i class="layui-icon layui-icon-home"></i> <cite>我的桌面</cite></li>
+            </ul>
+            <div class="layui-tab-content clildFrame">
+                <div class="layui-tab-item layui-show" style="overflow:auto">
+
+                    <iframe th:src="@{/index/gotoWelcome}" ></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 移动导航 -->
+<div class="site-tree-mobile layui-hide"><i class="layui-icon">&#xe602;</i></div>
+<div class="site-mobile-shade"></div>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>登录页面</title>
+
+    <script type="text/javascript" th:src="@{/js/layui/layui.all.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <!--CSS加载动画框架Loaders.css-->
+    <link rel="stylesheet" th:href="@{/css/loaders.css}">
+
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-ui.min.js}"></script>
+    <!--粒子背景依赖js-->
+    <script type="text/javascript" th:src="@{/js/Particleground.js}"></script>
+
+
+    <!--<script th:src="@{/js/global.js}"></script>-->
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var rootPath = /*[[@{/}]]*/ '';
+        /*]]>*/
+        $(function () {
+            //init(rootPath);
+        })
+    </script>
+    <style>
+        .layui-layer-content{
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+<div class='login'>
+    <div class='login_title'>
+        <span>管理员登录</span>
+    </div>
+
+    <form id="loginForm" method="post" action="/login">
+    <div class='login_fields'>
+        <div class='login_fields__user'>
+            <div class='icon'>
+                <img alt="" th:src="@{/images/user_icon_copy.png}">
+            </div>
+            <input name="loginName" id="loginName" placeholder='用户名' maxlength="16" type='text' autocomplete="off" />
+            <div class='validation'>
+                <img alt="" th:src="@{/images/tick.png}">
+            </div>
+        </div>
+        <div class='login_fields__password'>
+            <div class='icon'>
+                <img alt="" th:src="@{/images/lock_icon_copy.png}">
+            </div>
+            <input name="password" id="password" placeholder='密码' maxlength="16" type='password'  autocomplete="new-password">
+            <div class='validation'>
+                <img alt="" th:src="@{/images/tick.png}">
+            </div>
+        </div>
+        <div class='login_fields__password'>
+            <div class='icon'>
+                <img alt="" th:src="@{/images/key.png}" />
+            </div>
+            <input placeholder='验证码' maxlength="4" type='text' name="verifyCode" id="verifyCode" autocomplete="off">
+            <div class='validation' style="opacity: 1; right: 50px;top: 10px;">
+               <!-- <canvas class="J_codeimg" id="myCanvas">
+                </canvas>-->
+                <img class="verify-code" th:src="@{/login/imageCode}"
+                     title="点击更换验证码" onclick="flushImage()" id="imageCode" />
+            </div>
+        </div>
+        <div class='login_fields__submit'>
+            <input type="button" onclick="login()"  value='登录'>
+        </div>
+    </div>
+    </form>
+    <div class='disclaimer'>
+        <h4 th:text="${msg}"></h4>
+    </div>
+</div>
+
+<!--登录认证显示  start-->
+<div class='authent'>
+    <div class="loader" style="height: 44px;width: 44px;margin-left: 28px;">
+        <div class="loader-inner ball-clip-rotate-multiple">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <p>认证中...</p>
+</div>
+<!--登录认证显示  end-->
+<!--<div class="OverWindows"></div>-->
+
+<script type="text/javascript">
+    //登录回车键事件
+    $(document).keypress(function (e) {
+        // 回车键事件
+        if (e.which == 13) {
+            $('input[type="button"]').click();
+        }
+    });
+
+    function flushImage() {
+        $("#imageCode").attr("src",rootPath+"login/imageCode?t="+new Date().getTime())
+    }
+    //粒子背景特效
+    $('body').particleground({
+        lineColor: '#133b88'
+    });
+
+    $('input[name="pwd"]').focus(function () {
+        $(this).attr('type', 'password');
+    });
+    $('input[type="text"]').focus(function () {
+        $(this).prev().animate({'opacity': '1'}, 200);
+    });
+    $('input[type="text"],input[type="password"]').blur(function () {
+        $(this).prev().animate({'opacity': '.5'}, 200);
+    });
+    $('input[name="login"],input[name="pwd"]').keyup(function () {
+        var Len = $(this).val().length;
+        if (!$(this).val() == '' && Len >= 5) {
+            $(this).next().animate({
+                'opacity': '1',
+                'right': '30'
+            }, 200);
+        } else {
+            $(this).next().animate({
+                'opacity': '0',
+                'right': '20'
+            }, 200);
+        }
+    });
+    function login() {
+        var loginName = $("#loginName").val();
+        var password = $("#password").val();
+        var verifyCode = $("#verifyCode").val();
+        if(!loginName){
+            layer.alert("登录名不能为空");
+            return;
+        }
+        if(!password){
+            layer.alert("密码不能为空");
+            return;
+        }
+        if(!verifyCode){
+            layer.alert("图形验证码不能为空");
+            return;
+        }
+        // $.post("/login",$("#loginForm").serialize(),function (data) {
+        //     console.log(data)
+        //     if(data.msg=="codeError"){
+        //         layer.alert("验证码错误");
+        //     }else if(data.msg=="success"){
+        //         window.location.href="/index"
+        //     }else if(data.msg=="UnknownAccountException"||data.msg=="IncorrectCredentialsException"){
+        //         layer.alert("用户名密码错误");
+        //     }
+        //     // if (data.code==0){
+        //     //     window.location.href=rootPath+"index/gotoIndex"
+        //     // }else{
+        //     //     layer.alert(data.message);
+        //     //     flushImage()
+        //     // }
+        // })
+        $("#loginForm").submit();
+    }
+
+</script>
+
+</body>
+</html>

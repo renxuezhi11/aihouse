@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<!-- head头部菜单-->
+<head th:fragment="common-head">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+    <script type="text/javascript" th:src="@{/js/layui/layui.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/layui/css/layui.css}"/>
+
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <title>爱好室后台管理系统</title>
+    <script th:src="@{/js/global.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var rootPath = /*[[@{/}]]*/ '';
+        var imgPath='http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/';
+        var imgsl1='/app_picture1';
+        var imgsl2='/app_picture2';
+        /*]]>*/
+        var alertTime=1500;
+        $(function () {
+            init(rootPath);
+        })
+        function myAlert(msg) {
+            layer.alert(msg);
+        }
+        function myConfirm(msg,callback1,callback2) {
+            var index=layer.confirm(msg, {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                if(callback1){
+                    callback1()
+                }
+                layer.close(index)
+            }, function(){
+                if(callback2){
+                    callback2()
+                }
+            });
+        }
+
+        function loads(){
+            window.location.reload();
+        }
+        function myback(url){
+            if(url){
+                window.location.href=rootPath+url;
+            }else {
+                window.history.go(-1);
+            }
+        }
+
+        $.fn.serializeObject = function()
+        {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    </script>
+    <style>
+        .body-common{
+            margin-top: 1rem;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+
+</html>

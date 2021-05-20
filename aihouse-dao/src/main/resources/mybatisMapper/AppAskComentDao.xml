@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.AppAskComentDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.AppAskComent">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="ask_id" jdbcType="BIGINT" property="askId" />
+		<result column="is_checked" jdbcType="VARCHAR" property="isChecked" />
+		<result column="is_main_checked" jdbcType="VARCHAR" property="isMainChecked" />
+		<result column="comment_content" jdbcType="LONGVARCHAR" property="commentContent" />
+		<result column="thumbs_up" jdbcType="INTEGER" property="thumbsUp" />
+		<result column="comment_count" jdbcType="INTEGER" property="commentCount" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_ask_comment (
+		user_id,
+		ask_id,
+		comment_content,
+		is_checked,
+		status
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{askId,jdbcType=BIGINT},
+		 #{commentContent,jdbcType=LONGVARCHAR},
+		 #{isChecked,jdbcType=VARCHAR},
+		 #{status,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_ask_comment
+
+		where id = #{id}
+
+
+	</delete>
+
+	<update id="update" >
+		update ahs_ask_comment
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="askId!=null">ask_id = #{askId,jdbcType=BIGINT}, </if>
+			<if test="isChecked!=null">is_checked = #{isChecked,jdbcType=VARCHAR}, </if>
+			<if test="isMainChecked!=null">is_main_checked = #{isMainChecked,jdbcType=INTEGER}, </if>
+			<if test="thumbsUp!=null">thumbs_up = #{thumbsUp,jdbcType=INTEGER}, </if>
+			<if test="commentCount!=null">comment_count = #{commentCount,jdbcType=VARCHAR}, </if>
+			<if test="commentContent!=null and commentContent!=''">comment_content = #{commentContent,jdbcType=LONGVARCHAR}, </if>
+			<if test="createTime!=null">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+			<if test="status!=null">status = #{status,jdbcType=INTEGER},</if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<update id="updateChecked">
+		update ahs_ask_comment
+		<set>
+			is_checked = #{isChecked,jdbcType=VARCHAR}
+		</set>
+		where user_id = #{userId,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_id,
+		thumbs_up,
+		comment_count,
+		comment_content,
+		is_checked,
+		create_time,
+		status
+		from ahs_ask_comment
+		where id = #{id,jdbcType=BIGINT}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_id,
+		is_checked,
+		is_main_checked,
+		thumbs_up,
+		comment_count,
+		comment_content,
+		create_time,
+		status
+		from ahs_ask_comment
+		<where>
+			<if test="id!=null "> and ahs_ask_comment.id = #{id,jdbcType=BIGINT}</if>
+			<if test="userId!=null "> and ahs_ask_comment.user_id = #{userId,jdbcType=INTEGER}</if>
+			<if test="askId!=null "> and ahs_ask_comment.ask_id = #{askId,jdbcType=BIGINT}</if>
+			<if test="commentContent!=null and commentContent!=''"> and ahs_ask_comment.comment_content = #{commentContent,jdbcType=LONGVARCHAR}</if>
+			<if test="isChecked!=null">and ahs_ask_comment.is_checked = #{isChecked,jdbcType=VARCHAR} </if>
+			<if test="isMainChecked!=null">and ahs_ask_comment.is_main_checked = #{isMainChecked,jdbcType=INTEGER} </if>
+			<if test="createTime!=null "> and ahs_ask_comment.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+			<if test="status!=null"> and ahs_ask_comment.status = #{status,jdbcType=INTEGER}</if>
+			<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask_comment.create_time BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_id,
+		is_checked,
+		is_main_checked,
+		thumbs_up,
+		comment_count,
+		comment_content,
+		create_time,
+		status
+		from ahs_ask_comment
+		<where>
+			<if test="id!=null "> and ahs_ask_comment.id = #{id,jdbcType=BIGINT}</if>
+			<if test="userId!=null "> and ahs_ask_comment.user_id = #{userId,jdbcType=INTEGER}</if>
+			<if test="askId!=null "> and ahs_ask_comment.ask_id = #{askId,jdbcType=BIGINT}</if>
+			<if test="commentContent!=null and commentContent!=''"> and ahs_ask_comment.comment_content = #{commentContent,jdbcType=LONGVARCHAR}</if>
+			<if test="isChecked!=null">and ahs_ask_comment.is_checked = #{isChecked,jdbcType=VARCHAR} </if>
+			<if test="isMainChecked!=null">and ahs_ask_comment.is_main_checked = #{isMainChecked,jdbcType=INTEGER} </if>
+			<if test="createTime!=null "> and ahs_ask_comment.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+			<if test="status!=null"> and ahs_ask_comment.status = #{status,jdbcType=INTEGER}</if>
+			<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask_comment.create_time BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="queryByCondition"  resultMap="BaseResultMap">
+		select
+		id,
+		user_id,
+		ask_id,
+		is_checked,
+		is_main_checked,
+		thumbs_up,
+		comment_count,
+		comment_content,
+		create_time,
+		status
+		from ahs_ask_comment
+		<where>
+			<if test="id!=null "> and ahs_ask_comment.id = #{id,jdbcType=BIGINT}</if>
+			<if test="userId!=null "> and ahs_ask_comment.user_id = #{userId,jdbcType=INTEGER}</if>
+			<if test="askId!=null "> and ahs_ask_comment.ask_id = #{askId,jdbcType=BIGINT}</if>
+			<if test="commentContent!=null and commentContent!=''"> and ahs_ask_comment.comment_content = #{commentContent,jdbcType=LONGVARCHAR}</if>
+			<if test="isChecked!=null">and ahs_ask_comment.is_checked = #{isChecked,jdbcType=VARCHAR} </if>
+			<if test="isMainChecked!=null">and ahs_ask_comment.is_main_checked = #{isMainChecked,jdbcType=INTEGER} </if>
+			<if test="createTime!=null "> and ahs_ask_comment.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+			<if test="status!=null"> and ahs_ask_comment.status = #{status,jdbcType=INTEGER}</if>
+			<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask_comment.create_time BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<delete id="deleteAppAskComentByAppAsk" >
+		delete from  ahs_ask_comment
+		where ask_id=#{askId}
+	</delete>
+	
+	<select id="countCommentNotChecked" resultType="Integer">
+        SELECT count(0) FROM ahs_ask_comment
+        WHERE is_checked = 0 AND user_id = #{userId,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectMainCheckedList" resultMap="BaseResultMap">
+		SELECT aac.* FROM ahs_ask_comment aac LEFT JOIN ahs_ask ask ON ask.id = aac.ask_id
+		WHERE aac.is_main_checked = 0
+		AND ask.user_id = #{userId,jdbcType=INTEGER}
+	</select>
+
+	<select id="countCommentNotMainChecked" resultType="Integer">
+		SELECT count(0) FROM ahs_ask_comment  WHERE is_main_checked = 0 AND ask_id = #{askId,jdbcType=BIGINT}
+	</select>
+
+	<select id="countReplayCount" resultType="Integer" >
+        SELECT count(0) FROM ahs_ask_comment_reply WHERE comment_id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<select id="countPraiseCount" resultType="Integer">
+		SELECT count(0) FROM ahs_ask_comment_praise WHERE ask_comment_id = #{id,jdbcType=BIGINT}
+	</select>
+
+</mapper>

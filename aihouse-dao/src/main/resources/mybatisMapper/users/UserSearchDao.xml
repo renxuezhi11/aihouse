@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserSearchDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserSearch">
+
+		<id column="id" jdbcType="BIGINT" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="content" jdbcType="VARCHAR" property="content" />
+
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+
+		<result column="city_id" jdbcType="INTEGER" property="cityId" />
+
+		<result column="type" jdbcType="INTEGER" property="type"/>
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_search (
+		user_id,
+		content,
+		city_id,
+		type
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{content,jdbcType=VARCHAR},
+		 #{cityId,jdbcType=INTEGER},
+		 #{type,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_search 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_user_search
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="content!=null and content!=''">content = #{content,jdbcType=VARCHAR}, </if>
+			<if test="createTime!=null">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+			<if test="cityId!=null">city_id = #{cityId,jdbcType=INTEGER}, </if>
+			<if test="type!=null">type=#{type,jdbcType=INTEGER},</if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		content,
+		create_time,
+		city_id,type
+		from ahs_user_search
+		where id = #{id,jdbcType=BIGINT}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		content,
+		create_time,
+		city_id,
+		type
+		from ahs_user_search
+		<where>
+		<if test="id!=null "> and ahs_user_search.id = #{id,jdbcType=BIGINT}</if>
+		<if test="userId!=null "> and ahs_user_search.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="content!=null and content!=''"> and ahs_user_search.content = #{content,jdbcType=VARCHAR}</if>
+		<if test="createTime!=null "> and ahs_user_search.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_user_search.create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="cityId!=null "> and ahs_user_search.city_id = #{cityId,jdbcType=INTEGER}</if>
+		<if test="type!=null"> and type=#{type,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		content,
+		create_time,
+		city_id,
+		type
+		from ahs_user_search
+		<where>
+		<if test="id!=null "> and ahs_user_search.id = #{id,jdbcType=BIGINT}</if>
+		<if test="userId!=null "> and ahs_user_search.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="content!=null and content!=''"> and ahs_user_search.content = #{content,jdbcType=VARCHAR}</if>
+		<if test="createTime!=null "> and ahs_user_search.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_user_search.create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="cityId!=null "> and ahs_user_search.city_id = #{cityId,jdbcType=INTEGER}</if>
+		<if test="type!=null"> and type=#{type,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteUserSearchByUsers" >
+		delete from  ahs_user_search
+		where user_id=#{userId}
+	</delete>
+
+	<delete id="deleteAllUserSearch">
+		delete from ahs_user_search
+		where user_id=#{userId} and type=#{type}
+	</delete>
+	<select id="queryUserSearch" resultType="map">
+		select distinct content,type from ahs_user_search
+		where user_id=#{userId} order by create_time desc limit 0,10
+	</select>
+
+	<select id="queryHotSearch" resultType="map">
+		select count(content) as cnt, content,type from ahs_user_search
+		 group by content,type order by cnt desc limit 0,10
+	</select>
+</mapper>

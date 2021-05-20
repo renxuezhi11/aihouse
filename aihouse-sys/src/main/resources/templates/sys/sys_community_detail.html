@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <script type="text/javascript" th:src="@{/js/viewer/viewer.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/viewer/viewer.min.css}" />
+    <style type="text/css">
+        .close{
+            position: absolute;
+            top:-9px;
+            right:-10px;
+            width:20px;
+            height:20px;
+            line-height: 18px;
+            text-align: center;
+            transform: rotate(40deg);
+            border-radius: 50%;
+            background:red;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .item{
+            width:100px;
+            height:100px;
+            position: relative;
+            display: inline-block;
+            margin:0 20px 20px 0;
+        }
+    </style>
+</head>
+<body class="body-common">
+    <div class="page-container">
+        <form class="layui-form layui-form-pane" action="">
+            <input type="hidden" name="id" id="commid" th:value="${comm.id }" />
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>内容</label>
+                <div class="layui-input-block">
+                    <textarea id="content" name="content" placeholder="请输入内容" class="layui-textarea" th:text="${comm.content}"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                    预览图：
+                    <div class="layui-upload-list " id="imageWatchJt">
+                        <div class="item" th:each="s:${imgList}" >
+                            <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s+'/app_picture3'}" th:src="${'http://aihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s+'/app_picture1'}" onclick="previewImg(this)">
+                            <div class='close' th:onclick="delXg([[${s}]],this)" >+</div>
+                        </div>
+                    </div>
+                </blockquote>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>审核状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="status" value="0" lay-verify="required" title="未审核" th:checked="${comm.status==0}">
+                    <input type="radio" name="status" value="1" lay-verify="required" title="审核通过" th:checked="${comm.status==1}">
+                    <input type="radio" name="status" value="2" lay-verify="required" title="审核不通过" th:checked="${comm.status==2}">
+                    <input type="radio" name="status" value="3" lay-verify="required" title="已删除" th:checked="${comm.status==3}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>审核回复</label>
+                <div class="layui-input-block">
+                    <input type="text" name="statusContent" id="statusContent" maxlength="50" lay-verify="required" autocomplete="off"
+                           placeholder="审核回复" class="layui-input" th:value="${comm.statusContent}" >&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'commnuity/save')}">
+                    <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+                </span>
+                <input type="button" class="layui-btn"  onclick="closeI()" value="返回" />
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    var viewer;
+    layui.use(['form', 'layedit','laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit;
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#rentTime'
+            , type: 'date'
+        });
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"community/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        closeI();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+    });
+    function closeI() {
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+    function delXg(a,b) {
+        console.log(a);
+        var id=a;
+        var commid=$("#commid").val();
+        if(id){
+            $.post(rootPath + "community/deleteImg", {"id":commid,"picture":id}, function (data) {
+                if (data.code == 0) {
+                    b.parentElement.remove()
+                }
+            });
+        }else{
+            b.parentElement.remove()
+        }
+    }
+    function previewImg(obj) {
+        var galley = document.getElementById("imageWatchJt");
+        if(viewer){
+            viewer.destroy();
+        }
+        viewer = new Viewer(galley, {
+            toolbar: {
+                oneToOne: true,
+
+                prev: function() {
+                    viewer.prev(true);
+                },
+                play: true,
+                next: function() {
+                    viewer.next(true);
+                },
+                download: function() {
+                    var a = document.createElement('a');
+                    var src=viewer.image.src.replace(imgsl1,imgsl2);
+                    a.href = src;
+                    a.download = viewer.image.alt;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+            },
+            url:'data'
+        });
+        viewer.update();
+    }
+</script>
+</html>

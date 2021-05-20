@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+    <div class="page-container">
+        <form class="layui-form layui-form-pane" action="">
+            <input type="hidden" name="id" id="id" th:value="${sys_ask.id }" />
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>内容</label>
+                <div class="layui-input-inline">
+                    <textarea id="askContent" name="askContent" placeholder="请输入内容" class="layui-textarea" th:text="${sys_ask.askContent}"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>标题</label>
+                <div class="layui-input-inline">
+                    <textarea id="askTitle" name="askTitle" placeholder="请输入内容" class="layui-textarea" th:text="${sys_ask.askTitle}"></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>审核状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="status" value="0" lay-verify="required" title="未审核" th:checked="${sys_ask.status==0}">
+                    <input type="radio" name="status" value="1" lay-verify="required" title="审核通过" th:checked="${sys_ask.status==1}">
+                    <input type="radio" name="status" value="2" lay-verify="required" title="审核不通过" th:checked="${sys_ask.status==2}">
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysAsk/save')}">
+                    <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+                </span>
+                <input type="button" class="layui-btn"  onclick="closeI()" value="返回" />
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    layui.use(['form', 'layedit','laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit;
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#rentTime'
+            , type: 'date'
+        });
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"sysAsk/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        closeI();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+    });
+    function closeI() {
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+</script>
+</html>

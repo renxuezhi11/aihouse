@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.SysLoginRegisterSettingDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.SysLoginRegisterSetting">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="is_need_check" jdbcType="INTEGER" property="isNeedCheck"/>
+      <result column="is_need_login" jdbcType="INTEGER" property="isNeedLogin"/>
+      <result column="is_need_spread" jdbcType="INTEGER" property="isNeedSpread"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_sys_login_register_setting
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, is_need_check,is_need_login,is_need_spread
+    from ahs_sys_login_register_setting
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+      select id, is_need_check,is_need_login,is_need_spread
+      from ahs_sys_login_register_setting
+      <where>
+		<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+ 	</where>
+  </select>
+
+  <select id="queryByCondition" resultMap="BaseResultMap">
+      select id, is_need_check,is_need_login,is_need_spread
+      from ahs_sys_login_register_setting
+	<where>
+        <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+ 	</where> 
+
+  </select>
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        select id, is_need_check,is_need_login,is_need_spread
+        from ahs_sys_login_register_setting
+        <where>
+            <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+        </where>
+
+    </select>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+        insert into ahs_sys_login_register_setting (
+         is_need_check,is_need_login,is_need_spread
+        )
+        values (
+        #{isNeedCheck,jdbcType=INTEGER},
+        #{isNeedLogin,jdbcType=INTEGER},
+        #{isNeedSpread,jdbcType=INTEGER}
+        )
+    </insert>
+
+    <update id="update" >
+        update ahs_sys_login_register_setting
+        <set>
+            <if test="isNeedCheck!=null">is_need_check = #{isNeedCheck,jdbcType=INTEGER}, </if>
+            <if test="isNeedLogin!=null">is_need_login = #{isNeedLogin,jdbcType=INTEGER}, </if>
+            <if test="isNeedSpread!=null">is_need_spread = #{isNeedSpread,jdbcType=INTEGER}, </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

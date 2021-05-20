@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=mNvg4SESKhTMvz2GWoWxXhzjl8f7DbfG"></script>
+</head>
+<body class="body-common">
+    <div class="page-container">
+        <form class="layui-form layui-form-pane" action="">
+            <input type="hidden" name="id" th:value="${appoint.id }" />
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>房源类型</label>
+                <div class="layui-input-block">
+                    <input type="radio"  name="houseType" th:value="1" th:title="新房" th:checked="${appoint.houseType==1}">
+                    <input type="radio" name="houseType" th:value="2" th:title="二手房" th:checked="${appoint.houseType==2}" disabled>
+                    <input type="radio" name="houseType" th:value="3" th:title="租房" th:checked="${appoint.houseType==3}" disabled>
+                    <input type="radio" name="houseType" th:value="4" th:title="商铺出租" th:checked="${appoint.houseType==4}" disabled>
+                    <input type="radio" name="houseType" th:value="5" th:title="写字楼出租" th:checked="${appoint.houseType==5}" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">房源信息</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="houseId" id="houseId" maxlength="50"  autocomplete="off" disabled="disabled" style="display: none"
+                           placeholder="" class="layui-input" th:value="${appoint.houseId}" >
+                    <input type="text"  id="xx" maxlength="50"  autocomplete="off" disabled="disabled"
+                           placeholder="" class="layui-input" th:value="${appoint.name}" >
+                </div>
+                <label class="layui-form-label">预约人</label>
+                <div class="layui-input-inline">
+                    <input type="text"  id="xx1" maxlength="50"  autocomplete="off" disabled="disabled"
+                           placeholder="" class="layui-input" th:value="${appoint.username}" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">预约日期</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="appointmentDate" id="appointmentDate" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${appoint.appointmentDate}"  disabled="disabled">
+                </div>
+                <label class="layui-form-label">预约时间段</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="appointmentTime" id="appointmentTime" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${appoint.appointmentTime}"  disabled="disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">经纪人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="borkerId" id="borkerId" maxlength="50" autocomplete="off" style="display: none"
+                           placeholder="" class="layui-input" th:value="${appoint.borkerId}" >
+                    <input type="text" name="brokername" id="brokername" maxlength="50" autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${appoint.brokername}" >
+
+                </div>
+                <button class="layui-btn"  lay-submit=""  lay-filter="change-broker">指定</button>
+            </div>
+            <div>
+                <label class="layui-form-label">预约状态</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="status" th:value="0" th:title="预约中" th:checked="${appoint.status==0}">
+                    <input type="radio" name="status" th:value="1" th:title="取消预约" th:checked="${appoint.status==1}">
+                    <input type="radio" name="status" th:value="2" th:title="预约成功" th:checked="${appoint.status==2}">
+                    <input type="radio" name="status" th:value="3" th:title="已看房" th:checked="${appoint.status==3}">
+                    <input type="radio" name="status" th:value="4" th:title="已评论" th:checked="${appoint.status==4}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户手机号</label>
+                <div class="layui-input-block">
+                    <input type="number" name="userTelephone" id="userTelephone" maxlength="50" l autocomplete="off" disabled="disabled"
+                           placeholder="" class="layui-input" th:value="${appoint.userTelephone}" >
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="text-align: center">
+                <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'appointment/save')}">
+                    <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+                </span>
+                <input type="button" class="layui-btn"  onclick="closeI()" value="返回" />
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    layui.use(['form', 'layedit'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+        // var index=layedit.build('profile');
+        // layedit.setContent(index,message);
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            if(!data.field["borkerId"]){
+                myAlert("请选择经纪人");
+                return false;
+            }
+            $.post(rootPath+"appointment/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        closeI();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+        form.on('submit(change-broker)', function (data) {
+            layer.open({
+                type: 2,
+                title: '选择带看人',
+                shadeClose: true,
+                maxmin: true,
+                shade: 0.8,
+                area: ['600px', '500px'],
+                btn: ['确定','关闭'],
+                content:rootPath+ 'appointment/gotoHouseBrokerList?id='+$("#houseId").val(),
+                yes: function(index){
+                    var res = window["layui-layer-iframe" + index].callbackdata();
+                    console.log(res)
+                    $("#borkerId").val(res.id)
+                    $("#brokername").val(res.username)
+                    layer.close(index);
+                }
+            });
+            return false;
+        })
+    });
+    function closeI() {
+        if($("input[name=id]").val()){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+            parent.layer.get
+        }else{
+            myback()
+        }
+    }
+</script>
+</html>

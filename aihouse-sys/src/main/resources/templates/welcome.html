@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <script type="text/javascript" th:src="@{/js/layui/layui.js}"></script>
+    <script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/js/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <link rel="stylesheet" th:href="@{/css/layer.css}">
+</head>
+<body>
+<div class="">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">快捷方式</div>
+                <div class="layui-card-body">
+
+                    <div id="kj" class="layui-carousel layadmin-carousel layadmin-shortcut">
+                        <div carousel-item>
+                            <ul class="layui-row layui-col-space10 layui-this">
+                                <li class="layui-col-xs3 hrefTab ">
+                                    <a  href="javascript:void(0)"  data-url="newhouse/gotoList">
+                                        <i class="layui-icon layui-icon-console" data-icon="layui-icon-console"></i>
+                                        <cite>新房列表</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a  href="javascript:void(0)" data-url="secondHandHouse/gotoList">
+                                        <i class="layui-icon layui-icon-chart" data-icon="layui-icon-chart"></i>
+                                        <cite>二手房列表</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="renthouse/gotoWholeList">
+                                        <i class="layui-icon layui-icon-template-1" data-icon="layui-icon-template-1"></i>
+                                        <cite>整租列表</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="renthouse/gotoJointList">
+                                        <i class="layui-icon layui-icon-chat" data-icon="layui-icon-chat"></i>
+                                        <cite>合租列表</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="shophouse/gotoList">
+                                        <i class="layui-icon layui-icon-find-fill" data-icon="layui-icon-find-fill"></i>
+                                        <cite>商铺出租</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="officehouse/gotoList">
+                                        <i class="layui-icon layui-icon-survey" data-icon="layui-icon-survey"></i>
+                                        <cite>写字楼出租</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="appointment/gotoList">
+                                        <i class="layui-icon layui-icon-user" data-icon="layui-icon-user"></i>
+                                        <cite>预约管理</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="housereport/gotoList">
+                                        <i class="layui-icon layui-icon-set" data-icon="layui-icon-set"></i>
+                                        <cite>举报管理</cite>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="layui-row layui-col-space10">
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="sysAsk/gotoList">
+                                        <i class="layui-icon layui-icon-circle-dot" data-icon="layui-icon-circle-dot"></i>
+                                        <cite>问答审核</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="userCertification/gotoList">
+                                        <i class="layui-icon layui-icon-align-left" data-icon="layui-icon-align-left"></i>
+                                        <cite>实名认证审核</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="users/gotoList">
+                                        <i class="layui-icon layui-icon-face-surprised" data-icon="layui-icon-face-surprised"></i>
+                                        <cite>用户列表</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="sysAuth/gotoList">
+                                        <i class="layui-icon layui-icon-auz" data-icon="layui-icon-auz"></i>
+                                        <cite>权限设置</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="sysRole/gotoList">
+                                        <i class="layui-icon layui-icon-username" data-icon="layui-icon-username"></i>
+                                        <cite>角色设置</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="sysUser/gotoList">
+                                        <i class="layui-icon layui-icon-user" data-icon="layui-icon-user"></i>
+                                        <cite>管理用户设置</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="community/gotoList">
+                                        <i class="layui-icon layui-icon-login-qq" data-icon="layui-icon-login-qq"></i>
+                                        <cite>圈子管理</cite>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a href="javascript:void(0)" data-url="sysMarket/gotoPage">
+                                        <i class="layui-icon layui-icon-flag" data-icon="layui-icon-flag"></i>
+                                        <cite>行情管理</cite>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="layui-carousel-ind">
+                            <ul>
+                                <li class="layui-this"></li>
+                                <li class=""> </li>
+                            </ul>
+                        </div>
+                        <!--<button class="layui-icon layui-carousel-arrow" lay-type="sub">-->
+                        <!--</button><button class="layui-icon layui-carousel-arrow" lay-type="add"></button>-->
+                        </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <div class="layui-card">
+                <div class="layui-card-header">待办事项</div>
+                <div class="layui-card-body">
+
+                    <div id="db" class="layui-carousel layadmin-carousel layadmin-backlog" >
+                        <div carousel-item>
+                            <ul class="layui-row layui-col-space10 layui-this">
+                                <li class="layui-col-xs3 hrefTab">
+                                    <a lay-href="javascript:void(0)" data-url="secondHandHouse/gotoList" class="layadmin-backlog-body">
+                                        <h3>日活用户数</h3>
+                                        <p><cite th:text="${map.hyUser}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
+                                        <h3>新增用户数</h3>
+                                        <p><cite th:text="${map.xzUser}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待审二手房</h3>
+                                        <p><cite th:text="${map.secondcnt}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a href="javascript:;" onclick="layer.tips('不跳转', this, {tips: 3});" class="layadmin-backlog-body">
+                                        <h3>待审租房</h3>
+                                        <p><cite th:text="${map.rentcnt}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待审商铺</h3>
+                                        <p><cite th:text="${map.shopcnt}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待审写字楼</h3>
+                                        <p><cite th:text="${map.officecnt}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待处理预约</h3>
+                                        <p><cite th:text="${map.appointcnt}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待处理举报</h3>
+                                        <p><cite th:text="${map.reportcnt}"></cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="layui-row layui-col-space10">
+
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待处理认证</h3>
+                                        <p><cite th:text="${map.certcnt}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待处理圈子举报</h3>
+                                        <p><cite th:text="${map.reportcomcnt}"></cite></p>
+                                    </a>
+                                </li>
+                                <li class="layui-col-xs3">
+                                    <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
+                                        <h3>待处理问答举报</h3>
+                                        <p><cite th:text="${map.reportaskcnt}"></cite></p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="layui-carousel-ind">
+                            <ul><li class="layui-this"></li><li class=""></li></ul>
+                        </div>
+                        <!--<button class="layui-icon  layui-carousel-arrow" lay-type="sub"></button>-->
+                        <!--<button class="layui-icon  layui-carousel-arrow"lay-type="add"></button>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">数据统计</div>
+                <div class="layui-card-body">
+                    <div  id="container"   style="height: 500px;">
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">数据统计</div>
+                <div class="layui-card-body">
+                    <div  id="container1"   style="height: 500px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var tab,$;
+    layui.config({
+        base : '/js/layui/extend/'
+    }).use(['carousel','bodyTab','jquery'], function () {
+        var carousel = layui.carousel;
+        tab = layui.bodyTab();
+        $ = layui.jquery;
+        carousel.render({
+            width:"100%",
+            elem: '#kj',
+            arrow:"none",
+            indicator:"inside",
+            autoplay:false
+        })
+        var carouse2 = layui.carousel;
+        carouse2.render({
+            width:"100%",
+            elem: '#db',
+            arrow:"none",
+            indicator:"inside",
+            autoplay:false
+        })
+
+        $(".hrefTab a").on("click",function(){
+
+            addTab($(this))
+        })
+    })
+    function addTab(_this){
+        // var Urlss = '{:U("newhouse/gotoList")}';
+        // top.layui.index.openTabsPage(Urlss, "新房");
+        // 创建自定义事件
+        // $(window.parent.document)[1].s();
+
+        window.parent.s(_this);
+    }
+    ss();
+    ss1();
+    function ss() {
+        $.post("/index/getNewUserOfWeek", {}, function(data){
+            var dom = document.getElementById("container");
+            var myChart = echarts.init(dom);
+            option = {
+                title : {
+                    text: '最近一个月新增会员',
+                    subtext: '新增会员'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data :data.data.x
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value} '
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'注册会员数',
+                        type:'line',
+                        data:data.data.y
+                    }
+                ]
+            };
+            myChart.setOption(option, true);
+        })
+
+    }
+    function ss1() {
+        $.post("/index/getActiveUserOfWeek", {}, function(data){
+            var dom = document.getElementById("container1");
+            var myChart = echarts.init(dom);
+            option = {
+                title : {
+                    text: '最近7天会员日活量',
+                    subtext: '日活量'
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data :data.data.x
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value} '
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'日活数',
+                        type:'line',
+                        data:data.data.y
+                    }
+                ]
+            };
+            myChart.setOption(option, true);
+        })
+
+    }
+</script>
+</body>
+</html>

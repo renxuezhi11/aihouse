@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.shophouse.ShopHouseDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.ShopHouse">
+    <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="title" jdbcType="VARCHAR" property="title"/>
+      <result column="covered_area" jdbcType="NUMERIC" property="coveredArea"/>
+      <result column="is_fee" jdbcType="INTEGER" property="isFee"/>
+      <result column="property_fee" jdbcType="NUMERIC" property="propertyFee"/>
+    <result column="face_width" jdbcType="NUMERIC" property="faceWidth"/>
+    <result column="standard_tall" jdbcType="NUMERIC" property="standardTall"/>
+    <result column="floor_longth" jdbcType="NUMERIC" property="floorLongth"/>
+    <result column="floor_levels" jdbcType="INTEGER" property="floorLevels"/>
+    <result column="total_floor" jdbcType="INTEGER" property="totalFloor"/>
+    <result column="status" jdbcType="INTEGER" property="status"/>
+    <result column="city_id" jdbcType="INTEGER" property="cityId"/>
+    <result column="district_id" jdbcType="INTEGER" property="districtId"/>
+    <result column="area_id" jdbcType="INTEGER" property="areaId"/>
+    <result column="adress" jdbcType="VARCHAR" property="adress"/>
+    <result column="longitude" jdbcType="VARCHAR" property="longitude"/>
+    <result column="latitude" jdbcType="VARCHAR" property="latitude"/>
+    <result column="if_transfer" jdbcType="INTEGER" property="ifTransfer"/>
+    <result column="description" jdbcType="VARCHAR" property="description"/>
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+    <result column="monthly_rent" jdbcType="NUMERIC" property="monthlyRent"/>
+    <result column="transfer_fee" jdbcType="NUMERIC" property="transferFee"/>
+    <result column="lease_minimum" jdbcType="INTEGER" property="leaseMinimum"/>
+    <result column="mortgage_payment" jdbcType="INTEGER" property="mortgagePayment"/>
+    <result column="type" jdbcType="INTEGER" property="type"/>
+    <result column="house_real" jdbcType="INTEGER" property="houseReal"/>
+    <result column="status_content" jdbcType="VARCHAR" property="statusContent"/>
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus"/>
+    <result column="fixture" jdbcType="VARCHAR" property="fixture"/>
+    <result column="support" jdbcType="VARCHAR" property="support"/>
+    <result column="sex" jdbcType="INTEGER" property="sex"/>
+    <result column="user_type" jdbcType="INTEGER" property="userType"/>
+    <result column="contacts" jdbcType="VARCHAR" property="contacts"/>
+    <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+    <result column="operation" jdbcType="VARCHAR" property="operation"/>
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName"/>
+    <result column="village_id" jdbcType="INTEGER" property="villageId"/>
+    <result column="flag" jdbcType="INTEGER" property="flag"/>
+    <result column="feature" jdbcType="VARCHAR" property="feature"/>
+    <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_shop
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, title, covered_area,is_fee,property_fee,face_width,standard_tall,floor_longth,floor_levels,total_floor,status,city_id,district_id,area_id,adress,longitude,latitude,
+        if_transfer,description,create_time,create_by,update_time,update_by,monthly_rent,transfer_fee,lease_minimum,mortgage_payment,type,house_real,status_content,check_status,fixture,support,sex,user_type,
+        contacts,telephone,operation,shop_name,village_id,flag,feature,is_del
+        from ahs_shop
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, title, covered_area,is_fee,property_fee,face_width,standard_tall,floor_longth,floor_levels,total_floor,status,city_id,district_id,area_id,adress,longitude,latitude,
+    if_transfer,description,create_time,create_by,update_time,update_by,monthly_rent,transfer_fee,lease_minimum,mortgage_payment,type,house_real,status_content,check_status,fixture,support,sex,user_type,
+    contacts,telephone,operation,shop_name,village_id,flag,feature,is_del
+    from ahs_shop
+      <where>
+		<if test="checkStatus!=null "> and check_status = #{checkStatus,jdbcType=INTEGER}</if>
+          <if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+          <if test="createBy!=null "> and create_by = #{createBy,jdbcType=INTEGER}</if>
+          <if test="shopName!=null and shopName!=''"> and INSTR (shop_name ,#{shopName,jdbcType=VARCHAR})>0</if>
+          <if test="flag!=null"> and flag=#{flag,jdbcType=INTEGER}</if>
+          <if test="fixture!=null and fixture!=''"> and fixture=#{fixture,jdbcType=VARCHAR}</if>
+          <if test="type!=null"> and type=#{type,jdbcType=INTEGER}</if>
+        <if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and create_time BETWEEN #{startDate} and #{endDate}</if>
+ 	</where> 
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+
+  </select>
+  <update id="update">
+  update  	ahs_shop
+  <set>
+      <if test="checkStatus!=null">check_status=#{checkStatus,jdbcType=INTEGER},</if>
+      <if test="flag!=null">flag=#{flag,jdbcType=INTEGER},</if>
+      <if test="statusContent!=null and statusContent!=''">status_content=#{statusContent,jdbcType=VARCHAR},</if>
+      <if test="title!=null and title!=''">title=#{title,jdbcType=VARCHAR},</if>
+      <if test="coveredArea!=null">covered_area=#{coveredArea,jdbcType=NUMERIC},</if>
+      <if test="isFee!=null">is_fee=#{isFee,jdbcType=INTEGER},</if>
+      <if test="propertyFee!=null">property_fee=#{propertyFee,jdbcType=NUMERIC},</if>
+      <if test="faceWidth!=null">face_width=#{faceWidth,jdbcType=NUMERIC},</if>
+      <if test="standardTall!=null">standard_tall=#{standardTall,jdbcType=NUMERIC},</if>
+      <if test="floorLongth!=null">floor_longth=#{floorLongth,jdbcType=NUMERIC},</if>
+      <if test="floorLevels!=null"> floor_levels=#{floorLevels,jdbcType=INTEGER},</if>
+      <if test="totalFloor!=null">total_floor=#{totalFloor,jdbcType=INTEGER},</if>
+      <if test="status!=null">status=#{status,jdbcType=INTEGER},</if>
+      <if test="cityId!=null">city_id=#{cityId,jdbcType=INTEGER},</if>
+      <if test="districtId!=null"> district_id=#{districtId,jdbcType=INTEGER},</if>
+      <if test="areaId!=null">area_id=#{areaId,jdbcType=INTEGER},</if>
+      <if test="adress!=null and adress!=''">adress=#{adress,jdbcType=VARCHAR},</if>
+      <if test="longitude!=null and longitude!=''">longitude=#{longitude,jdbcType=VARCHAR},</if>
+      <if test="latitude!=null and latitude!=''">latitude=#{latitude,jdbcType=VARCHAR},</if>
+      <if test="ifTransfer!=null">if_transfer=#{ifTransfer,jdbcType=INTEGER},</if>
+      <if test="description!=null and description!=''">description=#{description,jdbcType=VARCHAR},</if>
+      <if test="monthlyRent!=null">monthly_rent=#{monthlyRent,jdbcType=NUMERIC},</if>
+      <if test="transferFee!=null">transfer_fee=#{transferFee,jdbcType=NUMERIC},</if>
+      <if test="leaseMinimum!=null">lease_minimum=#{leaseMinimum,jdbcType=INTEGER},</if>
+      <if test="mortgagePayment!=null">mortgage_payment=#{mortgagePayment,jdbcType=INTEGER},</if>
+      <if test="type!=null">type=#{type,jdbcType=INTEGER},</if>
+      <if test="houseReal!=null">house_real=#{houseReal,jdbcType=INTEGER},</if>
+      <if test="fixture!=null and fixture!=''">fixture=#{fixture,jdbcType=VARCHAR},</if>
+      <if test="support!=null and support!=''">support=#{support,jdbcType=VARCHAR},</if>
+      <if test="sex!=null">sex=#{sex,jdbcType=INTEGER},</if>
+      <if test="contacts!=null and contacts!=''">contacts=#{contacts,jdbcType=VARCHAR},</if>
+      <if test="telephone!=null and telephone!=''">telephone=#{telephone,jdbcType=VARCHAR},</if>
+      <if test="userType!=null">user_type=#{userType,jdbcType=INTEGER},</if>
+      <if test="operation!=null and operation!=''">operation=#{operation,jdbcType=VARCHAR},</if>
+      <if test="shopName!=null and shopName!=''">shop_name=#{shopName,jdbcType=VARCHAR},</if>
+      <if test="villageId!=null">village_id=#{villageId,jdbcType=INTEGER},</if>
+      <if test="feature!=null and feature!=''">feature=#{feature,jdbcType=VARCHAR},</if>
+      <if test="isDel!=null">is_del=#{isDel,jdbcType=INTEGER}</if>
+  </set>
+    where id=#{id}
+  </update>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+    insert into ahs_shop(title,covered_area,is_fee,property_fee,face_width,standard_tall,floor_longth,floor_levels,total_floor,status,city_id,district_id,area_id,adress,longitude,latitude,
+    if_transfer,description,create_by,monthly_rent,transfer_fee,lease_minimum,mortgage_payment,type,fixture,support,sex,user_type,
+    contacts,telephone,operation,shop_name,village_id,feature)VALUES (
+      #{title,jdbcType=VARCHAR},#{coveredArea,jdbcType=NUMERIC},#{isFee,jdbcType=INTEGER},#{propertyFee,jdbcType=NUMERIC},#{faceWidth,jdbcType=NUMERIC},
+      #{standardTall,jdbcType=NUMERIC},#{floorLongth,jdbcType=NUMERIC},#{floorLevels,jdbcType=INTEGER},#{totalFloor,jdbcType=INTEGER},#{status,jdbcType=INTEGER},
+      #{cityId,jdbcType=INTEGER},#{districtId,jdbcType=INTEGER},#{areaId,jdbcType=INTEGER},#{adress,jdbcType=VARCHAR},#{longitude,jdbcType=VARCHAR},#{latitude,jdbcType=VARCHAR},
+      #{ifTransfer,jdbcType=INTEGER},#{description,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER},#{monthlyRent,jdbcType=NUMERIC},#{transferFee,jdbcType=NUMERIC},
+      #{leaseMinimum,jdbcType=INTEGER},#{mortgagePayment,jdbcType=INTEGER},#{type,jdbcType=INTEGER},#{fixture,jdbcType=VARCHAR},#{support,jdbcType=VARCHAR},
+      #{sex,jdbcType=INTEGER},#{userType,jdbcType=INTEGER},#{contacts,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},#{operation,jdbcType=VARCHAR},#{shopName,jdbcType=VARCHAR},#{villageId,jdbcType=INTEGER},#{feature,jdbcType=VARCHAR}
+    )
+  </insert>
+
+    <select id="selectByIdForSolr" parameterType="java.lang.Integer" resultType="map">
+        select id,fixture,title,covered_area as coveredArea,CONCAT_WS(',',latitude,longitude) as loc,monthly_rent as monthlyRent,house_real as houseReal,
+        city_id as cityId,district_id as areaId,area_id as streesId,create_time as createtime,floor_levels as floorLevels,type,status,feature,shop_name as shopName
+        from ahs_shop
+        where id=#{id} and check_status=1
+    </select>
+    
+    <select id="queryInfo" parameterType="java.lang.Integer" resultType="map">
+        select
+        (select count(*) from ahs_user_collect where house_id=ahs_shop.id and collect_type=4) as collect_view,
+		(select count(*) from ahs_user_history where house_id=ahs_shop.id and history_type=4) as page_view,
+		(select img_url from ahs_shop_img where shop_id= ahs_shop.id  limit 0,1) as picture,
+		(select nickname from ahs_users where id=ahs_shop.create_by) as nickname,
+		(select shortname from ahs_area where id=ahs_shop.district_id) as areaname,(select shortname from ahs_area where id=ahs_shop.area_id) as streesname
+        from ahs_shop
+        where id=#{id}
+    </select>
+    
+    <select id="queryDetail" parameterType="java.lang.Integer" resultType="map">
+        select id,title,covered_area,is_fee,property_fee,face_width,standard_tall,floor_longth,floor_levels,total_floor,status,adress,if_transfer,description
+        ,monthly_rent,transfer_fee,mortgage_payment,type,fixture,support,operation,shop_name,feature,lease_minimum ,longitude,latitude,flag,create_by,
+        (select shortname from ahs_area where id=ahs_shop.district_id) as areaname,(select shortname from ahs_area where id=ahs_shop.area_id) as streesname
+        ,(select img_url from ahs_shop_img where shop_id=ahs_shop.id limit 0,1) as img_url,
+        (select count(*) from ahs_shop_img where shop_id=ahs_shop.id ) as img_count,
+        (select im_account from ahs_users where id=ahs_shop.create_by) as im_account,
+		(select nickname from ahs_users where id=ahs_shop.create_by) as nickname,
+		(select userphoto from ahs_users where id=ahs_shop.create_by) as userphoto
+        from ahs_shop
+        where id=#{id} and is_del=0
+    </select>
+    <select id="getUserShopHouseList" parameterType="java.lang.Integer" resultType="map">
+        select id,title,covered_area,floor_levels,total_floor,check_status,monthly_rent,flag,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i') as createtime,mortgage_payment
+        ,(select img_url from ahs_shop_img where shop_id=ahs_shop.id limit 0,1) as img_url
+        from ahs_shop where create_by=#{userId} and is_del=0 order by create_time desc
+    </select>
+</mapper>

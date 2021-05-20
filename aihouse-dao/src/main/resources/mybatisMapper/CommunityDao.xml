@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.CommunityDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.Community">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_id" jdbcType="INTEGER" property="userId"/>
+		<result column="content" jdbcType="VARCHAR" property="content"/>
+		<result column="picture" jdbcType="VARCHAR" property="picture"/>
+		<result column="video" jdbcType="VARCHAR" property="video"/>
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+		<result column="lng" jdbcType="VARCHAR" property="lng"/>
+		<result column="lat" jdbcType="VARCHAR" property="lat"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<result column="thumbs_up" jdbcType="INTEGER" property="thumbsUp"/>
+		<result column="visual" jdbcType="INTEGER" property="visual"/>
+		<result column="status_content" jdbcType="VARCHAR" property="statusContent"/>
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_community (
+		user_id,content,picture,video,lng,lat,visual
+		)
+ 	   values (
+ 	   	 #{userId,jdbcType=INTEGER},
+		 #{content,jdbcType=VARCHAR},
+		 #{picture,jdbcType=VARCHAR},
+		 #{video,jdbcType=VARCHAR},
+		 #{lng,jdbcType=VARCHAR},
+		 #{lat,jdbcType=VARCHAR},
+		 #{visual,jdbcType=INTEGER}
+		)
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_community
+		where id = #{id}
+	</delete>
+
+	<update id="update" >
+		update ahs_community
+		<set>
+			<if test="content!=null and content!=''">content=#{content,jdbcType=VARCHAR},</if>
+			<if test="picture!=null and picture!=''">picture = #{picture,jdbcType=VARCHAR}, </if>
+			<if test="video!=null and video!=''">video = #{video,jdbcType=VARCHAR}, </if>
+			<if test="status!=null ">status = #{status,jdbcType=INTEGER}, </if>
+			<if test="statusContent!=null and statusContent!=''">status_content = #{statusContent,jdbcType=VARCHAR}, </if>
+			<if test="thumbsUp!=null">thumbs_up = #{thumbsUp,jdbcType=INTEGER}, </if>
+			<if test="visual!=null">visual = #{visual,jdbcType=INTEGER}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select id,user_id,content,picture,video,status,createtime,thumbs_up,status_content,visual,lng,lat
+		from ahs_community
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select id,user_id,content,picture,video,status,createtime,thumbs_up,status_content,visual,lng,lat
+		from ahs_community
+		<where>
+			<if test="status!=null ">and status = #{status,jdbcType=INTEGER}</if>
+			<if test="userId!=null"> and user_id=#{userId,jdbcType=userId}</if>
+			<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select id,user_id,content,picture,video,status,createtime,thumbs_up,status_content,visual,lng,lat
+		from ahs_community
+		<where>
+			<if test="status!=null ">and status = #{status,jdbcType=INTEGER}</if>
+			<if test="id!=null">and id = #{id,jdbcType=INTEGER}</if>
+			<if test="userId!=null"> and user_id=#{userId,jdbcType=INTEGER}</if>
+			<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate} and #{endDate}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+	</select>
+
+	<select id="selectAppIndexList" resultMap="BaseResultMap" >
+		SELECT id,user_id,content,picture,video,status,createtime,thumbs_up,status_content,visual,lng,lat FROM ahs_community WHERE visual = 1 AND status = 1
+        UNION
+        SELECT a.id,a.user_id,a.content,a.picture,a.video,a.status,a.createtime,a.thumbs_up,a.status_content,a.visual,a.lng,a.lat FROM ahs_community a
+        LEFT JOIN ahs_users b ON a.user_id = b.id
+        LEFT JOIN ahs_user_focus c ON b.id = c.focus_user_id
+        WHERE a.visual = 2 AND c.user_id = #{userId,jdbcType=userId}
+        AND a.status = 1
+        ORDER BY createtime
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</select>
+
+	
+	<select id="selectUserList" parameterType="java.lang.Integer"  resultType="map">
+		select picture
+		from ahs_community where user_id=#{userId} and status = 1 and picture is not null  order by createtime desc limit 0,3
+	</select>
+
+
+	<select id="selectAppIndexScreenList" resultMap="BaseResultMap" >
+		select id,user_id,content,picture,video,status,createtime,thumbs_up,status_content,visual,lng,lat
+		from ahs_community
+		<where>
+			<if test="status!=null ">and status = #{status,jdbcType=INTEGER}</if>
+			<if test="userId!=null"> and user_id NOT IN (select screen_user_id from ahs_user_screen where user_id=#{userId,jdbcType=INTEGER})</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</select>
+
+</mapper>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserFocusDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserFocus">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="focus_user_id" jdbcType="INTEGER" property="focusUserId" />
+
+		<result column="focus_user_name" jdbcType="VARCHAR" property="focusUserName"/>
+
+		<result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+
+		<result column="userphoto" jdbcType="VARCHAR" property="userphoto"/>
+
+		<result column="signname" jdbcType="VARCHAR" property="signname"/>
+
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_focus (
+		user_id,
+		focus_user_id,
+		focus_user_name
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{focusUserId,jdbcType=INTEGER},
+		 #{focusUserName,jdbcType=VARCHAR}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_focus 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_user_focus
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="focusUserId!=null">focus_user_id = #{focusUserId,jdbcType=INTEGER}, </if>
+			<if test="createtime!=null">createtime = #{createtime,jdbcType=TIMESTAMP}, </if>
+			<if test="focusUserName!=null and focusUserName!=''">focus_user_name = #{focusUserName,jdbcType=VARCHAR}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		focus_user_id,
+		createtime
+		from ahs_user_focus
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		focus_user_id,
+		(select nickname from ahs_users where id=ahs_user_focus.focus_user_id) as nickname,
+		(select userphoto from ahs_users where id=ahs_user_focus.focus_user_id) as userphoto,
+		(select signname from ahs_users where id=ahs_user_focus.focus_user_id) as signname,
+		createtime
+		from ahs_user_focus
+		<where>
+		<if test="id!=null "> and ahs_user_focus.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_focus.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="focusUserId!=null "> and ahs_user_focus.focus_user_id = #{focusUserId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_user_focus.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="focusUserName!=null and focusUserName!=''"> and focus_user_name = #{focusUserName,jdbcType=VARCHAR}, </if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		focus_user_id,
+		createtime
+		from ahs_user_focus
+		<where>
+		<if test="id!=null "> and ahs_user_focus.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_focus.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="focusUserId!=null "> and ahs_user_focus.focus_user_id = #{focusUserId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_user_focus.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="focusUserName!=null and focusUserName!=''"> and focus_user_name = #{focusUserName,jdbcType=VARCHAR}, </if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteUserFocusByUsers" >
+		delete from  ahs_user_focus
+		where user_id=#{userId}
+	</delete>
+
+	<select id="selectCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select count(*) from ahs_user_focus where focus_user_id=#{userId}
+	</select>
+</mapper>

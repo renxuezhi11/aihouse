@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<script th:inline="javascript">
+    var id = [[${id}]];
+</script>
+<body class="body-common">
+<div class="page-container">
+    <div class="mt-20">
+        <table id="table-data" lay-filter="table-data"></table>
+    </div>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>选择</a>
+    </script>
+    <!--请在下方写此页面业务相关的脚本-->
+    <script type="text/javascript" th:inline="javascript">
+        var table;
+        var username,userId;
+        layui.use(['form', 'table'], function () {
+            var form = layui.form; //只有执行了这一步，部分表单元素才会自动修饰成功
+            //但是，如果你的HTML是动态生成的，自动渲染就会失效
+            //因此你需要在相应的地方，执行下述方法来手动渲染，跟这类似的还有 element.init();
+            form.render();
+            table = layui.table;
+            //第一个实例
+            table.render({
+                elem: '#table-data'
+                , url: rootPath + "appointment/selectAllBroker?id="+id //数据接口
+                , method: "post"
+                , page: false //开启分页
+                , cols: [[ //表头
+                    {field: 'id', title: 'id', type: "radio"}
+                    , {field: 'id', title: 'ID'}
+                    , {field: 'username', title: '用户名'}
+                    ,{field: 'nickname', title: '昵称'}
+                    ,{field: 'truename', title: '姓名'}
+                    ,{field:'score',title:'评分'}
+                ]],
+                parseData: function (res) { //res 即为原始返回的数据
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.message, //解析提示文本
+                        "data": res.data //解析数据列表
+                    };
+                }
+            });
+            table.on('tool(table-data)', function (obj) {
+                var data = obj.data;
+                if(obj.event=='edit'){
+                    userId=data.id;
+                    username=data.nickname;
+                }
+            });
+            table.on('radio(table-data)', function(obj){
+                var data = obj.data;
+                userId=data.id;
+                username=data.nickname;
+            });
+        })
+        var callbackdata = function () {
+            var data = {
+                "username": username,
+                "id":userId
+            };
+            return data;
+        }
+    </script>
+</div>
+</body>
+</html>

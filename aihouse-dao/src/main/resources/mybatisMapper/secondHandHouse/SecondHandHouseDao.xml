@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.secondHandHouse.SecondHandHouseDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.SecondHandHouse">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="feature" jdbcType="VARCHAR" property="feature" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="village_id" jdbcType="INTEGER" property="villageId" />
+		<result column="village_name" jdbcType="VARCHAR" property="villageName" />
+		<result column="address" jdbcType="VARCHAR" property="address" />
+		<result column="lng" jdbcType="VARCHAR" property="lng" />
+		<result column="lat" jdbcType="VARCHAR" property="lat" />
+		<result column="floor" jdbcType="INTEGER" property="floor" />
+		<result column="total_floor" jdbcType="INTEGER" property="totalFloor" />
+		<result column="covered_type" jdbcType="VARCHAR" property="coveredType" />
+		<result column="covered_area" jdbcType="DOUBLE" property="coveredArea" />
+		<result column="price" jdbcType="DOUBLE" property="price" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="orientations" jdbcType="VARCHAR" property="orientations" />
+		<result column="is_lift" jdbcType="INTEGER" property="isLift" />
+		<result column="room" jdbcType="INTEGER" property="room" />
+		<result column="hall" jdbcType="INTEGER" property="hall" />
+		<result column="cookroom" jdbcType="INTEGER" property="cookroom" />
+		<result column="toilet" jdbcType="INTEGER" property="toilet" />
+		<result column="gallery" jdbcType="INTEGER" property="gallery" />
+		<result column="cityid" jdbcType="INTEGER" property="cityid" />
+		<result column="areaid" jdbcType="INTEGER" property="areaid" />
+		<result column="streesid" jdbcType="INTEGER" property="streesid" />
+		<result column="fixture" jdbcType="VARCHAR" property="fixture" />
+		<result column="age" jdbcType="INTEGER" property="age" />
+		<result column="house_desc" jdbcType="LONGVARCHAR" property="houseDesc" />
+		<result column="owner_mentality" jdbcType="LONGVARCHAR" property="ownerMentality" />
+		<result column="sell_point" jdbcType="LONGVARCHAR" property="sellPoint" />
+		<result column="house_number" jdbcType="VARCHAR" property="houseNumber" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+		<result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="house_type" jdbcType="VARCHAR" property="houseType" />
+		<result column="contacts" jdbcType="VARCHAR" property="contacts" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="user_type" jdbcType="INTEGER" property="userType" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="sign_name" jdbcType="VARCHAR" property="signName" />
+		<result column="broker" jdbcType="INTEGER" property="broker" />
+		<result column="house_real" jdbcType="INTEGER" property="houseReal" />
+		<result column="status_content" jdbcType="VARCHAR" property="statusContent" />
+		<result column="flag" jdbcType="INTEGER" property="flag" />
+		<result column="is_del" jdbcType="INTEGER" property="isDel" />
+		<result column="is_top" jdbcType="INTEGER" property="isTop"/>
+		<result column="is_sale" jdbcType="INTEGER" property="isSale"/>
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_second_house (
+		feature,
+		title,
+		village_id,
+		village_name,
+		address,
+		lng,
+		lat,
+		floor,
+		total_floor,
+		covered_type,
+		covered_area,
+		price,
+		user_id,
+		orientations,
+		is_lift,
+		room,
+		hall,
+		cookroom,
+		toilet,
+		gallery,
+		cityid,
+		areaid,
+		streesid,
+		fixture,
+		age,
+		house_desc,
+		owner_mentality,
+		sell_point,
+		house_number,
+		updatetime,
+		status,
+		house_type,
+		contacts,
+		sex,
+		user_type,
+		telephone,
+		sign_name,
+		broker,
+		createtime
+		)
+ 	   values (
+		 #{feature,jdbcType=VARCHAR},
+		 #{title,jdbcType=VARCHAR},
+		 #{villageId,jdbcType=INTEGER},
+		 #{villageName,jdbcType=VARCHAR},
+		 #{address,jdbcType=VARCHAR},
+		 #{lng,jdbcType=VARCHAR},
+		 #{lat,jdbcType=VARCHAR},
+		 #{floor,jdbcType=INTEGER},
+		 #{totalFloor,jdbcType=INTEGER},
+		 #{coveredType,jdbcType=VARCHAR},
+		 #{coveredArea,jdbcType=DOUBLE},
+		 #{price,jdbcType=DOUBLE},
+		 #{userId,jdbcType=INTEGER},
+		 #{orientations,jdbcType=VARCHAR},
+		 #{isLift,jdbcType=INTEGER},
+		 #{room,jdbcType=INTEGER},
+		 #{hall,jdbcType=INTEGER},
+		 #{cookroom,jdbcType=INTEGER},
+		 #{toilet,jdbcType=INTEGER},
+		 #{gallery,jdbcType=INTEGER},
+		 #{cityid,jdbcType=INTEGER},
+		 #{areaid,jdbcType=INTEGER},
+		 #{streesid,jdbcType=INTEGER},
+		 #{fixture,jdbcType=VARCHAR},
+		 #{age,jdbcType=INTEGER},
+		 #{houseDesc,jdbcType=LONGVARCHAR},
+		 #{ownerMentality,jdbcType=LONGVARCHAR},
+		 #{sellPoint,jdbcType=LONGVARCHAR},
+		 #{houseNumber,jdbcType=VARCHAR},
+		 NOW(),
+		 #{status,jdbcType=INTEGER},
+		 #{houseType,jdbcType=VARCHAR},
+		 #{contacts,jdbcType=VARCHAR},
+		 #{sex,jdbcType=INTEGER},
+		 #{userType,jdbcType=INTEGER},
+		 #{telephone,jdbcType=VARCHAR},
+		 #{signName,jdbcType=VARCHAR},
+		 #{broker,jdbcType=INTEGER},
+		 NOW()
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_second_house 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_second_house
+		<set>
+			<if test="feature!=null and feature!=''">feature = #{feature,jdbcType=VARCHAR}, </if>
+			<if test="title!=null and title!=''">title = #{title,jdbcType=VARCHAR}, </if>
+			<if test="villageId!=null">village_id = #{villageId,jdbcType=INTEGER}, </if>
+			<if test="villageName!=null and villageName!=''">village_name = #{villageName,jdbcType=VARCHAR}, </if>
+			<if test="address!=null and address!=''">address = #{address,jdbcType=VARCHAR}, </if>
+			<if test="lng!=null and lng!=''">lng = #{lng,jdbcType=VARCHAR}, </if>
+			<if test="lat!=null and lat!=''">lat = #{lat,jdbcType=VARCHAR}, </if>
+			<if test="floor!=null">floor = #{floor,jdbcType=INTEGER}, </if>
+			<if test="totalFloor!=null">total_floor = #{totalFloor,jdbcType=INTEGER}, </if>
+			<if test="coveredType!=null and coveredType!=''">covered_type = #{coveredType,jdbcType=VARCHAR}, </if>
+			<if test="coveredArea!=null">covered_area = #{coveredArea,jdbcType=DOUBLE}, </if>
+			<if test="price!=null">price = #{price,jdbcType=DOUBLE}, </if>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="orientations!=null and orientations!=''">orientations = #{orientations,jdbcType=VARCHAR}, </if>
+			<if test="isLift!=null">is_lift = #{isLift,jdbcType=INTEGER}, </if>
+			<if test="room!=null">room = #{room,jdbcType=INTEGER}, </if>
+			<if test="hall!=null">hall = #{hall,jdbcType=INTEGER}, </if>
+			<if test="cookroom!=null">cookroom = #{cookroom,jdbcType=INTEGER}, </if>
+			<if test="toilet!=null">toilet = #{toilet,jdbcType=INTEGER}, </if>
+			<if test="gallery!=null">gallery = #{gallery,jdbcType=INTEGER}, </if>
+			<if test="cityid!=null">cityid = #{cityid,jdbcType=INTEGER}, </if>
+			<if test="areaid!=null">areaid = #{areaid,jdbcType=INTEGER}, </if>
+			<if test="streesid!=null">streesid = #{streesid,jdbcType=INTEGER}, </if>
+			<if test="fixture!=null and fixture!=''">fixture = #{fixture,jdbcType=VARCHAR}, </if>
+			<if test="age!=null">age = #{age,jdbcType=INTEGER}, </if>
+			<if test="houseDesc!=null and houseDesc!=''">house_desc = #{houseDesc,jdbcType=LONGVARCHAR}, </if>
+			<if test="ownerMentality!=null and ownerMentality!=''">owner_mentality = #{ownerMentality,jdbcType=LONGVARCHAR}, </if>
+			<if test="sellPoint!=null and sellPoint!=''">sell_point = #{sellPoint,jdbcType=LONGVARCHAR}, </if>
+			<if test="houseNumber!=null and houseNumber!=''">house_number = #{houseNumber,jdbcType=VARCHAR}, </if>
+			<if test="status!=null">status = #{status,jdbcType=INTEGER}, </if>
+			<if test="houseType!=null and houseType!=''">house_type = #{houseType,jdbcType=VARCHAR}, </if>
+			<if test="contacts!=null and contacts!=''">contacts = #{contacts,jdbcType=VARCHAR}, </if>
+			<if test="sex!=null">sex = #{sex,jdbcType=INTEGER}, </if>
+			<if test="userType!=null">user_type = #{userType,jdbcType=INTEGER}, </if>
+			<if test="telephone!=null and telephone!=''">telephone = #{telephone,jdbcType=VARCHAR}, </if>
+			<if test="signName!=null and signName!=''">sign_name = #{signName,jdbcType=VARCHAR}, </if>
+			<if test="broker!=null">broker = #{broker,jdbcType=INTEGER}, </if>
+			<if test="houseReal!=null">house_real = #{houseReal,jdbcType=INTEGER}, </if>
+			<if test="statusContent!=null and statusContent!=''">status_content = #{statusContent,jdbcType=VARCHAR}, </if>
+			<if test="flag!=null">flag = #{flag,jdbcType=INTEGER}, </if>
+			<if test="isDel!=null">is_del = #{isDel,jdbcType=INTEGER}, </if>
+			<if test="isTop!=null">is_top=#{isTop,jdbcType=INTEGER},</if>
+			<if test="isSale!=null">is_sale =#{isSale,jdbcType=INTEGER},</if>
+			updatetime = NOW()
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		feature,
+		title,
+		village_id,
+		village_name,
+		address,
+		lng,
+		lat,
+		floor,
+		total_floor,
+		covered_type,
+		covered_area,
+		price,
+		user_id,
+		orientations,
+		is_lift,
+		room,
+		hall,
+		cookroom,
+		toilet,
+		gallery,
+		cityid,
+		areaid,
+		streesid,
+		fixture,
+		age,
+		house_desc,
+		owner_mentality,
+		sell_point,
+		house_number,
+		createtime,
+		updatetime,
+		status,
+		house_type,
+		contacts,
+		sex,
+		user_type,
+		telephone,
+		sign_name,
+		broker,
+		house_real,
+		status_content,
+		flag,
+		is_del,is_sale
+		from ahs_second_house
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		feature,
+		title,
+		village_id,
+		village_name,
+		address,
+		lng,
+		lat,
+		floor,
+		total_floor,
+		covered_type,
+		covered_area,
+		price,
+		user_id,
+		orientations,
+		is_lift,
+		room,
+		hall,
+		cookroom,
+		toilet,
+		gallery,
+		cityid,
+		areaid,
+		streesid,
+		fixture,
+		age,
+		house_desc,
+		owner_mentality,
+		sell_point,
+		house_number,
+		createtime,
+		updatetime,
+		status,
+		house_type,
+		contacts,
+		sex,
+		user_type,
+		telephone,
+		sign_name,
+		broker,
+		house_real,
+		status_content,
+		flag,
+		is_del,
+		is_top,
+		is_sale
+		from ahs_second_house
+		<where>
+		<if test="id!=null "> and ahs_second_house.id = #{id,jdbcType=INTEGER}</if>
+		<if test="feature!=null and feature!=''"> and ahs_second_house.feature = #{feature,jdbcType=VARCHAR}</if>
+		<if test="title!=null and title!=''"> and ahs_second_house.title = #{title,jdbcType=VARCHAR}</if>
+		<if test="villageId!=null "> and ahs_second_house.village_id = #{villageId,jdbcType=INTEGER}</if>
+		<if test="villageName!=null and villageName!=''"> and INSTR (ahs_second_house.village_name ,#{villageName,jdbcType=VARCHAR})>0</if>
+		<if test="address!=null and address!=''"> and ahs_second_house.address = #{address,jdbcType=VARCHAR}</if>
+		<if test="lng!=null and lng!=''"> and ahs_second_house.lng = #{lng,jdbcType=VARCHAR}</if>
+		<if test="lat!=null and lat!=''"> and ahs_second_house.lat = #{lat,jdbcType=VARCHAR}</if>
+		<if test="floor!=null "> and ahs_second_house.floor = #{floor,jdbcType=INTEGER}</if>
+		<if test="totalFloor!=null "> and ahs_second_house.total_floor = #{totalFloor,jdbcType=INTEGER}</if>
+		<if test="coveredType!=null and coveredType!=''"> and ahs_second_house.covered_type = #{coveredType,jdbcType=VARCHAR}</if>
+		<if test="coveredArea!=null "> and ahs_second_house.covered_area = #{coveredArea,jdbcType=DOUBLE}</if>
+		<if test="price!=null "> and ahs_second_house.price = #{price,jdbcType=DOUBLE}</if>
+		<if test="userId!=null "> and ahs_second_house.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="orientations!=null and orientations!=''"> and ahs_second_house.orientations = #{orientations,jdbcType=VARCHAR}</if>
+		<if test="isLift!=null "> and ahs_second_house.is_lift = #{isLift,jdbcType=INTEGER}</if>
+		<if test="room!=null "> and ahs_second_house.room = #{room,jdbcType=INTEGER}</if>
+		<if test="hall!=null "> and ahs_second_house.hall = #{hall,jdbcType=INTEGER}</if>
+		<if test="cookroom!=null "> and ahs_second_house.cookroom = #{cookroom,jdbcType=INTEGER}</if>
+		<if test="toilet!=null "> and ahs_second_house.toilet = #{toilet,jdbcType=INTEGER}</if>
+		<if test="gallery!=null "> and ahs_second_house.gallery = #{gallery,jdbcType=INTEGER}</if>
+		<if test="cityid!=null "> and ahs_second_house.cityid = #{cityid,jdbcType=INTEGER}</if>
+		<if test="areaid!=null "> and ahs_second_house.areaid = #{areaid,jdbcType=INTEGER}</if>
+		<if test="streesid!=null "> and ahs_second_house.streesid = #{streesid,jdbcType=INTEGER}</if>
+		<if test="fixture!=null and fixture!=''"> and ahs_second_house.fixture = #{fixture,jdbcType=VARCHAR}</if>
+		<if test="age!=null "> and ahs_second_house.age = #{age,jdbcType=INTEGER}</if>
+		<if test="houseDesc!=null and houseDesc!=''"> and ahs_second_house.house_desc = #{houseDesc,jdbcType=LONGVARCHAR}</if>
+		<if test="ownerMentality!=null and ownerMentality!=''"> and ahs_second_house.owner_mentality = #{ownerMentality,jdbcType=LONGVARCHAR}</if>
+		<if test="sellPoint!=null and sellPoint!=''"> and ahs_second_house.sell_point = #{sellPoint,jdbcType=LONGVARCHAR}</if>
+		<if test="houseNumber!=null and houseNumber!=''"> and ahs_second_house.house_number = #{houseNumber,jdbcType=VARCHAR}</if>
+		<if test="updatetime!=null "> and ahs_second_house.updatetime = #{updatetime,jdbcType=TIMESTAMP}</if>
+		<if test="status!=null "> and ahs_second_house.status = #{status,jdbcType=INTEGER}</if>
+		<if test="houseType!=null and houseType!=''"> and ahs_second_house.house_type = #{houseType,jdbcType=VARCHAR}</if>
+		<if test="contacts!=null and contacts!=''"> and ahs_second_house.contacts = #{contacts,jdbcType=VARCHAR}</if>
+		<if test="sex!=null "> and ahs_second_house.sex = #{sex,jdbcType=INTEGER}</if>
+		<if test="userType!=null "> and ahs_second_house.user_type = #{userType,jdbcType=INTEGER}</if>
+		<if test="telephone!=null and telephone!=''"> and ahs_second_house.telephone = #{telephone,jdbcType=VARCHAR}</if>
+		<if test="signName!=null and signName!=''"> and ahs_second_house.sign_name = #{signName,jdbcType=VARCHAR}</if>
+		<if test="broker!=null "> and ahs_second_house.broker = #{broker,jdbcType=INTEGER}</if>
+		<if test="houseReal!=null "> and ahs_second_house.house_real = #{houseReal,jdbcType=INTEGER}</if>
+		<if test="statusContent!=null and statusContent!=''"> and ahs_second_house.status_content = #{statusContent,jdbcType=VARCHAR}</if>
+		<if test="flag!=null "> and ahs_second_house.flag = #{flag,jdbcType=INTEGER}</if>
+		<if test="isDel!=null "> and ahs_second_house.is_del = #{isDel,jdbcType=INTEGER}</if>
+			<if test="isTop!=null "> and ahs_second_house.is_top = #{isTop,jdbcType=INTEGER}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		feature,
+		title,
+		village_id,
+		village_name,
+		address,
+		lng,
+		lat,
+		floor,
+		total_floor,
+		covered_type,
+		covered_area,
+		price,
+		user_id,
+		orientations,
+		is_lift,
+		room,
+		hall,
+		cookroom,
+		toilet,
+		gallery,
+		cityid,
+		areaid,
+		streesid,
+		fixture,
+		age,
+		house_desc,
+		owner_mentality,
+		sell_point,
+		house_number,
+		createtime,
+		updatetime,
+		status,
+		house_type,
+		contacts,
+		sex,
+		user_type,
+		telephone,
+		sign_name,
+		broker,
+		house_real,
+		status_content,
+		flag,
+		is_del,
+		is_top
+		from ahs_second_house
+		<where>
+		<if test="id!=null "> and ahs_second_house.id = #{id,jdbcType=INTEGER}</if>
+		<if test="feature!=null and feature!=''"> and ahs_second_house.feature = #{feature,jdbcType=VARCHAR}</if>
+		<if test="title!=null and title!=''"> and ahs_second_house.title = #{title,jdbcType=VARCHAR}</if>
+		<if test="villageId!=null "> and ahs_second_house.village_id = #{villageId,jdbcType=INTEGER}</if>
+		<if test="villageName!=null and villageName!=''"> and ahs_second_house.village_name = #{villageName,jdbcType=VARCHAR}</if>
+		<if test="address!=null and address!=''"> and ahs_second_house.address = #{address,jdbcType=VARCHAR}</if>
+		<if test="lng!=null and lng!=''"> and ahs_second_house.lng = #{lng,jdbcType=VARCHAR}</if>
+		<if test="lat!=null and lat!=''"> and ahs_second_house.lat = #{lat,jdbcType=VARCHAR}</if>
+		<if test="floor!=null "> and ahs_second_house.floor = #{floor,jdbcType=INTEGER}</if>
+		<if test="totalFloor!=null "> and ahs_second_house.total_floor = #{totalFloor,jdbcType=INTEGER}</if>
+		<if test="coveredType!=null and coveredType!=''"> and ahs_second_house.covered_type = #{coveredType,jdbcType=VARCHAR}</if>
+		<if test="coveredArea!=null "> and ahs_second_house.covered_area = #{coveredArea,jdbcType=DOUBLE}</if>
+		<if test="price!=null "> and ahs_second_house.price = #{price,jdbcType=DOUBLE}</if>
+		<if test="userId!=null "> and ahs_second_house.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="orientations!=null and orientations!=''"> and ahs_second_house.orientations = #{orientations,jdbcType=VARCHAR}</if>
+		<if test="isLift!=null "> and ahs_second_house.is_lift = #{isLift,jdbcType=INTEGER}</if>
+		<if test="room!=null "> and ahs_second_house.room = #{room,jdbcType=INTEGER}</if>
+		<if test="hall!=null "> and ahs_second_house.hall = #{hall,jdbcType=INTEGER}</if>
+		<if test="cookroom!=null "> and ahs_second_house.cookroom = #{cookroom,jdbcType=INTEGER}</if>
+		<if test="toilet!=null "> and ahs_second_house.toilet = #{toilet,jdbcType=INTEGER}</if>
+		<if test="gallery!=null "> and ahs_second_house.gallery = #{gallery,jdbcType=INTEGER}</if>
+		<if test="cityid!=null "> and ahs_second_house.cityid = #{cityid,jdbcType=INTEGER}</if>
+		<if test="areaid!=null "> and ahs_second_house.areaid = #{areaid,jdbcType=INTEGER}</if>
+		<if test="streesid!=null "> and ahs_second_house.streesid = #{streesid,jdbcType=INTEGER}</if>
+		<if test="fixture!=null and fixture!=''"> and ahs_second_house.fixture = #{fixture,jdbcType=VARCHAR}</if>
+		<if test="age!=null "> and ahs_second_house.age = #{age,jdbcType=INTEGER}</if>
+		<if test="houseDesc!=null and houseDesc!=''"> and ahs_second_house.house_desc = #{houseDesc,jdbcType=LONGVARCHAR}</if>
+		<if test="ownerMentality!=null and ownerMentality!=''"> and ahs_second_house.owner_mentality = #{ownerMentality,jdbcType=LONGVARCHAR}</if>
+		<if test="sellPoint!=null and sellPoint!=''"> and ahs_second_house.sell_point = #{sellPoint,jdbcType=LONGVARCHAR}</if>
+		<if test="houseNumber!=null and houseNumber!=''"> and ahs_second_house.house_number = #{houseNumber,jdbcType=VARCHAR}</if>
+		<if test="status!=null "> and ahs_second_house.status = #{status,jdbcType=INTEGER}</if>
+		<if test="houseType!=null and houseType!=''"> and ahs_second_house.house_type = #{houseType,jdbcType=VARCHAR}</if>
+		<if test="contacts!=null and contacts!=''"> and ahs_second_house.contacts = #{contacts,jdbcType=VARCHAR}</if>
+		<if test="sex!=null "> and ahs_second_house.sex = #{sex,jdbcType=INTEGER}</if>
+		<if test="userType!=null "> and ahs_second_house.user_type = #{userType,jdbcType=INTEGER}</if>
+		<if test="telephone!=null and telephone!=''"> and ahs_second_house.telephone = #{telephone,jdbcType=VARCHAR}</if>
+		<if test="signName!=null and signName!=''"> and ahs_second_house.sign_name = #{signName,jdbcType=VARCHAR}</if>
+		<if test="broker!=null "> and ahs_second_house.broker = #{broker,jdbcType=INTEGER}</if>
+		<if test="houseReal!=null "> and ahs_second_house.house_real = #{houseReal,jdbcType=INTEGER}</if>
+		<if test="statusContent!=null and statusContent!=''"> and ahs_second_house.status_content = #{statusContent,jdbcType=VARCHAR}</if>
+		<if test="flag!=null "> and ahs_second_house.flag = #{flag,jdbcType=INTEGER}</if>
+		<if test="isDel!=null "> and ahs_second_house.is_del = #{isDel,jdbcType=INTEGER}</if>
+			<if test="isTop!=null "> and ahs_second_house.is_top = #{isTop,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteSecondHandHouseByVillage" >
+		delete from  ahs_second_house
+		where village_id=#{villageId}
+	</delete>
+
+	<select id="selectByIdForSolr" parameterType="java.lang.Integer" resultType="map">
+		select	 id,village_name as villageName,feature,cityid as cityId,areaid as areaId,streesid as streesId,price,room,hall,toilet,
+		orientations,house_type as houseType,floor,fixture,title,is_top as houseReal,DATE_FORMAT(createtime,'%Y-%m-%d %H:%i:%s') as createtime,user_type as userType,is_lift as isLift,
+		covered_area as coveredArea,CONCAT_WS(',',lat,lng) as loc,is_sale as isSale
+		 from ahs_second_house
+		where id=#{id}
+	</select>
+
+	<select id="queryInfo" parameterType="java.lang.Integer" resultType="map">
+		select (select count(*) from ahs_user_collect where house_id=ahs_second_house.id and collect_type=2) as collect_view,
+		(select count(*) from ahs_user_history where house_id=ahs_second_house.id and history_type=2) as page_view,
+		(select img_url from ahs_second_house_img where second_house= ahs_second_house.id and img_type=1 limit 0,1) as picture,
+		(select nickname from ahs_users where id=ahs_second_house.user_id) as nickname,
+		(select shortname from ahs_area where id=ahs_second_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_second_house.streesid) as streesname
+		from ahs_second_house
+		where id=#{id}
+	</select>
+	<select id="queryDetail" parameterType="java.lang.Integer" resultType="map">
+		select id,room,hall,toilet,price,covered_area,orientations,fixture,house_desc,house_real,house_type,is_lift,title,feature,village_name,address,DATE_FORMAT(createtime,'%Y-%m-%d') as createtime,house_number,
+		(select shortname from ahs_area where id=ahs_second_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_second_house.streesid) as streesname,lat,lng,floor,total_floor,user_id,flag,is_sale,
+		(select im_account from ahs_users where id=ahs_second_house.user_id) as im_account,
+		(select nickname from ahs_users where id=ahs_second_house.user_id) as nickname,
+		(select userphoto from ahs_users where id=ahs_second_house.user_id) as userphoto,
+		(select img_url from ahs_second_house_img where second_house=ahs_second_house.id and img_type=1 limit 0,1) as img_url,
+		(select count(*) from ahs_second_house_img where second_house=ahs_second_house.id and img_type=1 ) as img_count
+		from ahs_second_house
+		where id=#{id} and is_del=0
+	</select>
+	
+	<select id="geUserSecondHouseList" parameterType="java.lang.Integer" resultType="map">
+		select id,room,hall,toilet,price,covered_area,title,floor,total_floor,(select img_url from ahs_second_house_img where second_house=ahs_second_house.id and img_type=1 limit 0,1) as img_url
+		,flag,status,DATE_FORMAT(createtime,'%Y-%m-%d %H:%i') as createtime
+		from ahs_second_house
+		where   user_id=#{userId} and is_del=0 order by createtime desc
+	</select>
+</mapper>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>输入提示后查询</title>
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=b7d8c6c97590c4e8d9957fcc10370794&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.Geocoder"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+</head>
+<body>
+<div id="container"></div>
+<div id="myPageTop">
+    <table>
+        <tr>
+            <td>
+                <label>请输入关键字：</label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="tipinput"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    //地图加载
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });
+    //输入提示
+    var city,lng,lat,address;
+    map.getCity(function(info) {
+        city = info.city;
+        var autoOptions = {
+            input: "tipinput",
+            city: city
+        };
+        var auto = new AMap.Autocomplete(autoOptions);
+        var placeSearch = new AMap.PlaceSearch({
+            map: map
+        });  //构造地点查询类
+        AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+        function select(e) {
+            placeSearch.setCity(e.poi.adcode);
+            placeSearch.search(e.poi.name)
+        }
+    })
+    map.on('click', function (e) {
+        lng=e.lnglat.getLng();
+        lat=e.lnglat.getLat();
+        regeoCode(e.lnglat.getLng() + ',' + e.lnglat.getLat());
+    })
+
+    var geocoder,marker;
+            //关键字查询
+    function regeoCode(lnglat1) {
+        if (!geocoder) {
+            geocoder = new AMap.Geocoder({
+                city: "010", //城市设为北京，默认：“全国”
+                radius: 1000 //范围，默认：500
+            });
+        }
+        var lnglat = lnglat1.split(',');
+        if (!marker) {
+            marker = new AMap.Marker();
+            map.add(marker);
+        }
+        marker.setPosition(lnglat);
+        geocoder.getAddress(lnglat, function(status, result) {
+            if (status === 'complete'&&result.regeocode) {
+                address = result.regeocode.formattedAddress;
+                //console.log(address)
+            }else{alert(JSON.stringify(result))}
+        });
+    }
+    var callbackdata = function () {
+        var data = {
+            "lng": lng,
+            "lat":lat,
+            "address":address
+        };
+        return data;
+    }
+</script>
+</body>
+</html>

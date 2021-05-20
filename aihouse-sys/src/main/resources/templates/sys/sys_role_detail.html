@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${sys_role.id }" />
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="name" maxlength="100" lay-verify="required" autocomplete="off"
+                               placeholder="请输入角色名称" class="layui-input" th:value="${sys_role.name}" >
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="0" lay-verify="required" title="启用" th:checked="${sys_role.status==0 ||sys_role.status==null}">
+                        <input type="radio" name="status" value="1" lay-verify="required" title="禁用" th:checked="${sys_role.status==1}">
+                    </div>
+                </div>
+                <div class="layui-form-item"  pane="">
+                    <label class="layui-form-label">选择权限</label>
+                    <div class="layui-input-block">
+                        <div id="LAY-auth-tree-index"></div>
+                    </div>
+                </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysRole/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script th:inline="javascript">
+    layui.config({
+        base: rootPath+'js/layui/extend/'
+    }).extend({
+        authtree: 'authtree'
+    });
+    layui.use(['form','authtree', 'layedit', 'laydate'], function () {
+        var form = layui.form
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
+        form.render();
+        var authtree = layui.authtree;
+
+           laydate.render({
+               elem: '#createTime'
+               , type: 'datetime'
+           });
+           laydate.render({
+               elem: '#updateTime'
+               , type: 'datetime'
+           });
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            var authids = authtree.getChecked('#LAY-auth-tree-index');
+            data.field["auths"]=authids;
+            $.post(rootPath+"sysRole/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback("sysRole/gotoList");
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+        $.post(rootPath+'sysRole/detail',{id:[[${sys_role.id}]]},function (data) {
+            var trees = authtree.listConvert(data.data.data, {
+                primaryKey: 'id'
+                ,startPid: 0
+                ,parentKey: 'parentAuthId'
+                ,nameKey: 'name'
+                ,valueKey: 'id'
+                ,checkedKey: data.data.ck
+                ,disabledKey: []
+            });
+            // 如果页面中多个树共存，需要注意 layfilter 需要不一样
+            authtree.render('#LAY-auth-tree-index', trees, {
+                inputname: 'authids[]',
+                layfilter: 'lay-check-convert-auth',
+                // openall: true,
+                autowidth: true
+            });
+        })
+    });
+</script>
+
+</body>
+</html>

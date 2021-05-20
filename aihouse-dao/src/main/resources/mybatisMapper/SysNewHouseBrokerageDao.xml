@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.SysNewHouseBrokerageDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.SysNewHouseBrokerage">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="new_house_id" jdbcType="INTEGER" property="newHouseId" />
+		<result column="type" jdbcType="INTEGER" property="type" />
+		<result column="brokerage_type" jdbcType="INTEGER" property="brokerageType" />
+		<result column="brokerage_model" jdbcType="INTEGER" property="brokerageModel" />
+		<result column="brokerage_money" jdbcType="DECIMAL" property="brokerageMoney" />
+		<result column="brokerage_scale" jdbcType="DECIMAL" property="brokerageScale" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="is_del" jdbcType="INTEGER" property="isDel" />
+		<result column="createtime" jdbcType="DATE" property="createtime" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_new_house_brokerage (
+		id,
+		new_house_id,
+		type,
+		brokerage_type,
+		brokerage_model,
+		brokerage_money,
+		brokerage_scale,
+		remark,
+		is_del,
+		createtime
+		)
+ 	   values (
+		 #{id,jdbcType=INTEGER},
+		 #{newHouseId,jdbcType=INTEGER},
+		 #{type,jdbcType=INTEGER},
+		 #{brokerageType,jdbcType=INTEGER},
+		 #{brokerageModel,jdbcType=INTEGER},
+		 #{brokerageMoney,jdbcType=DECIMAL},
+		 #{brokerageScale,jdbcType=DECIMAL},
+		 #{remark,jdbcType=VARCHAR},
+		 #{isDel,jdbcType=INTEGER},
+		 NOW()
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_new_house_brokerage
+
+		where id = #{id}
+
+
+	</delete>
+
+	<update id="update" >
+		update ahs_new_house_brokerage
+		<set>
+			<if test="newHouseId!=null">new_house_id = #{newHouseId,jdbcType=INTEGER}, </if>
+			<if test="type!=null">type = #{type,jdbcType=INTEGER}, </if>
+			<if test="brokerageType!=null">brokerage_type = #{brokerageType,jdbcType=INTEGER}, </if>
+			<if test="brokerageModel!=null">brokerage_model = #{brokerageModel,jdbcType=INTEGER}, </if>
+			<if test="brokerageMoney!=null">brokerage_money = #{brokerageMoney,jdbcType=DECIMAL}, </if>
+			<if test="brokerageScale!=null">brokerage_scale = #{brokerageScale,jdbcType=DECIMAL}, </if>
+			<if test="remark!=null and remark!=''">remark = #{remark,jdbcType=VARCHAR}, </if>
+			<if test="isDel!=null">is_del = #{isDel,jdbcType=INTEGER}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		new_house_id,
+		type,
+		brokerage_type,
+		brokerage_model,
+		brokerage_money,
+		brokerage_scale,
+		remark,
+		is_del,
+		createtime
+		from ahs_new_house_brokerage
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		new_house_id,
+		type,
+		brokerage_type,
+		brokerage_model,
+		brokerage_money,
+		brokerage_scale,
+		remark,
+		is_del,
+		createtime
+		from ahs_new_house_brokerage
+		<where>
+			<if test="id!=null "> and ahs_new_house_brokerage.id = #{id,jdbcType=INTEGER}</if>
+			<if test="newHouseId!=null "> and ahs_new_house_brokerage.new_house_id = #{newHouseId,jdbcType=INTEGER}</if>
+			<if test="type!=null "> and ahs_new_house_brokerage.type = #{type,jdbcType=INTEGER}</if>
+			<if test="brokerageType!=null "> and ahs_new_house_brokerage.brokerage_type = #{brokerageType,jdbcType=INTEGER}</if>
+			<if test="brokerageModel!=null "> and ahs_new_house_brokerage.brokerage_model = #{brokerageModel,jdbcType=INTEGER}</if>
+			<if test="brokerageMoney!=null "> and ahs_new_house_brokerage.brokerage_money = #{brokerageMoney,jdbcType=DECIMAL}</if>
+			<if test="brokerageScale!=null "> and ahs_new_house_brokerage.brokerage_scale = #{brokerageScale,jdbcType=DECIMAL}</if>
+			<if test="remark!=null and remark!=''"> and ahs_new_house_brokerage.remark = #{remark,jdbcType=VARCHAR}</if>
+			<if test="isDel!=null "> and ahs_new_house_brokerage.is_del = #{isDel,jdbcType=INTEGER}</if>
+			<if test="startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		new_house_id,
+		type,
+		brokerage_type,
+		brokerage_model,
+		brokerage_money,
+		brokerage_scale,
+		remark,
+		is_del,
+		createtime
+		from ahs_new_house_brokerage
+		<where>
+			<if test="id!=null "> and ahs_new_house_brokerage.id = #{id,jdbcType=INTEGER}</if>
+			<if test="newHouseId!=null "> and ahs_new_house_brokerage.new_house_id = #{newHouseId,jdbcType=INTEGER}</if>
+			<if test="type!=null "> and ahs_new_house_brokerage.type = #{type,jdbcType=INTEGER}</if>
+			<if test="brokerageType!=null "> and ahs_new_house_brokerage.brokerage_type = #{brokerageType,jdbcType=INTEGER}</if>
+			<if test="brokerageModel!=null "> and ahs_new_house_brokerage.brokerage_model = #{brokerageModel,jdbcType=INTEGER}</if>
+			<if test="brokerageMoney!=null "> and ahs_new_house_brokerage.brokerage_money = #{brokerageMoney,jdbcType=DECIMAL}</if>
+			<if test="brokerageScale!=null "> and ahs_new_house_brokerage.brokerage_scale = #{brokerageScale,jdbcType=DECIMAL}</if>
+			<if test="remark!=null and remark!=''"> and ahs_new_house_brokerage.remark = #{remark,jdbcType=VARCHAR}</if>
+			<if test="isDel!=null "> and ahs_new_house_brokerage.is_del = #{isDel,jdbcType=INTEGER}</if>
+			<if test="startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+</mapper>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <script type="text/javascript" th:src="@{/js/viewer/viewer.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/viewer/viewer.min.css}" />
+    <style type="text/css">
+        .close{
+            position: absolute;
+            top:-9px;
+            right:-10px;
+            width:20px;
+            height:20px;
+            line-height: 18px;
+            text-align: center;
+            transform: rotate(40deg);
+            border-radius: 50%;
+            background:red;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .item{
+            width:100px;
+            height:100px;
+            position: relative;
+            display: inline-block;
+            margin:0 20px 20px 0;
+        }
+    </style>
+</head>
+<body class="body-common">
+        <div class="layui-tab">
+            <input type="hidden" id="newHouseId" name="newHouseId" th:value="${houseId }" />
+            <ul class="layui-tab-title">
+                <li class="layui-this">效果图</li>
+                <li>交通图</li>
+                <li>实景图</li>
+                <li>户型图</li>
+                <li>样板间</li>
+                <li>周边配套</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+
+                    <button type="button" class="layui-btn" id="xg">图片上传</button>
+                    <form class="layui-form layui-form-pane" action="">
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览图：
+                            <div class="layui-upload-list " id="imageWatchXg">
+                                <div class="item" th:each="s:${list}" th:if="${s.imgType==1}">
+                                    <input type="hidden" name="ids" th:value="${s.id }" />
+                                    <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}"  th:src="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg('imageWatchXg')">
+                                    <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                                    <input type="hidden" name="picturePath" th:value="${s.imgUrl }" />
+                                </div>
+                            </div>
+                        </blockquote>
+                        <div class="layui-form-item" style="text-align: center">
+                            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'newHouseImg/save')}">
+                                <button class="layui-btn" lay-submit="" lay-filter="save-data-xg">提交</button>
+                            </span>
+                            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-tab-item">
+                    <button type="button" class="layui-btn" id="jt">图片上传</button>
+                    <form class="layui-form layui-form-pane" action="">
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览图：
+                            <div class="layui-upload-list " id="imageWatchJt">
+                                <div class="item" th:each="s:${list}" th:if="${s.imgType==2}">
+                                    <input type="hidden" name="ids" th:value="${s.id }" />
+                                    <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}" th:src="${'http://aihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg('imageWatchJt')">
+                                    <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                                    <input type="hidden" name="picturePathJt" th:value="${s.imgUrl }" />
+                                </div>
+                            </div>
+                        </blockquote>
+                        <div class="layui-form-item" style="text-align: center">
+                            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'newHouseImg/save')}">
+                                <button class="layui-btn" lay-submit="" lay-filter="save-data-jt">提交</button>
+                            </span>
+                            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-tab-item">
+                    <button type="button" class="layui-btn" id="sj">图片上传</button>
+                    <form class="layui-form layui-form-pane" action="">
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览图：
+                            <div class="layui-upload-list " id="imageWatchSj">
+                                <div class="item" th:each="s:${list}" th:if="${s.imgType==3}">
+                                    <input type="hidden" name="ids" th:value="${s.id }" />
+                                    <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}"  th:src="${'http://aihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg('imageWatchSj')">
+                                    <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                                    <input type="hidden" name="picturePathSj" th:value="${s.imgUrl }" />
+                                </div>
+                            </div>
+                        </blockquote>
+                        <div class="layui-form-item" style="text-align: center">
+                            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'newHouseImg/save')}">
+                                <button class="layui-btn" lay-submit="" lay-filter="save-data-sj">提交</button>
+                            </span>
+                            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-tab-item">
+                    <button type="button" class="layui-btn" id="hx">图片上传</button>
+                    <form class="layui-form layui-form-pane" action="">
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览图：
+                            <div class="layui-upload-list " id="imageWatchHx">
+                                <div class="item" th:each="s:${list}" th:if="${s.imgType==4}">
+                                    <input type="hidden" name="ids" th:value="${s.id }" />
+                                    <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}"  th:src="${'http://aihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg('imageWatchHx')">
+                                    <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                                    <input type="hidden" name="picturePathHx" th:value="${s.imgUrl }" />
+                                </div>
+                            </div>
+                        </blockquote>
+                        <div class="layui-form-item" style="text-align: center">
+                            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'newHouseImg/save')}">
+                                <button class="layui-btn" lay-submit="" lay-filter="save-data-hx">提交</button>
+                            </span>
+                            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-tab-item">
+                    <button type="button" class="layui-btn" id="yb">图片上传</button>
+                    <form class="layui-form layui-form-pane" action="">
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览图：
+                            <div class="layui-upload-list " id="imageWatchYb">
+                                <div class="item" th:each="s:${list}" th:if="${s.imgType==5}">
+                                    <input type="hidden" name="ids" th:value="${s.id }" />
+                                    <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}"  th:src="${'http://aihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg('imageWatchYb')">
+                                    <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                                    <input type="hidden" name="picturePathYb" th:value="${s.imgUrl }" />
+                                </div>
+                            </div>
+                        </blockquote>
+                        <div class="layui-form-item" style="text-align: center">
+                            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'newHouseImg/save')}">
+                                <button class="layui-btn" lay-submit="" lay-filter="save-data-yb">提交</button>
+                            </span>
+                            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+                        </div>
+                    </form>
+                </div>
+                <div class="layui-tab-item">
+                    <button type="button" class="layui-btn" id="zb">图片上传</button>
+                    <form class="layui-form layui-form-pane" action="">
+                        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                            预览图：
+                            <div class="layui-upload-list " id="imageWatchZb">
+                                <div class="item" th:each="s:${list}" th:if="${s.imgType==6}">
+                                    <input type="hidden" name="ids" th:value="${s.id }" />
+                                    <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}"  th:src="${'http://aihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg('imageWatchZb')">
+                                    <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                                    <input type="hidden" name="picturePathZb" th:value="${s.imgUrl }" />
+                                </div>
+                            </div>
+                        </blockquote>
+                        <div class="layui-form-item" style="text-align: center">
+                            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'newHouseImg/save')}">
+                                <button class="layui-btn" lay-submit="" lay-filter="save-data-zb">提交</button>
+                            </span>
+                            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+</body>
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    var viewer;
+    layui.use(['form','element','upload','jquery'], function(){
+        var element = layui.element,
+            upload=layui.upload
+            ,form=layui.form,
+            $=layui.jquery;
+        upload.render({
+            elem: '#xg'
+            ,url: rootPath+'newhouseimg/upload'
+            ,multiple: true
+            ,before: function(obj){
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                })
+            }
+            ,done: function(res){
+                //上传完毕
+                layer.close(layer.msg());
+                layer.msg('上传成功');
+                //$("#typeImg").val(res.data);
+                for(var k in res.data){
+                    $("#imageWatchXg").append("<div class='item'> <img  style='width: 100px;height: 100px' data='"+imgPath+res.data[k]+imgsl2+"' src='"+imgPath+res.data[k]+imgsl1+"' onclick=\"previewImg('imageWatchXg')\"><div class='close' onclick='delXg(0,this)'>+</div><input type='hidden' name='picturePath' value='"+res.data[k]+"' /></div>")
+                }
+            }
+        });
+        upload.render({
+            elem: '#jt'
+            ,url: rootPath+'newhouseimg/upload'
+            ,multiple: true
+            ,before: function(obj){
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                })
+            }
+            ,done: function(res){
+                //上传完毕
+                layer.close(layer.msg());
+                layer.msg('上传成功');
+                //$("#typeImg").val(res.data);
+                for(var k in res.data){
+                    $("#imageWatchJt").append("<div class='item'> <img  style='width: 100px;height: 100px' data='"+imgPath+res.data[k]+imgsl2+"' src='"+imgPath+res.data[k]+imgsl1+"' onclick=\"previewImg('imageWatchJt')\"><div class='close' onclick='delXg(0,this)'>+</div><input type='hidden' name='picturePathJt' value='"+res.data[k]+"' /></div>")
+                }
+            }
+        });
+        upload.render({
+            elem: '#sj'
+            ,url: rootPath+'newhouseimg/upload'
+            ,multiple: true
+            ,before: function(obj){
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                })
+            }
+            ,done: function(res){
+                //上传完毕
+                layer.close(layer.msg());
+                layer.msg('上传成功');
+                //$("#typeImg").val(res.data);
+                for(var k in res.data){
+                    $("#imageWatchSj").append("<div class='item'> <img  style='width: 100px;height: 100px' data='"+imgPath+res.data[k]+imgsl2+"' src='"+imgPath+res.data[k]+imgsl1+"' onclick=\"previewImg('imageWatchSj')\"><div class='close' onclick='delXg(0,this)'>+</div><input type='hidden' name='picturePathSj' value='"+res.data[k]+"' /></div>")
+                }
+            }
+        });
+        upload.render({
+            elem: '#hx'
+            ,url: rootPath+'newhouseimg/upload'
+            ,multiple: true
+            ,before: function(obj){
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                })
+            }
+            ,done: function(res){
+                //上传完毕
+                layer.close(layer.msg());
+                layer.msg('上传成功');
+                //$("#typeImg").val(res.data);
+                for(var k in res.data){
+                    $("#imageWatchHx").append("<div class='item'> <img  style='width: 100px;height: 100px' data='"+imgPath+res.data[k]+imgsl2+"' src='"+imgPath+res.data[k]+imgsl1+"' onclick=\"previewImg('imageWatchHx')\"><div class='close' onclick='delXg(0,this)'>+</div><input type='hidden' name='picturePathHx' value='"+res.data[k]+"' /></div>")
+                }
+            }
+        });
+        upload.render({
+            elem: '#yb'
+            ,url: rootPath+'newhouseimg/upload'
+            ,multiple: true
+            ,before: function(obj){
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                })
+            }
+            ,done: function(res){
+                //上传完毕
+                layer.close(layer.msg());
+                layer.msg('上传成功');
+                //$("#typeImg").val(res.data);
+                for(var k in res.data){
+                    $("#imageWatchYb").append("<div class='item'> <img  style='width: 100px;height: 100px' data='"+imgPath+res.data[k]+imgsl2+"' src='"+imgPath+res.data[k]+imgsl1+"' onclick=\"previewImg('imageWatchYb')\"><div class='close' onclick='delXg(0,this)'>+</div><input type='hidden' name='picturePathYb' value='"+res.data[k]+"' /></div>")
+                }
+            }
+        });
+        upload.render({
+            elem: '#zb'
+            ,url: rootPath+'newhouseimg/upload'
+            ,multiple: true
+            ,before: function(obj){
+                layer.msg('图片上传中...', {
+                    icon: 16,
+                    shade: 0.01,
+                    time: 0
+                })
+            }
+            ,done: function(res){
+                //上传完毕
+                layer.close(layer.msg());
+                layer.msg('上传成功');
+                //$("#typeImg").val(res.data);
+                for(var k in res.data){
+                    $("#imageWatchZb").append("<div class='item'> <img  style='width: 100px;height: 100px' data='"+imgPath+res.data[k]+imgsl2+"' src='"+imgPath+res.data[k]+imgsl1+"' onclick=\"previewImg('imageWatchZb')\"><div class='close' onclick='delXg(0,this)'>+</div><input type='hidden' name='picturePathZb' value='"+res.data[k]+"' /></div>")
+                }
+            }
+        });
+        //监听提交
+        form.on('submit(save-data-zb)', function (data) {
+            var imgUrls=[];
+            $("input[name='picturePathZb']").each(function () {
+                imgUrls.push(this.value)
+            })
+            console.log(imgUrls)
+            data.field['newHouseId']=$("#newHouseId").val();
+            data.field['imgUrls']=imgUrls;
+            data.field['imgType']=6;
+            $.post(rootPath+"newhouseimg/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    window.location.reload();
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false;
+        });
+        //监听提交
+        form.on('submit(save-data-yb)', function (data) {
+            var imgUrls=[];
+            $("input[name='picturePathYb']").each(function () {
+                imgUrls.push(this.value)
+            })
+            console.log(imgUrls)
+            data.field['newHouseId']=$("#newHouseId").val();
+            data.field['imgUrls']=imgUrls;
+            data.field['imgType']=5;
+            $.post(rootPath+"newhouseimg/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    window.location.reload();
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false;
+        });
+        //监听提交
+        form.on('submit(save-data-hx)', function (data) {
+            var imgUrls=[];
+            $("input[name='picturePathHx']").each(function () {
+                imgUrls.push(this.value)
+            })
+            console.log(imgUrls)
+            data.field['newHouseId']=$("#newHouseId").val();
+            data.field['imgUrls']=imgUrls;
+            data.field['imgType']=4;
+            $.post(rootPath+"newhouseimg/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    window.location.reload();
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false;
+        });
+        //监听提交
+        form.on('submit(save-data-sj)', function (data) {
+            var imgUrls=[];
+            $("input[name='picturePathSj']").each(function () {
+                imgUrls.push(this.value)
+            })
+            console.log(imgUrls)
+            data.field['newHouseId']=$("#newHouseId").val();
+            data.field['imgUrls']=imgUrls;
+            data.field['imgType']=3;
+            $.post(rootPath+"newhouseimg/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    window.location.reload();
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false;
+        });
+        //监听提交
+        form.on('submit(save-data-jt)', function (data) {
+            var imgUrls=[];
+            $("input[name='picturePathJt']").each(function () {
+                imgUrls.push(this.value)
+            })
+            console.log(imgUrls)
+            data.field['newHouseId']=$("#newHouseId").val();
+            data.field['imgUrls']=imgUrls;
+            data.field['imgType']=2;
+            $.post(rootPath+"newhouseimg/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    window.location.reload();
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false;
+        });
+        //监听提交
+        form.on('submit(save-data-xg)', function (data) {
+            var imgUrls=[];
+            $("input[name='picturePath']").each(function () {
+                   imgUrls.push(this.value)
+            })
+            console.log(imgUrls)
+            data.field['newHouseId']=$("#newHouseId").val();
+            data.field['imgUrls']=imgUrls;
+            data.field['imgType']=1;
+            $.post(rootPath+"newhouseimg/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    window.location.reload();
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false;
+        });
+
+    });
+    function delXg(a,b) {
+        var id=a;
+        if(id){
+            $.post(rootPath + "newhouseimg/deleteImg", {"id":id}, function (data) {
+                if (data.code == 0) {
+                    b.parentElement.remove()
+                }
+            });
+        }else{
+            b.parentElement.remove()
+        }
+    }
+    function previewImg(obj) {
+        /*var img = new Image();
+        img.src = obj.src;
+        var height = 700; //获取图片高度
+        var width = 600; //获取图片宽度
+        var src=obj.src.replace(imgsl1,imgsl2);
+        var imgHtml = "<img src='" + src + "' />";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: 'auto',
+            area: [width + 'px',height+'px'],
+            shadeClose:true,//点击外围关闭弹窗
+            scrollbar: false,//不现实滚动条
+            title: "图片预览", //不显示标题
+            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function () {
+                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+            }
+        });*/
+        var galley = document.getElementById(obj);
+        if(viewer){
+            viewer.destroy();
+        }
+        viewer = new Viewer(galley, {
+            toolbar: {
+                oneToOne: true,
+
+                prev: function() {
+                    viewer.prev(true);
+                },
+                play: true,
+                next: function() {
+                    viewer.next(true);
+                },
+                download: function() {
+                    var a = document.createElement('a');
+                    var src=viewer.image.src.replace(imgsl1,imgsl2);
+                    a.href = src;
+                    a.download = viewer.image.alt;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+            },
+            url:'data'
+        });
+        viewer.update();
+    }
+</script>
+</html>

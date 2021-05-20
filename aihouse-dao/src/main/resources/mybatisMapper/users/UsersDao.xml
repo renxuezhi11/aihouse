@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UsersDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.Users">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="telephone" jdbcType="VARCHAR" property="telephone" />
+		<result column="nickname" jdbcType="VARCHAR" property="nickname" />
+		<result column="username" jdbcType="VARCHAR" property="username"/>
+		<result column="truename" jdbcType="VARCHAR" property="truename" />
+		<result column="sex" jdbcType="INTEGER" property="sex" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="userphoto" jdbcType="VARCHAR" property="userphoto" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="wxaccount" jdbcType="VARCHAR" property="wxaccount" />
+		<result column="aliaccount" jdbcType="VARCHAR" property="aliaccount" />
+		<result column="is_certification" jdbcType="INTEGER" property="isCertification" />
+		<result column="im_account" jdbcType="VARCHAR" property="imAccount" />
+		<result column="im_password" jdbcType="VARCHAR" property="imPassword" />
+		<result column="id_card" jdbcType="VARCHAR" property="idCard" />
+		<result column="role" jdbcType="INTEGER" property="role" />
+		<result column="register_time" jdbcType="TIMESTAMP" property="registerTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="signname" jdbcType="VARCHAR" property="signname"/>
+		<result column="cityname" jdbcType="VARCHAR" property="cityname"/>
+		<result column="spread_code" jdbcType="VARCHAR" property="spreadCode"/>
+		<result column="areaname" jdbcType="VARCHAR" property="areaname"/>
+		<result column="is_spread" jdbcType="INTEGER" property="isSpread" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_users (
+		telephone,
+		nickname,
+		username,
+		truename,
+		sex,
+		password,
+		userphoto,
+		email,
+		wxaccount,
+		aliaccount,
+		is_certification,
+		im_account,
+		im_password,
+		id_card,
+		role,
+		status,
+		parent_id
+		)
+ 	   values (
+		 #{telephone,jdbcType=VARCHAR},
+		 #{nickname,jdbcType=VARCHAR},
+		 #{username,jdbcType=VARCHAR},
+		 #{truename,jdbcType=VARCHAR},
+		 #{sex,jdbcType=INTEGER},
+		 #{password,jdbcType=VARCHAR},
+		 #{userphoto,jdbcType=VARCHAR},
+		 #{email,jdbcType=VARCHAR},
+		 #{wxaccount,jdbcType=VARCHAR},
+		 #{aliaccount,jdbcType=VARCHAR},
+		 #{isCertification,jdbcType=INTEGER},
+		 #{imAccount,jdbcType=VARCHAR},
+		 #{imPassword,jdbcType=VARCHAR},
+		 #{idCard,jdbcType=VARCHAR},
+		 #{role,jdbcType=INTEGER},
+		 #{status,jdbcType=INTEGER},
+		 #{parentId,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_users 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_users
+		<set>
+			<if test="telephone!=null and telephone!=''">telephone = #{telephone,jdbcType=VARCHAR}, </if>
+			<if test="nickname!=null and nickname!=''">nickname = #{nickname,jdbcType=VARCHAR}, </if>
+			<if test="truename!=null and truename!=''">truename = #{truename,jdbcType=VARCHAR}, </if>
+			<if test="sex!=null">sex = #{sex,jdbcType=INTEGER}, </if>
+			<if test="password!=null and password!=''">password = #{password,jdbcType=VARCHAR}, </if>
+			<if test="userphoto!=null and userphoto!=''">userphoto = #{userphoto,jdbcType=VARCHAR}, </if>
+			<if test="email!=null and email!=''">email = #{email,jdbcType=VARCHAR}, </if>
+			<if test="wxaccount!=null and wxaccount!=''">wxaccount = #{wxaccount,jdbcType=VARCHAR}, </if>
+			<if test="aliaccount!=null and aliaccount!=''">aliaccount = #{aliaccount,jdbcType=VARCHAR}, </if>
+			<if test="isCertification!=null">is_certification = #{isCertification,jdbcType=INTEGER}, </if>
+			<if test="imAccount!=null and imAccount!=''">im_account = #{imAccount,jdbcType=VARCHAR}, </if>
+			<if test="imPassword!=null and imPassword!=''">im_password = #{imPassword,jdbcType=VARCHAR}, </if>
+			<if test="idCard!=null and idCard!=''">id_card = #{idCard,jdbcType=VARCHAR}, </if>
+			<if test="role!=null">role = #{role,jdbcType=INTEGER}, </if>
+			<if test="registerTime!=null">register_time = #{registerTime,jdbcType=TIMESTAMP}, </if>
+			<if test="status!=null">status = #{status,jdbcType=INTEGER}, </if>
+			<if test="signname!=null and signname!=''">signname=#{signname,jdbcType=VARCHAR},</if>
+			<if test="cityname!=null and cityname!=''">cityname=#{cityname,jdbcType=VARCHAR},</if>
+			<if test="areaname!=null and areaname!=''">areaname=#{areaname,jdbcType=VARCHAR},</if>
+			<if test="spreadCode!=null and spreadCode!=''">spread_code=#{spreadCode,jdbcType=VARCHAR},</if>
+			<if test="isSpread!=null">is_spread = #{isSpread,jdbcType=INTEGER}, </if>
+			<if test="parentId!=null">parent_id = #{parentId,jdbcType=INTEGER}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		telephone,
+		username,
+		nickname,
+		truename,
+		sex,
+		password,
+		userphoto,
+		email,
+		wxaccount,
+		aliaccount,
+		is_certification,
+		im_account,
+		im_password,
+		id_card,
+		role,
+		register_time,
+		status,signname,cityname,areaname,parent_id,is_spread,spread_code
+		from ahs_users
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		telephone,
+		nickname,
+		username,
+		truename,
+		sex,
+		password,
+		userphoto,
+		email,
+		wxaccount,
+		aliaccount,
+		is_certification,
+		im_account,
+		im_password,
+		id_card,
+		role,
+		register_time,
+		status,
+		signname,cityname,areaname,parent_id,is_spread,spread_code
+		from ahs_users
+		<where>
+		<if test="id!=null "> and ahs_users.id = #{id,jdbcType=INTEGER}</if>
+		<if test="telephone!=null and telephone!=''"> and ahs_users.telephone = #{telephone,jdbcType=VARCHAR}</if>
+		<if test="nickname!=null and nickname!=''"> and ahs_users.nickname = #{nickname,jdbcType=VARCHAR}</if>
+		<if test="username!=null and username!=''"> and ahs_users.username = #{username,jdbcType=VARCHAR}</if>
+		<if test="truename!=null and truename!=''"> and ahs_users.truename = #{truename,jdbcType=VARCHAR}</if>
+		<if test="sex!=null "> and ahs_users.sex = #{sex,jdbcType=INTEGER}</if>
+		<if test="password!=null and password!=''"> and ahs_users.password = #{password,jdbcType=VARCHAR}</if>
+		<if test="userphoto!=null and userphoto!=''"> and ahs_users.userphoto = #{userphoto,jdbcType=VARCHAR}</if>
+		<if test="email!=null and email!=''"> and ahs_users.email = #{email,jdbcType=VARCHAR}</if>
+		<if test="wxaccount!=null and wxaccount!=''"> and ahs_users.wxaccount = #{wxaccount,jdbcType=VARCHAR}</if>
+		<if test="aliaccount!=null and aliaccount!=''"> and ahs_users.aliaccount = #{aliaccount,jdbcType=VARCHAR}</if>
+		<if test="isCertification!=null "> and ahs_users.is_certification = #{isCertification,jdbcType=INTEGER}</if>
+		<if test="imAccount!=null and imAccount!=''"> and ahs_users.im_account = #{imAccount,jdbcType=VARCHAR}</if>
+		<if test="imPassword!=null and imPassword!=''"> and ahs_users.im_password = #{imPassword,jdbcType=VARCHAR}</if>
+		<if test="idCard!=null and idCard!=''"> and ahs_users.id_card = #{idCard,jdbcType=VARCHAR}</if>
+		<if test="role!=null "> and ahs_users.role = #{role,jdbcType=INTEGER}</if>
+		<if test="spreadCode!=null and spreadCode!=''"> and ahs_users.spread_code = #{spreadCode,jdbcType=VARCHAR}</if>
+		<if test="status!=null "> and ahs_users.status = #{status,jdbcType=INTEGER}</if>
+		<if test="isSpread!=null">and ahs_users.is_spread = #{isSpread,jdbcType=INTEGER}</if>
+		<if test="startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and registerTime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		telephone,
+		nickname,
+		username,
+		truename,
+		sex,
+		password,
+		userphoto,
+		email,
+		wxaccount,
+		aliaccount,
+		is_certification,
+		im_account,
+		im_password,
+		id_card,
+		role,
+		register_time,
+		status,signname,cityname,areaname,parent_id,is_spread,spread_code
+		from ahs_users
+		<where>
+		<if test="id!=null "> and ahs_users.id = #{id,jdbcType=INTEGER}</if>
+		<if test="telephone!=null and telephone!=''"> and ahs_users.telephone = #{telephone,jdbcType=VARCHAR}</if>
+		<if test="nickname!=null and nickname!=''"> and ahs_users.nickname = #{nickname,jdbcType=VARCHAR}</if>
+		<if test="username!=null and username!=''"> and ahs_users.username = #{username,jdbcType=VARCHAR}</if>
+		<if test="truename!=null and truename!=''"> and ahs_users.truename = #{truename,jdbcType=VARCHAR}</if>
+		<if test="sex!=null "> and ahs_users.sex = #{sex,jdbcType=INTEGER}</if>
+		<if test="password!=null and password!=''"> and ahs_users.password = #{password,jdbcType=VARCHAR}</if>
+		<if test="userphoto!=null and userphoto!=''"> and ahs_users.userphoto = #{userphoto,jdbcType=VARCHAR}</if>
+		<if test="email!=null and email!=''"> and ahs_users.email = #{email,jdbcType=VARCHAR}</if>
+		<if test="wxaccount!=null and wxaccount!=''"> and ahs_users.wxaccount = #{wxaccount,jdbcType=VARCHAR}</if>
+		<if test="aliaccount!=null and aliaccount!=''"> and ahs_users.aliaccount = #{aliaccount,jdbcType=VARCHAR}</if>
+		<if test="isCertification!=null "> and ahs_users.is_certification = #{isCertification,jdbcType=INTEGER}</if>
+		<if test="imAccount!=null and imAccount!=''"> and ahs_users.im_account = #{imAccount,jdbcType=VARCHAR}</if>
+		<if test="imPassword!=null and imPassword!=''"> and ahs_users.im_password = #{imPassword,jdbcType=VARCHAR}</if>
+		<if test="idCard!=null and idCard!=''"> and ahs_users.id_card = #{idCard,jdbcType=VARCHAR}</if>
+		<if test="role!=null "> and ahs_users.role = #{role,jdbcType=INTEGER}</if>
+		<if test="status!=null "> and ahs_users.status = #{status,jdbcType=INTEGER}</if>
+		<if test="startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and registerTime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		<if test="spreadCode!=null"> and ahs_users.spread_code =#{spreadCode,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="queryBroker" parameterType="java.lang.Integer" resultType="map">
+		select a.id,a.im_account,a.nickname as truename,a.username,a.userphoto,(select score from ahs_broker_score  where user_id=a.id) as score from ahs_users a,ahs_new_house_broker b
+		where a.id=b.broker_id and b.new_house_id=#{id} and b.status=0  order by score desc limit 0,5
+	</select>
+
+	<select id="getNewHouseAllBroker" parameterType="java.lang.Integer" resultType="map">
+		select a.id,a.im_account,a.nickname as truename,a.username,a.userphoto,(select score from ahs_broker_score  where user_id=a.id) as score from ahs_users a,ahs_new_house_broker b
+		where a.id=b.broker_id and b.new_house_id=#{id} and b.status=0  order by score desc
+	</select>
+	<select id="getAllBroker"  resultType="map">
+		select a.id,a.im_account,a.nickname as truename,a.username,a.userphoto,(select score from ahs_broker_score  where user_id=a.id) as score from ahs_users a
+		where a.role=6 and   a.status=0  order by score desc
+	</select>
+</mapper>

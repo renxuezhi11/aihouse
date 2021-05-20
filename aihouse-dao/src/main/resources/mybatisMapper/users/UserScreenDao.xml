@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserScreenDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserScreen">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="screen_user_id" jdbcType="INTEGER" property="screenUserId" />
+
+		<result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+
+		<result column="userphoto" jdbcType="VARCHAR" property="userPhoto"/>
+
+		<result column="signname" jdbcType="VARCHAR" property="signname"/>
+
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_screen (
+		user_id,
+		screen_user_id
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{screenUserId,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_screen
+		where id = #{id}
+	</delete>
+
+	<update id="update" >
+		update ahs_user_screen
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="screenUserId!=null">screen_user_id = #{screenUserId,jdbcType=INTEGER}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		screen_user_id,
+		(select nickname from ahs_users where id=ahs_user_screen.screen_user_id) as nickname,
+		(select userphoto from ahs_users where id=ahs_user_screen.screen_user_id) as userphoto,
+		(select signname from ahs_users where id=ahs_user_screen.screen_user_id) as signname,
+		createtime
+		from ahs_user_screen
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		screen_user_id,
+		(select nickname from ahs_users where id=ahs_user_screen.screen_user_id) as nickname,
+		(select userphoto from ahs_users where id=ahs_user_screen.screen_user_id) as userphoto,
+		(select signname from ahs_users where id=ahs_user_screen.screen_user_id) as signname,
+		createtime
+		from ahs_user_screen
+		<where>
+		<if test="id!=null "> and ahs_user_screen.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_screen.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="screenUserId!=null "> and ahs_user_screen.screen_user_id = #{screenUserId,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		screen_user_id,
+		(select nickname from ahs_users where id=ahs_user_screen.screen_user_id) as nickname,
+		(select userphoto from ahs_users where id=ahs_user_screen.screen_user_id) as userphoto,
+		(select signname from ahs_users where id=ahs_user_screen.screen_user_id) as signname,
+		createtime
+		from ahs_user_screen
+		<where>
+			<if test="id!=null "> and ahs_user_screen.id = #{id,jdbcType=INTEGER}</if>
+			<if test="userId!=null "> and ahs_user_screen.user_id = #{userId,jdbcType=INTEGER}</if>
+			<if test="screenUserId!=null "> and ahs_user_screen.screen_user_id = #{screenUserId,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+	</select>
+</mapper>

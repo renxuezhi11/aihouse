@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <script type="text/javascript" th:src="@{/js/viewer/viewer.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/viewer/viewer.min.css}" />
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id"  th:value="${user_certification.id}" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">昵称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="nickname" id="nickname" disabled="disabled" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入昵称" class="layui-input" th:value="${app_users.nickname}" >
+            </div>
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="telephone" id="telephone" disabled="disabled" maxlength="11" lay-verify="required" autocomplete="off"
+                       placeholder="请输入手机号" class="layui-input" th:value="${app_users.telephone}" >
+            </div>
+            <label class="layui-form-label" style="margin-left:18px;">身份证</label>
+            <div class="layui-input-inline">
+                <input type="text" STYLE="width: 280px;" name="idCard" id="idCard" maxlength="32"
+                       placeholder="请输入身份证号" class="layui-input" th:value="${user_certification.idCard}"  >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                身份证：
+                <div class="layui-upload-list" id="imageWatch" >
+                    <img  th:each="s:${imgUrl}" style='width: 100px;height: 100px' th:src="@{/users/watch(path=${s})}" onclick="previewImg(this)">
+                </div>
+            </blockquote>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">真实姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="truename" id="truename" maxlength="20" lay-verify="required" autocomplete="off"
+                       placeholder="请输入真实姓名" class="layui-input" th:value="${user_certification.truename}" >
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">审核回复</label>
+            <div class="layui-input-block">
+                        <textarea placeholder="请输入审核回复" class="layui-textarea"
+                                  th:text="${user_certification.statusContent}" name="statusContent" id="statusContent"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">认证审核状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status"  value="0" lay-verify="required" title="未审核" th:checked="${user_certification.status==0 ||user_certification.status==null}">
+                <input type="radio" name="status"  value="1" lay-verify="required" title="审核通过" th:checked="${user_certification.status==1}">
+                <input type="radio" name="status"  value="2" lay-verify="required" title="审核不通过" th:checked="${user_certification.status==2}">
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'userCertification/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    var  viewer;
+    layui.use(['form', 'layedit'], function () {
+        var form = layui.form
+            , layer = layui.layer
+        form.render();
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            var roles=[];
+            $("input[name='roles']:checked").each(function () {
+                roles.push(this.value);
+            })
+            data.field['roles']=roles;
+            $.post(rootPath+"userCertification/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback("userCertification/gotoList");
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+    });
+
+    function previewImg(obj) {
+        // var img = new Image();
+        // img.src = obj.src;
+        // var height = 700; //获取图片高度
+        // var width = 600; //获取图片宽度
+        // var src=obj.src.replace(imgsl1,imgsl2);
+        // var imgHtml = "<img src='" + src + "' />";
+        // //弹出层
+        // layer.open({
+        //     type: 1,
+        //     shade: 0.8,
+        //     offset: 'auto',
+        //     area: [width + 'px',height+'px'],
+        //     shadeClose:true,//点击外围关闭弹窗
+        //     scrollbar: false,//不现实滚动条
+        //     title: "图片预览", //不显示标题
+        //     content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+        //     cancel: function () {
+        //         //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+        //     }
+        // });
+        var galley = document.getElementById("imageWatch");
+        if(viewer){
+            viewer.destroy();
+        }
+        viewer = new Viewer(galley, {
+            toolbar: {
+                oneToOne: true,
+
+                prev: function() {
+                    viewer.prev(true);
+                },
+                play: true,
+                next: function() {
+                    viewer.next(true);
+                },
+                download: function() {
+                    var a = document.createElement('a');
+                    a.href = viewer.image.src;
+                    a.download = viewer.image.alt;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+            },
+        });
+        viewer.update();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.renthouse.SysRentHouseDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.RentHouse">
+    <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="user_id" jdbcType="INTEGER" property="userId"/>
+      <result column="cityid" jdbcType="INTEGER" property="cityId"/>
+      <result column="areaid" jdbcType="INTEGER" property="areaId"/>
+      <result column="streetsid" jdbcType="INTEGER" property="streetsId"/>
+      <result column="contacts" jdbcType="VARCHAR" property="contacts"/>
+      <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+      <result column="house_type" jdbcType="VARCHAR" property="houseType"/>
+      <result column="covered_type" jdbcType="VARCHAR" property="coveredType"/>
+      <result column="room" jdbcType="INTEGER" property="room"/>
+      <result column="hall" jdbcType="INTEGER" property="hall"/>
+      <result column="cookroom" jdbcType="INTEGER" property="cookRoom"/>
+      <result column="toilet" jdbcType="INTEGER" property="toilet"/>
+      <result column="gallery" jdbcType="INTEGER" property="gallery"/>
+      <result column="covered_area" jdbcType="NUMERIC" property="coveredArea"/>
+      <result column="is_lift" jdbcType="INTEGER" property="isLift"/>
+      <result column="floor" jdbcType="INTEGER" property="floor"/>
+      <result column="total_floor" jdbcType="INTEGER" property="totalFloor"/>
+      <result column="village_id" jdbcType="INTEGER" property="villageId"/>
+      <result column="village_name" jdbcType="VARCHAR" property="villageName"/>
+      <result column="house_desc" jdbcType="LONGVARCHAR" property="houseDesc"/>
+      <result column="lng" jdbcType="VARCHAR" property="lng"/>
+      <result column="lat" jdbcType="VARCHAR" property="lat"/>
+      <result column="address" jdbcType="VARCHAR" property="address"/>
+      <result column="support" jdbcType="VARCHAR" property="support"/>
+      <result column="fixture" jdbcType="VARCHAR" property="fixture"/>
+      <result column="orientations" jdbcType="VARCHAR" property="orientations"/>
+      <result column="title" jdbcType="VARCHAR" property="title"/>
+      <result column="house_number" jdbcType="VARCHAR" property="houseNumber"/>
+      <result column="rent_mode" jdbcType="VARCHAR" property="rentMode"/>
+      <result column="createtime" jdbcType="TIMESTAMP" property="createtime"/>
+      <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime"/>
+      <result column="status" jdbcType="INTEGER" property="status"/>
+      <result column="rent_people" jdbcType="INTEGER" property="rentPeople"/>
+      <result column="rent_room" jdbcType="INTEGER" property="rentRoom"/>
+      <result column="rent_sex" jdbcType="INTEGER" property="rentSex"/>
+      <result column="rent_fee" jdbcType="INTEGER" property="rentFee"/>
+      <result column="rent_time" jdbcType="VARCHAR" property="rentTime"/>
+      <result column="rent_way" jdbcType="INTEGER" property="rentWay"/>
+      <result column="broker" jdbcType="INTEGER" property="broker"/>
+      <result column="rent_real" jdbcType="INTEGER" property="rentReal"/>
+      <result column="status_content" jdbcType="VARCHAR" property="statusContent"/>
+      <result column="flag" jdbcType="INTEGER" property="flag"/>
+      <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+      <result column="sex" jdbcType="INTEGER" property="sex"/>
+      <result column="user_type" jdbcType="INTEGER" property="userType"/>
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_rent_house
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, user_id, village_id,cityid,areaid,streesid,contacts,telephone,house_type,covered_type,room,hall,cookroom,toilet,gallery,covered_area,is_lift,floor,
+        total_floor,village_name,house_desc,lng,lat,address,support,fixture,orientations,title,house_number,rent_mode,createtime,updatetime,status,rent_people,rent_room,rent_sex,
+        rent_fee,rent_time,rent_way,broker,rent_real,status_content,flag,is_del,sex,user_type
+        from ahs_rent_house
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_id, village_id,cityid,areaid,streesid,contacts,telephone,house_type,covered_type,room,hall,cookroom,toilet,gallery,covered_area,is_lift,floor,
+    total_floor,village_name,house_desc,lng,lat,address,support,fixture,orientations,title,house_number,rent_mode,createtime,updatetime,status,rent_people,rent_room,rent_sex,
+    rent_fee,rent_time,rent_way,broker,rent_real,status_content,flag,is_del,sex,user_type
+    from ahs_rent_house
+      <where>
+        <if test="id!=null"> and id=#{id,jdbcType=INTEGER}</if>
+         <if test="userId!=null"> and user_id=#{userId,jdbcType=INTEGER}</if>
+		<if test="status!=null "> and status = #{status,jdbcType=INTEGER}</if>
+        <if test="rentMode!=null "> and rent_mode = #{rentMode,jdbcType=INTEGER}</if>
+         <if test="villageName!=null and villageName!=''"> and INSTR (village_name ,#{villageName,jdbcType=VARCHAR})>0</if>
+         <if test="houseType!=null and houseType!=''"> and house_type= #{houseType,jdbcType=VARCHAR}</if>
+          <if test="fixture!=null and fixture!=''"> and fixture=#{fixture,jdbcType=VARCHAR}</if>
+          <if test="flag!=null">and flag=#{flag,jdbcType=INTEGER}</if>
+          <if test="orientations!=null and orientations!=''">and orientations=#{orientations,jdbcType=VARCHAR}</if>
+        <if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate} and #{endDate}</if>
+ 	</where> 
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+
+  </select>
+  <update id="update">
+  update  	ahs_rent_house
+  <set>
+      <if test="status!=null">status=#{status,jdbcType=INTEGER},</if>
+      <if test="flag!=null">flag=#{flag,jdbcType=INTEGER},</if>
+      <if test="statusContent!=null and statusContent!=''">status_content=#{statusContent,jdbcType=VARCHAR},</if>
+      <if test="cityId!=null">cityid=#{cityId,jdbcType=INTEGER},</if>
+      <if test="areaId!=null">areaid=#{areaId,jdbcType=INTEGER},</if>
+      <if test="streetsId!=null">streetsid=#{streetsId,jdbcType=INTEGER},</if>
+      <if test="sex!=null">sex=#{sex,jdbcType=INTEGER},</if>
+      <if test="contacts!=null and contacts!=''">contacts=#{contacts,jdbcType=VARCHAR},</if>
+      <if test="telephone!=null and telephone!=''">telephone=#{telephone,jdbcType=VARCHAR},</if>
+      <if test="userType!=null">user_type=#{userType,jdbcType=INTEGER},</if>
+      <if test="houseType!=null and houseType!=''">house_type= #{houseType,jdbcType=VARCHAR},</if>
+      <if test="coveredType!=null and coveredType!=''">covered_type=#{coveredType,jdbcType=VARCHAR},</if>
+      <if test="room!=null">room=#{room,jdbcType=INTEGER},</if>
+      <if test="hall!=null">hall=#{hall,jdbcType=INTEGER},</if>
+      <if test="cookRoom!=null">cookroom=#{cookRoom,jdbcType=INTEGER},</if>
+      <if test="toilet!=null">toilet=#{toilet,jdbcType=INTEGER},</if>
+      <if test="gallery!=null">gallery=#{gallery,jdbcType=INTEGER},</if>
+      <if test="coveredArea!=null">covered_area=#{coveredArea,jdbcType=NUMERIC},</if>
+      <if test="isLift!=null"> is_lift=#{isLift,jdbcType=INTEGER},</if>
+      <if test="floor!=null"> floor=#{floor,jdbcType=INTEGER},</if>
+      <if test="totalFloor!=null">total_floor=#{totalFloor,jdbcType=INTEGER},</if>
+      <if test="villageId!=null">village_id=#{villageId,jdbcType=INTEGER},</if>
+      <if test="villageName!=null and villageName!=''">village_name=#{villageName,jdbcType=VARCHAR},</if>
+      <if test="houseDesc!=null and houseDesc!=''">house_desc=#{houseDesc,jdbcType=VARCHAR},</if>
+      <if test="lng!=null and lng!=''">lng=#{lng,jdbcType=VARCHAR},</if>
+      <if test="lat!=null and lat!=''">lat=#{lat,jdbcType=VARCHAR},</if>
+      <if test="address!=null and address!=''">address=#{address,jdbcType=VARCHAR},</if>
+      <if test="support!=null and support!=''">support=#{support,jdbcType=VARCHAR},</if>
+      <if test="fixture!=null and fixture!=''">fixture=#{fixture,jdbcType=VARCHAR},</if>
+      <if test="orientations!=null and orientations!=''">orientations=#{orientations,jdbcType=VARCHAR},</if>
+      <if test="title!=null and title!=''">title=#{title,jdbcType=VARCHAR},</if>
+      <if test="houseNumber!=null and houseNumber!=''">house_number=#{houseNumber,jdbcType=VARCHAR},</if>
+      <if test="rentMode!=null">rent_mode=#{rentMode,jdbcType=INTEGER},</if>
+      <if test="updatetime!=null">updatetime=#{updatetime,jdbcType=TIMESTAMP},</if>
+      <if test="rentPeople!=null">rent_people=#{rentPeople,jdbcType=INTEGER},</if>
+      <if test="rentRoom!=null">rent_room=#{rentRoom,jdbcType=INTEGER},</if>
+      <if test="rentSex!=null">rent_sex=#{rentSex,jdbcType=INTEGER},</if>
+      <if test="rentFee!=null">rent_fee=#{rentFee,jdbcType=INTEGER},</if>
+      <if test="rentTime!=null">rent_time=#{rentTime,jdbcType=VARCHAR},</if>
+      <if test="rentWay!=null">rent_way=#{rentWay,jdbcType=INTEGER},</if>
+      <if test="broker!=null">broker=#{broker,jdbcType=INTEGER},</if>
+      <if test="rentReal!=null">rent_real=#{rentReal,jdbcType=INTEGER},</if>
+      <if test="isDel!=null">is_del=#{isDel,jdbcType=INTEGER},</if>
+  </set>
+    where id=#{id}
+  </update>
+
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+    insert into ahs_rent_house( user_id, village_id,cityid,areaid,streesid,contacts,telephone,house_type,covered_type,room,hall,cookroom,toilet,gallery,covered_area,is_lift,floor,
+        total_floor,village_name,house_desc,lng,lat,address,support,fixture,orientations,title,house_number,rent_mode,rent_people,rent_room,rent_sex,
+        rent_fee,rent_time,rent_way,broker,sex,user_type)values(
+          #{userId,jdbcType=INTEGER},#{villageId,jdbcType=INTEGER},#{cityId,jdbcType=INTEGER},#{areaId,jdbcType=INTEGER},#{streetsId,jdbcType=INTEGER},
+          #{contacts,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR},#{houseType,jdbcType=VARCHAR},#{coveredType,jdbcType=VARCHAR},#{room,jdbcType=INTEGER},#{hall,jdbcType=INTEGER},#{cookRoom,jdbcType=INTEGER},
+          #{toilet,jdbcType=INTEGER},#{gallery,jdbcType=INTEGER},#{coveredArea,jdbcType=NUMERIC},#{isLift,jdbcType=INTEGER},#{floor,jdbcType=INTEGER},
+          #{totalFloor,jdbcType=INTEGER},#{villageName,jdbcType=VARCHAR},#{houseDesc,jdbcType=VARCHAR},#{lng,jdbcType=VARCHAR},#{lat,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR},
+          #{support,jdbcType=VARCHAR},#{fixture,jdbcType=VARCHAR},#{orientations,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{houseNumber,jdbcType=VARCHAR},#{rentMode,jdbcType=INTEGER},
+          #{rentPeople,jdbcType=INTEGER},#{rentRoom,jdbcType=INTEGER},#{rentSex,jdbcType=INTEGER},#{rentFee,jdbcType=INTEGER},#{rentTime,jdbcType=VARCHAR},#{rentWay,jdbcType=INTEGER},#{broker,jdbcType=INTEGER},
+          #{sex,jdbcType=INTEGER},#{userType,jdbcType=INTEGER}
+        )
+  </insert>
+    
+    <select id="selectByIdForSolr" parameterType="java.lang.Integer" resultType="map">
+        select id,village_name as villageName,cityid as cityId,areaid as areaId,streesid as streesId,rent_fee as rentFee,floor,room,hall,toilet,house_type as houseType,
+        rent_real as houseReal,createtime,is_lift as isLift,fixture,title,orientations,rent_mode as rentMode,
+        covered_area as coveredArea,CONCAT_WS(',',lat,lng) as loc
+        from ahs_rent_house
+        where id=#{id}
+    </select>
+    
+    <select id="queryInfo" parameterType="java.lang.Integer" resultType="map">
+        select
+        (select count(*) from ahs_user_collect where house_id=ahs_rent_house.id and collect_type=3) as collect_view,
+		(select count(*) from ahs_user_history where house_id=ahs_rent_house.id and history_type=3) as page_view,
+		(select img_url from ahs_rent_house_img where rent_house= ahs_rent_house.id  limit 0,1) as picture,
+		(select nickname from ahs_users where id=ahs_rent_house.user_id) as nickname,
+		(select shortname from ahs_area where id=ahs_rent_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_rent_house.streesid) as streesname
+        from ahs_rent_house
+        where id=#{id}
+    </select>
+    
+    <select id="queryDetail" parameterType="java.lang.Integer" resultType="map">
+        select id,user_id,house_type,room,hall,toilet,covered_area,is_lift,floor,total_floor,village_name,house_desc,lng,lat,address,support,fixture,orientations,title,
+        rent_mode,DATE_FORMAT(createtime,'%Y-%m-%d') as createtime,rent_time,rent_way,broker,rent_fee,rent_room,rent_people,rent_sex,flag,
+        (select shortname from ahs_area where id=ahs_rent_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_rent_house.streesid) as streesname
+        ,(select img_url from ahs_rent_house_img where rent_house=ahs_rent_house.id limit 0,1) as img_url,
+        (select count(*) from ahs_rent_house_img where rent_house=ahs_rent_house.id ) as img_count,
+        (select im_account from ahs_users where id=ahs_rent_house.user_id) as im_account,
+		(select nickname from ahs_users where id=ahs_rent_house.user_id) as nickname,
+		(select userphoto from ahs_users where id=ahs_rent_house.user_id) as userphoto
+        from ahs_rent_house
+        where id=#{id} and is_del=0
+    </select>
+    
+    <select id="geUserRentHouseList" parameterType="java.lang.Integer" resultType="map">
+        select id,user_id,house_type,room,hall,rent_fee,toilet,floor,total_floor,covered_area,title,rent_way,rent_mode,flag,status,DATE_FORMAT(createtime,'%Y-%m-%d %H:%i') as createtime,
+        (select img_url from ahs_rent_house_img where rent_house=ahs_rent_house.id limit 0,1) as img_url
+        from ahs_rent_house
+        where user_id=#{userId} and is_del=0 order by createtime desc
+    </select>
+</mapper>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+    <div class="page-container">
+        <ul class="layui-timeline">
+            <li class="layui-timeline-item" th:each="comment:${list}" th:data="${comment.id}" th:onclick="delete(${comment.id})">
+                <i class="layui-icon layui-timeline-axis"></i>
+                <div class="layui-timeline-content layui-text" >
+                    <h3 class="layui-timeline-title" th:text="${comment.createtime_}"></h3>
+                    <p th:text=" ${comment.nickname}+':'+${comment.content}">
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    function delete(id){
+        myConfirm(text, function (index) {
+            $.post(rootPath + "sysAsk/deleteCommentReplay", {id: id}, function (data) {
+                if (data.code == 0) {
+                    myAlert("删除成功");
+                    setTimeout(function () {
+                        closeI();
+                    }, alertTime)
+                } else {
+                    myAlert("删除失败->" + data.message)
+                }
+            });
+        })
+    }
+
+</script>
+</html>

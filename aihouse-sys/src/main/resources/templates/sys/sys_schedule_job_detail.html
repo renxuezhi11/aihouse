@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${job.id }" />
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="jobName" id="jobName" maxlength="100" lay-verify="required" autocomplete="off"
+                               placeholder="请输入任务名称" class="layui-input" th:value="${job.jobName}" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="description" id="description" maxlength="100" lay-verify="required" autocomplete="off"
+                               placeholder="请输入任务描述" class="layui-input" th:value="${job.description}" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务处理类</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="quartzClass" id="quartzClass" maxlength="100" lay-verify="required" autocomplete="off"
+                               placeholder="请输入任务处理类" class="layui-input" th:value="${job.quartzClass}" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任务处理时间表达式</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cronExpression" id="cronExpression" maxlength="100" lay-verify="required" autocomplete="off"
+                               placeholder="请输入任务时间表达式" class="layui-input" th:value="${job.cronExpression}" >
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="jobStatus" value="1" lay-verify="required" title="启用" th:checked="${job.jobStatus==1 ||job.jobStatus==null}">
+                        <input type="radio" name="jobStatus" value="2" lay-verify="required" title="禁用" th:checked="${job.jobStatus==2}">
+                    </div>
+                </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'job/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="closeI()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script th:inline="javascript">
+
+    layui.use(['form'], function () {
+        var form = layui.form;
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"job/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        closeI();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+    });
+    function closeI() {
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+</script>
+
+</body>
+</html>

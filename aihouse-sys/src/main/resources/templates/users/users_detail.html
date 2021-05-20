@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<script th:inline="javascript">
+    var id = [[${app_users.id}]];
+    var telephone= [[${app_users.telephone}]];
+</script>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id"  th:value="${app_users.id}" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">昵称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="nickname" id="nickname" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入昵称" class="layui-input" th:value="${app_users.nickname}" >
+            </div>
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="telephone" id="telephone" maxlength="11" lay-verify="required" autocomplete="off"
+                       placeholder="请输入手机号" class="layui-input" th:value="${app_users.telephone}" >
+            </div>
+            <label class="layui-form-label" style="margin-left:18px;">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" STYLE="width: 280px;" name="password" id="password" maxlength="32"  autocomplete="new-password"
+                       placeholder="请输入密码(修改时不填写密码则不修改)" class="layui-input" th:value="${app_users.password}"  >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <input type="hidden" name="userphoto" id="userphoto" th:src="${app_users.userphoto}">
+            <div class="layui-upload-drag" id="fileUpload">
+                <i class="layui-icon"></i>
+                <p>点击上传头像，或将文件拖拽到此处</p>
+            </div>
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                头像：
+                <div class="layui-upload-list" id="imageWatch">
+                    <img th:if="${!#strings.isEmpty(app_users.userphoto)}" th:src="@{/users/watch(path=${app_users.userphoto})}" />
+                </div>
+            </blockquote>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">真实姓名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="truename" id="truename" maxlength="20"  autocomplete="off"
+                       placeholder="请输入真实姓名" class="layui-input" th:value="${app_users.truename}" >
+            </div>
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline">
+                <input type="text" STYLE="width: 280px;" name="email" id="email" maxlength="50" autocomplete="off"
+                       placeholder="请输入邮箱" class="layui-input" th:value="${app_users.email}" >
+            </div>
+            <label class="layui-form-label" style="margin-left: 120px;">身份证</label>
+            <div class="layui-input-inline">
+                <input type="text" STYLE="width: 280px;" name="idCard" id="idCard" maxlength="18"  autocomplete="off"
+                       placeholder="请输入身份证号" class="layui-input" th:value="${app_users.idCard}" >
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="1" lay-verify="required" title="男" th:checked="${app_users.sex==1 ||app_users.sex==null}">
+                <input type="radio" name="sex" value="2" lay-verify="required" title="女" th:checked="${app_users.sex==2}">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">角色</label>
+            <div class="layui-input-block">
+                <input type="radio" name="role" value="1" lay-verify="required" title="业主" th:checked="${app_users.role==1 ||app_users.role==null}">
+                <input type="radio" name="role" value="2" lay-verify="required" title="租客" th:checked="${app_users.role==2}">
+                <input type="radio" name="role" value="3" lay-verify="required" title="购房者" th:checked="${app_users.role==3}">
+                <input type="radio" name="role" value="4" lay-verify="required" title="职业房东" th:checked="${app_users.role==4}">
+                <input type="radio" name="role" value="5" lay-verify="required" title="置业顾问" th:checked="${app_users.role==5}">
+                <input type="radio" name="role" value="6" lay-verify="required" title="合伙人" th:checked="${app_users.role==6}">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">用户状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="0" lay-verify="required" title="正常" th:checked="${app_users.status==0 ||app_users.status==null}">
+                <input type="radio" name="status" value="1" lay-verify="required" title="禁用" th:checked="${app_users.status==1}">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">是否实名认证</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isCertification" disabled="disabled" value="0" lay-verify="required" title="未认证" th:checked="${app_users.isCertification==0 ||app_users.isCertification==null}">
+                <input type="radio" name="isCertification" disabled="disabled" value="1" lay-verify="required" title="认证中" th:checked="${app_users.isCertification==1}">
+                <input type="radio" name="isCertification" disabled="disabled" value="2" lay-verify="required" title="认证通过" th:checked="${app_users.isCertification==2}">
+                <input type="radio" name="isCertification" disabled="disabled" value="3" lay-verify="required" title="认证失败" th:checked="${app_users.isCertification==3}">
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'users/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    var isphone=false;
+    layui.use(['form', 'layedit', 'laydate','upload'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate,
+            upload=layui.upload;
+        form.render();
+
+        upload.render({
+            elem: '#fileUpload'
+            ,url: rootPath+"users/upload"
+            ,done: function(res){
+                layer.msg('上传成功');
+                $("#userphoto").val(res.data);
+                $("#imageWatch").html("<img src='"+rootPath+"users/watch?path="+res.data+"'>")
+            }
+        });
+
+        laydate.render({
+            elem: '#createTime'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateTime'
+            , type: 'datetime'
+        });
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            console.log(telephone)
+            if(telephone==$("#telephone").val()){
+                isphone=true;
+            }
+            if(isphone){
+                var roles=[];
+                $("input[name='roles']:checked").each(function () {
+                    roles.push(this.value);
+                })
+                data.field['roles']=roles;
+                $.post(rootPath+"users/save",data.field,function (data) {
+                    if(data.code==0){
+                        myAlert("保存成功");
+                        setTimeout(function () {
+                            myback("users/gotoList");
+                        },alertTime)
+                    }else{
+                        myAlert("保存失败->"+data.message)
+                    }
+                });
+            }else{
+                myAlert("手机号重复")
+            }
+            return false
+        });
+    });
+    var laert
+    function selectIcon() {
+        laert=layer.open({
+            type: 2,
+            title: '选择头像',
+            shadeClose: true,
+            maxmin: true,
+            shade: 0.8,
+            area: ['1000px', '700px'],
+            content: rootPath+'users/selectList'
+        });
+    }
+    function imageWatch(urls) {
+        $("#icon").val(urls)
+        $("#imageWatch").html("<img src='"+rootPath+"users/watch?path="+urls+"'>")
+        layer.close(laert)
+    }
+    $("#telephone").blur(function () {
+        if(telephone){
+            if(telephone!=$("#telephone").val()){
+                var te=$("#telephone").val();
+                if((/^1[34578]\d{9}$/.test(te))){
+                    $.post(rootPath+"users/isTelephoneExit",{"telephone":te},function (data) {
+                        if(data.data){
+                            isphone=true;
+                        }else{
+                            isphone=false;
+                            myAlert("手机号重复")
+                        }
+                    });
+                }else{
+                    myAlert("手机号格式错误")
+                }
+            }
+        }else{
+            var te=$("#telephone").val();
+            if((/^1[34578]\d{9}$/.test(te))){
+                $.post(rootPath+"users/isTelephoneExit",{"telephone":te},function (data) {
+                    if(data.data){
+                        isphone=true;
+                    }else{
+                        isphone=false;
+                        myAlert("手机号重复")
+                    }
+                });
+            }else{
+                myAlert("手机号格式错误")
+            }
+        }
+    })
+</script>
+</body>
+</html>

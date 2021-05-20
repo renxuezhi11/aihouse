@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=mNvg4SESKhTMvz2GWoWxXhzjl8f7DbfG"></script>-->
+</head>
+<body class="body-common">
+    <div class="page-container">
+        <form class="layui-form layui-form-pane" action="">
+            <input type="hidden" name="id" th:value="${vill.id }" />
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>小区名称</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="villageName" id="villageName" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.villageName}" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>省</label>
+                <div class="layui-input-inline">
+                    <select name="provinceid" lay-filter="provinceId" id="provinceid" th:value="${vill.provinceid}" lay-verify="required">
+                        <option value="">--请选择--</option>
+                        <option th:each="s : ${provice}" th:value="${s.id}" th:text="${s.areaname}" th:selected="${s.id==vill.provinceid}"></option>
+                    </select>
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>城市</label>
+                <div class="layui-input-inline">
+                    <!--<input type="text" name="cityId" id="cityId" maxlength="50" lay-verify="required" autocomplete="off"-->
+                           <!--placeholder="请选择城市" class="layui-input" th:value="${village.cityId}" >-->
+                    <select name="cityid" lay-filter="cityId" id="cityid" th:value="${vill.cityid}" lay-verify="required">
+                        <option value="">--请选择--</option>
+                        <option th:each="s : ${city}" th:value="${s.id}" th:text="${s.areaname}" th:selected="${s.id==vill.cityid}"></option>
+                    </select>
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>区域</label>
+                <div class="layui-input-inline">
+                    <!--<input type="text" name="areaId" id="areaId" maxlength="50" lay-verify="required" autocomplete="off"-->
+                           <!--placeholder="请选择区域" class="layui-input" th:value="${village.areaId}" >-->
+                    <select name="areaid" lay-filter="areaId" id="areaid" th:value="${vill.areaid}" lay-verify="required">
+                        <option value="">--请选择--</option>
+                        <option th:each="s : ${area}" th:value="${s.id}" th:text="${s.areaname}" th:selected="${s.id==vill.areaid}"></option>
+                    </select>
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>片区</label>
+                <div class="layui-input-inline">
+                    <!--<input type="text" name="streesId" id="streesId" maxlength="50" lay-verify="required" autocomplete="off"-->
+                           <!--placeholder="请选择片区" class="layui-input" th:value="${village.streesId}" >-->
+                    <select name="streesid" lay-filter="streesId" id="streesid" th:value="${vill.streesid}" lay-verify="required">
+                        <option value="">--请选择--</option>
+                        <option th:each="s : ${strees}" th:value="${s.id}" th:text="${s.areaname}" th:selected="${s.id==vill.streesid}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="address" id="address" maxlength="200" lay-verify="required" autocomplete="off"
+                           placeholder="请输入地址" class="layui-input" th:value="${vill.address}" >
+                    <span class="layui-btn" id="map">地图选址</span>
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>经度</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="lng" id="lng" maxlength="200" lay-verify="required" autocomplete="off"
+                           placeholder="经度" class="layui-input" th:value="${vill.lng}" >
+                </div>
+                <label class="layui-form-label"><span style="color: red">*</span>经度</label>
+
+                <div class="layui-input-inline">
+                    <input type="text" name="lat" id="lat" maxlength="200" lay-verify="required" autocomplete="off"
+                           placeholder="纬度" class="layui-input" th:value="${vill.lat}" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span style="color: red">*</span>建筑类型</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" name="coveredType" th:value="板楼" th:title="板楼" th:checked="${!#strings.isEmpty(vill.coveredType)&&#strings.contains(vill.coveredType,'板楼')}">
+                    <input type="checkbox" name="coveredType" th:value="塔楼" th:title="塔楼" th:checked="${!#strings.isEmpty(vill.coveredType)&&#strings.contains(vill.coveredType,'塔楼')}">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">开发商</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="developer" id="developer" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.developer}" >
+                </div>
+                <label class="layui-form-label">产权年限</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="propertyYear" id="propertyYear" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.propertyYear}" >
+                </div>
+                <label class="layui-form-label">物业公司</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="propertyCompany" id="propertyCompany" maxlength="50" autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.propertyCompany}" >
+                </div>
+                <label class="layui-form-label">物业费</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="propertyFee" id="propertyFee" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.propertyFee}" >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">占地面积</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="floorSpace" id="floorSpace" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.floorSpace}" >
+                </div>
+                <label class="layui-form-label">建筑面积</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="coveredArea" id="coveredArea" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.coveredArea}" >
+                </div>
+                <label class="layui-form-label">容积率</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="plotRatio" id="plotRatio" maxlength="50" autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.plotRatio}" >
+                </div>
+                <label class="layui-form-label">绿化率</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="greeningRate" id="greeningRate" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.greeningRate}" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">停车位地上</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="carPlaceUp" id="carPlaceUp" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.carPlaceUp}" >
+                </div>
+                <label class="layui-form-label">停车位地下</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="carPlaceDown" id="carPlaceDown" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.carPlaceDown}" >
+                </div>
+                <label class="layui-form-label">楼栋数</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="building" id="building" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.building}" >
+                </div>
+                <label class="layui-form-label">总户数</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="totalHouse" id="totalHouse" maxlength="50"  autocomplete="off"
+                           placeholder="" class="layui-input" th:value="${vill.totalHouse}" >
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'village/save')}">
+                    <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+                </span>
+                <input type="button" class="layui-btn"  onclick="closeI()" value="返回" />
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    layui.use(['form', 'layedit'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+        // var index=layedit.build('profile');
+        // layedit.setContent(index,message);
+        form.render('select');
+        form.on('select(provinceId)', function(res) {
+            var hosid = res.value;
+            if(hosid){
+                var data = {"parentId":hosid};
+                $.post(rootPath+"village/getAreaList",data,function (data) {
+                    if(data.code==0){
+                        var tmp = '<option value="">--请选择--</option>';
+                        $("#areaid").html(tmp);
+                        $("#streesid").html(tmp);
+                        for ( var i in data.data) {
+                            tmp += '<option value="' + data.data[i].id +  '">' + data.data[i].areaname + '</option>';
+                        }
+                        $("#cityid").html(tmp);
+                        form.render();
+                    }
+                });
+            }else{
+                var tmp = '<option value="">--请选择--</option>';
+                $("#areaid").html(tmp);
+                $("#streesid").html(tmp);
+                $("#cityid").html(tmp);
+                form.render();
+            }
+
+        })
+        form.on('select(cityId)', function(res) {
+            var hosid = res.value;
+            if(hosid){
+                var data = {"parentId":hosid};
+                $.post(rootPath+"village/getAreaList",data,function (data) {
+                    if(data.code==0){
+                        var tmp = '<option value="">--请选择--</option>';
+                        $("#streesid").html(tmp);
+                        for ( var i in data.data) {
+                            tmp += '<option value="' + data.data[i].id +  '">' + data.data[i].areaname + '</option>';
+                        }
+                        $("#areaid").html(tmp);
+                        form.render();
+                    }
+                });
+            }else{
+                var tmp = '<option value="">--请选择--</option>';
+                $("#areaid").html(tmp);
+                $("#streesid").html(tmp);
+                form.render();
+            }
+
+        })
+        form.on('select(areaId)', function(res) {
+            var hosid = res.value;
+            if (hosid) {
+                var data = {"parentId": hosid};
+                $.post(rootPath + "village/getAreaList", data, function (data) {
+                    if (data.code == 0) {
+                        var tmp = '<option value="">--请选择--</option>';
+                        // $("#streesId").html(tmp);
+                        for (var i in data.data) {
+                            tmp += '<option value="' + data.data[i].id + '">' + data.data[i].areaname + '</option>';
+                        }
+                        $("#streesid").html(tmp);
+                        form.render();
+                    }
+                });
+         }else{
+                var tmp = '<option value="">--请选择--</option>';
+                $("#streesid").html(tmp);
+                form.render();
+            }
+        });
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            var coveredType='';
+            $("input[name='coveredType']:checked").each(function () {
+                coveredType=coveredType+","+this.value;
+            })
+            data.field['coveredType']=coveredType;
+            $.post(rootPath+"village/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        closeI();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+        $(document).on('click','#map',function(){
+            layer.open({
+                type:2,
+                area:["800px","600px"],
+                title:"地图选址",
+                content:'/common/gotoMap',
+                btn: ['确定','关闭'],
+                yes: function(index){
+                    var res = window["layui-layer-iframe" + index].callbackdata();
+                    $("#lng").val(res.lng);
+                    $("#lat").val(res.lat);
+                    $("#address").val(res.address);
+                    layer.close(index);
+                },
+                success:function(){
+                   /* var map = new BMap.Map("maplocation"); // 创建地图实例
+                    var geoc = new BMap.Geocoder();
+                    map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+                    var point = new BMap.Point(116.404, 39.915); // 创建点坐标
+                    map.centerAndZoom(point, 12);
+                    function myFun(result){
+                        var cityName = result.name;
+                        map.setCenter(cityName);
+                        //alert("当前定位城市:"+cityName);
+                    }
+                    var myCity = new BMap.LocalCity();
+                    myCity.get(myFun);
+                    var marker = new BMap.Marker(map.getCenter());  // 创建标注
+                    map.addOverlay(marker);               // 将标注添加到地图中
+                    marker.enableDragging();                //可拖拽
+                    //marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    map.addEventListener("click",function(e){
+                        // alert(e.point.lng+","+e.point.lat);// 单击地图获取坐标点；
+                        //$(‘#lng‘).val(e.point.lng);
+                        //$(‘#lat‘).val(e.point.lat);
+                        //map.panTo(new BMap.Point(e.point.lng,e.point.lat));// map.panTo方法，把点击的点设置为地图中心点
+                    });
+                    marker.addEventListener("dragend", function(e){                    //拖拽标注获取标注坐标
+                        //alert("当前位置：" + e.point.lng + ", " + e.point.lat);           //可拖拽的标注
+
+                        $("#lng").val(e.point.lng);
+                        $("#lat").val(e.point.lat);
+                        geoc.getLocation(e.point, function (rs) {
+                            //console.log(rs)
+                            var addComp = rs.addressComponents;
+                            var address = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+                            $("#address").val(address)
+                        })
+                    })
+                    //加载完成之后,改变标注点坐标,使之和当前定位的城市基本相符
+                    map.addEventListener("tilesloaded",function(){
+                        var newpoint = map.getCenter();
+                        marker.setPosition(newpoint);
+                    });*/
+                },
+                cancel:function(){
+                }
+            });
+        });
+    });
+    function closeI() {
+        if($("input[name=id]").val()){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        }else{
+            myback()
+        }
+
+    }
+</script>
+</html>

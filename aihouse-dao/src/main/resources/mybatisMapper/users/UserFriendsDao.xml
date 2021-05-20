@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserFriendsDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserFriends">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="accountFrom" jdbcType="VARCHAR" property="accountFrom" />
+
+		<result column="accountTo" jdbcType="VARCHAR" property="accountTo" />
+
+		<result column="remark" jdbcType="VARCHAR" property="remark"/>
+		<result column="label" jdbcType="VARCHAR" property="label" />
+		<result column="letter" jdbcType="VARCHAR" property="letter" />
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_friends (
+		accountFrom,
+		accountTo,
+		remark,
+		label,
+		letter
+		)
+ 	   values (
+		 #{accountFrom,jdbcType=VARCHAR},
+		 #{accountTo,jdbcType=VARCHAR},
+		 #{remark,jdbcType=VARCHAR},
+		 #{label,jdbcType=VARCHAR},
+		 #{letter,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_friends
+		where id = #{id}
+
+	</delete>
+
+	<update id="update" >
+		update ahs_user_friends
+		<set>
+			<if test="remark!=null and remark!=''">remark = #{remark,jdbcType=VARCHAR}, </if>
+			<if test="label!=null and label!=''">label = #{label,jdbcType=VARCHAR}, </if>
+			<if test="letter!=null and letter!=''">letter = #{letter,jdbcType=VARCHAR}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select id,accountFrom,
+		accountTo,
+		remark,
+		label,
+		letter
+		from ahs_user_friends
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select id,
+		accountFrom,
+		accountTo,
+		remark,
+		label,
+		letter
+		from ahs_user_friends
+		<where>
+			<if test="accountTo!=null "> and accountTo = #{accountTo,jdbcType=VARCHAR}</if>
+			<if test="accountFrom!=null "> and accountFrom = #{accountFrom,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select id,
+		accountFrom,
+		accountTo,
+		remark,
+		label,
+		letter
+		from ahs_user_friends
+		<where>
+			<if test="accountTo!=null "> and accountTo = #{accountTo,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="getUserFriendsList" parameterType="java.lang.String" resultType="map">
+		select id,accountFrom,remark,label,letter,(select userphoto from ahs_users where im_account =accountFrom limit 0,1) as img,
+		(select id from ahs_users where im_account =accountFrom limit 0,1) as userId
+		from ahs_user_friends where accountTo=#{imAccount,jdbcType=VARCHAR} and letter=#{letter,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getUserFriendsLetter" parameterType="java.lang.String" resultType="map">
+		select letter from ahs_user_friends where accountTo=#{imAccount,jdbcType=VARCHAR} group by letter order by letter
+	</select>
+	
+	<select id="searchFriends" parameterType="java.lang.String" resultType="map">
+		select id as userId,nickname,im_account,userphoto from ahs_users where im_account=#{keyword,jdbcType=VARCHAR} OR telephone=#{keyword,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getUserFriendsInfo" resultType="map">
+		select a.remark,b.userphoto,b.id,b.im_account from ahs_user_friends a,ahs_users b where a.accountFrom=b.im_account and a.accountTo=(select im_account from ahs_users where id=#{userId})
+		 and a.accountFrom in
+			<foreach collection="member" item="arr" index="no" open="("
+					 separator="," close=")">
+				#{arr}
+			</foreach>
+	</select>
+
+	<select id="getUserFriendsLsInfo" resultType="map">
+		select b.userphoto,b.id,b.im_account,b.nickname as remark from ahs_users b where b.im_account in
+		<foreach collection="memberLs" item="arr" index="no" open="("
+				 separator="," close=")">
+			#{arr}
+		</foreach>
+	</select>
+</mapper>

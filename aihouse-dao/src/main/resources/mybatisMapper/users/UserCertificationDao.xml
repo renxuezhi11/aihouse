@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserCertificationDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserCertification">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="id_card" jdbcType="VARCHAR" property="idCard" />
+		<result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+		<result column="truename" jdbcType="VARCHAR" property="truename" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="status_content" jdbcType="VARCHAR" property="statusContent" />
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_certification (
+		user_id,
+		id_card,
+		img_url,
+		truename
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{idCard,jdbcType=VARCHAR},
+		 #{imgUrl,jdbcType=VARCHAR},
+		 #{truename,jdbcType=VARCHAR}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_certification 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_user_certification
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="idCard!=null and idCard!=''">id_card = #{idCard,jdbcType=VARCHAR}, </if>
+			<if test="imgUrl!=null and imgUrl!=''">img_url = #{imgUrl,jdbcType=VARCHAR}, </if>
+			<if test="truename!=null and truename!=''">truename = #{truename,jdbcType=VARCHAR}, </if>
+			<if test="createTime!=null">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+			<if test="status!=null">status = #{status,jdbcType=INTEGER}, </if>
+			<if test="statusContent!=null and statusContent!=''">status_content = #{statusContent,jdbcType=VARCHAR}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		id_card,
+		img_url,
+		truename,
+		create_time,
+		status,
+		status_content
+		from ahs_user_certification
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		id_card,
+		img_url,
+		truename,
+		create_time,
+		status,
+		status_content
+		from ahs_user_certification
+		<where>
+		<if test="id!=null "> and ahs_user_certification.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_certification.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="idCard!=null and idCard!=''"> and ahs_user_certification.id_card = #{idCard,jdbcType=VARCHAR}</if>
+		<if test="imgUrl!=null and imgUrl!=''"> and ahs_user_certification.img_url = #{imgUrl,jdbcType=VARCHAR}</if>
+		<if test="truename!=null and truename!=''"> and ahs_user_certification.truename = #{truename,jdbcType=VARCHAR}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_user_certification.create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="status!=null "> and ahs_user_certification.status = #{status,jdbcType=INTEGER}</if>
+		<if test="statusContent!=null and statusContent!=''"> and ahs_user_certification.status_content = #{statusContent,jdbcType=VARCHAR}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_user_certification.create_time BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		id_card,
+		img_url,
+		truename,
+		create_time,
+		status,
+		status_content
+		from ahs_user_certification
+		<where>
+		<if test="id!=null "> and ahs_user_certification.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_certification.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="idCard!=null and idCard!=''"> and ahs_user_certification.id_card = #{idCard,jdbcType=VARCHAR}</if>
+		<if test="imgUrl!=null and imgUrl!=''"> and ahs_user_certification.img_url = #{imgUrl,jdbcType=VARCHAR}</if>
+		<if test="truename!=null and truename!=''"> and ahs_user_certification.truename = #{truename,jdbcType=VARCHAR}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_user_certification.create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="status!=null "> and ahs_user_certification.status = #{status,jdbcType=INTEGER}</if>
+		<if test="statusContent!=null and statusContent!=''"> and ahs_user_certification.status_content = #{statusContent,jdbcType=VARCHAR}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_user_certification.create_time BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteUserCertificationByUsers" >
+		delete from  ahs_user_certification
+		where user_id=#{userId}
+	</delete>
+
+
+</mapper>

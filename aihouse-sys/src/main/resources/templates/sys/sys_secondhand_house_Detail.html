@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+    <script type="text/javascript" th:src="@{/js/viewer/viewer.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/js/viewer/viewer.min.css}" />
+    <style type="text/css">
+        .close{
+            position: absolute;
+            top:-9px;
+            right:-10px;
+            width:20px;
+            height:20px;
+            line-height: 18px;
+            text-align: center;
+            transform: rotate(40deg);
+            border-radius: 50%;
+            background:red;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .item{
+            width:100px;
+            height:100px;
+            position: relative;
+            display: inline-block;
+            margin:0 20px 20px 0;
+        }
+    </style>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${sys_secondhand_house.id }" />
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">小区名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="villageName" id="villageName" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入小区名称" class="layui-input" th:value="${sys_secondhand_house.villageName}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">房源特色</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="feature" th:value="新房房源" th:title="新房房源" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'新房房源')}">
+                <input type="checkbox" name="feature" th:value="两房朝南" th:title="两房朝南" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'两房朝南')}">
+                <input type="checkbox" name="feature" th:value="拎包入住" th:title="拎包入住" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'拎包入住')}">
+                <input type="checkbox" name="feature" th:value="南北通透" th:title="南北通透" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'南北通透')}">
+                <input type="checkbox" name="feature" th:value="环境优美" th:title="环境优美" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'环境优美')}">
+                <input type="checkbox" name="feature" th:value="近地铁" th:title="近地铁" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'近地铁')}">
+                <input type="checkbox" name="feature" th:value="配套成熟" th:title="配套成熟" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'配套成熟')}">
+                <input type="checkbox" name="feature" th:value="繁华地段" th:title="繁华地段" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'繁华地段')}">
+                <input type="checkbox" name="feature" th:value="品质小区" th:title="品质小区" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'品质小区')}">
+                <input type="checkbox" name="feature" th:value="次新小区" th:title="次新小区" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'次新小区')}">
+                <input type="checkbox" name="feature" th:value="送家电" th:title="送家电" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'送家电')}">
+                <input type="checkbox" name="feature" th:value="位置安静" th:title="位置安静" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'位置安静')}">
+                <input type="checkbox" name="feature" th:value="视野好" th:title="视野好" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'视野好')}">
+                <input type="checkbox" name="feature" th:value="安全性高" th:title="安全性高" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'安全性高')}">
+                <input type="checkbox" name="feature" th:value="景观房" th:title="景观房" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'景观房')}">
+                <input type="checkbox" name="feature" th:value="中国风" th:title="中国风" th:checked="${!#strings.isEmpty(sys_secondhand_house.feature)&&#strings.contains(sys_secondhand_house.feature,'中国风')}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" id="title" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入标题" class="layui-input" th:value="${sys_secondhand_house.title}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" id="address" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入地址" class="layui-input" th:value="${sys_secondhand_house.address}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">经度</label>
+            <div class="layui-input-inline">
+                <input type="text" name="lng" id="lng" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入经度" class="layui-input" th:value="${sys_secondhand_house.lng}" >
+            </div>
+            <label class="layui-form-label">纬度</label>
+            <div class="layui-input-inline">
+                <input type="text" name="lat" id="lat" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入纬度" class="layui-input" th:value="${sys_secondhand_house.lat}" >
+            </div>
+            <label class="layui-form-label">楼层</label>
+            <div class="layui-input-inline">
+                <input type="text" name="floor" id="floor" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入楼层" class="layui-input" th:value="${sys_secondhand_house.floor}" >
+            </div>
+            <label class="layui-form-label">总楼层</label>
+            <div class="layui-input-inline">
+                <input type="text" name="totalFloor" id="totalFloor" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入总楼层" class="layui-input" th:value="${sys_secondhand_house.totalFloor}" >
+            </div>
+        </div>
+        <!--<div class="layui-form-item">
+            <label class="layui-form-label">建筑类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="coveredType" value="民用住宅建筑" lay-verify="required" title="民用住宅建筑" th:checked="${sys_secondhand_house.coveredType=='民用住宅建筑' ||sys_secondhand_house.coveredType==null}">
+                <input type="radio" name="coveredType" value="商用建筑" lay-verify="required" title="商用建筑" th:checked="${sys_secondhand_house.coveredType=='商用建筑'}">
+                <input type="radio" name="coveredType" value="工业用建筑" lay-verify="required" title="工业用建筑" th:checked="${sys_secondhand_house.coveredType=='工业用建筑'}">
+            </div>
+        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width:160px;">建筑面积(m²)</label>
+            <div class="layui-input-inline">
+                <input type="text" name="coveredArea" id="coveredArea" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入建筑面积" class="layui-input" th:value="${sys_secondhand_house.coveredArea}" >
+            </div>
+            <label class="layui-form-label">售价(万元)</label>
+            <div class="layui-input-inline">
+                <input type="text" name="price" id="price" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入售价" class="layui-input" th:value="${sys_secondhand_house.price}" >
+            </div>
+            <label class="layui-form-label">朝向</label>
+            <div class="layui-input-inline">
+                <select name="orientations" lay-verify="required" id="orientations" th:value="${sys_secondhand_house.orientations}">
+                    <option value=""></option>
+                    <option value="南北" th:selected="${sys_secondhand_house.orientations == '南北'}">南北</option>
+                    <option value="南" th:selected="${sys_secondhand_house.orientations== '南'}">南</option>
+                    <option value="东南" th:selected="${sys_secondhand_house.orientations=='东南'}">东南</option>
+                    <option value="东" th:selected="${sys_secondhand_house.orientations == '东'}">东</option>
+                    <option value="西南" th:selected="${sys_secondhand_house.orientations== '西南'}">西南</option>
+                    <option value="北" th:selected="${sys_secondhand_house.orientations=='北'}">北</option>
+                    <option value="西" th:selected="${sys_secondhand_house.orientations == '西'}">西</option>
+                    <option value="东西" th:selected="${sys_secondhand_house.orientations== '东西'}">东西</option>
+                    <option value="东北" th:selected="${sys_secondhand_house.orientations=='东北'}">东北</option>
+                    <option value="西北" th:selected="${sys_secondhand_house.orientations=='西北'}">西北</option>
+                </select>
+            </div>
+          <!--  <label class="layui-form-label">房龄</label>
+            <div class="layui-input-inline">
+                <input type="text" name="age" id="age" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入房龄" class="layui-input" th:value="${sys_secondhand_house.age}" >
+            </div>-->
+            <label class="layui-form-label">装修情况</label>
+            <div class="layui-input-inline">
+                <select name="fixture" lay-verify="required" id="fixture" th:value="${sys_secondhand_house.fixture}">
+                    <option value="装修情况"></option>
+                    <option value="毛坯" th:selected="${sys_secondhand_house.fixture == '毛坯'}">毛坯</option>
+                    <option value="简装修" th:selected="${sys_secondhand_house.fixture=='简装修'}">简装修</option>
+                    <option value="精装修" th:selected="${sys_secondhand_house.fixture== '精装修'}">精装修</option>
+                    <option value="豪华装修" th:selected="${sys_secondhand_house.fixture== '豪华装修'}">豪华装修</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">室</label>
+            <div class="layui-input-inline">
+                <input type="text" name="room" id="room" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入室" class="layui-input" th:value="${sys_secondhand_house.room}" >
+            </div>
+            <label class="layui-form-label">厅</label>
+            <div class="layui-input-inline">
+                <input type="text" name="hall" id="hall" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入厅" class="layui-input" th:value="${sys_secondhand_house.hall}" >
+            </div>
+            <label class="layui-form-label">厨房</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cookroom" id="cookroom" maxlength="50"  autocomplete="off"
+                       placeholder="请输入厨房" class="layui-input" th:value="${sys_secondhand_house.cookroom}" >
+            </div>
+            <label class="layui-form-label">卫生间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="toilet" id="toilet" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入卫生间" class="layui-input" th:value="${sys_secondhand_house.toilet}" >
+            </div>
+            <label class="layui-form-label">阳台</label>
+            <div class="layui-input-inline">
+                <input type="text" name="gallery" id="gallery" maxlength="50"  autocomplete="off"
+                       placeholder="请输入阳台" class="layui-input" th:value="${sys_secondhand_house.gallery}" >
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">房源描述</label>
+            <div class="layui-input-block">
+                        <textarea placeholder="请输入房源描述" class="layui-textarea" lay-verify="required"
+                                  th:text="${sys_secondhand_house.houseDesc}" name="houseDesc" id="houseDesc"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                预览图：
+                <div class="layui-upload-list " id="imageWatchJt">
+                    <div class="item" th:each="s:${imgList}" >
+                        <img  style='width: 100px;height: 100px' th:data="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture2'}" th:src="${'http://hzaihaoshi.oss-cn-shenzhen.aliyuncs.com/data/'+s.imgUrl+'/app_picture1'}" onclick="previewImg(this)">
+                        <div class='close' th:onclick="'javascript:delXg('+${s.id }+',this)'" >+</div>
+                    </div>
+                </div>
+            </blockquote>
+        </div>
+        <div class="layui-form-item ">
+           <!-- <label class="layui-form-label">业主心态</label>
+            <div class="layui-input-block">
+                <input type="text" name="ownerMentality" id="ownerMentality" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入业主心态" class="layui-input" th:value="${sys_secondhand_house.ownerMentality}" >
+            </div>
+            <label class="layui-form-label">卖点</label>
+            <div class="layui-input-block">
+                <input type="text" name="sellPoint" id="sellPoint" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入卖点" class="layui-input" th:value="${sys_secondhand_house.sellPoint}" >
+            </div>-->
+            <label class="layui-form-label">房号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="houseNumber" id="houseNumber" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入房号" class="layui-input" th:value="${sys_secondhand_house.houseNumber}" >
+            </div>
+            <label class="layui-form-label">是否有电梯</label>
+            <div class="layui-input-inline">
+                <input type="radio" name="isLift" value="0" lay-verify="required" title="有" th:checked="${sys_secondhand_house.isLift==0 ||sys_secondhand_house.isLift==null}">
+                <input type="radio" name="isLift" value="1" lay-verify="required" title="无" th:checked="${sys_secondhand_house.isLift==1}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">产品类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="houseType" value="住宅" lay-verify="required" title="住宅" th:checked="${sys_secondhand_house.houseType=='住宅' ||sys_secondhand_house.houseType==null}">
+                <input type="radio" name="houseType" value="公寓" lay-verify="required" title="公寓" th:checked="${sys_secondhand_house.houseType=='公寓'}">
+                <input type="radio" name="houseType" value="别墅" lay-verify="required" title="别墅" th:checked="${sys_secondhand_house.houseType=='别墅'}">
+                <input type="radio" name="houseType" value="其他" lay-verify="required" title="其他" th:checked="${sys_secondhand_house.houseType=='其他'}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-inline">
+                <input type="text" name="contacts" id="contacts" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入联系人" class="layui-input" th:value="${sys_secondhand_house.contacts}" >
+            </div>
+            <label class="layui-form-label">手机号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="telephone" id="telephone" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入手机号" class="layui-input" th:value="${sys_secondhand_house.telephone}" >
+            </div>
+          <!--  <label class="layui-form-label">签名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="signName" id="signName" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入签名" class="layui-input" th:value="${sys_secondhand_house.signName}" >
+            </div>-->
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sex" value="0" lay-verify="required" title="男" th:checked="${sys_secondhand_house.sex==0 ||sys_secondhand_house.sex==null}">
+                <input type="radio" name="sex" value="1" lay-verify="required" title="女" th:checked="${sys_secondhand_house.sex==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">发布人类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="userType" value="0" lay-verify="required" title="业主" th:checked="${sys_secondhand_house.userType==0 ||sys_secondhand_house.userType==null}">
+                <input type="radio" name="userType" value="1" lay-verify="required" title="经纪人" th:checked="${sys_secondhand_house.userType==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">是否实勘</label>
+            <div class="layui-input-block">
+                <input type="radio" name="houseReal" value="0" lay-verify="required" title="未" th:checked="${sys_secondhand_house.houseReal==0 ||sys_secondhand_house.houseReal==null}">
+                <input type="radio" name="houseReal" value="1" lay-verify="required" title="已" th:checked="${sys_secondhand_house.houseReal==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="status" value="0" lay-verify="required" title="未审核" th:checked="${sys_secondhand_house.status==0 ||sys_secondhand_house.status==null}">
+                <input type="radio" name="status" value="1" lay-verify="required" title="审核通过" th:checked="${sys_secondhand_house.status==1}">
+                <input type="radio" name="status" value="2" lay-verify="required" title="审核不通过" th:checked="${sys_secondhand_house.status==2}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">是否在售</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isSale" value="0" lay-verify="required" title="在售" th:checked="${sys_secondhand_house.isSale==0 ||sys_secondhand_house.isSale==null}">
+                <input type="radio" name="isSale" value="1" lay-verify="required" title="已售" th:checked="${sys_secondhand_house.isSale==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">审核回复</label>
+            <div class="layui-input-block">
+                <input type="text" name="statusContent" id="statusContent" maxlength="50" autocomplete="off"
+                       placeholder="请输入审核回复" class="layui-input" th:value="${sys_secondhand_house.statusContent}" >
+            </div>
+        </div>
+        <!--<div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">上架状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="flag" value="0" lay-verify="required" title="未上架" th:checked="${sys_secondhand_house.flag==0 ||sys_secondhand_house.flag==null}">
+                <input type="radio" name="flag" value="1" lay-verify="required" title="上架" th:checked="${sys_secondhand_house.flag==1}">
+                <input type="radio" name="flag" value="2" lay-verify="required" title="下架" th:checked="${sys_secondhand_house.flag==2}">
+            </div>
+        </div>-->
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">删除状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isDel" value="0" lay-verify="required" title="正常" th:checked="${sys_secondhand_house.isDel==0 ||sys_secondhand_house.isDel==null}">
+                <input type="radio" name="isDel" value="1" lay-verify="required" title="删除" th:checked="${sys_secondhand_house.isDel==1}">
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    var viewer;
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate,
+            upload=layui.upload;
+        form.render();
+
+        laydate.render({
+            elem: '#createTime'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateTime'
+            , type: 'datetime'
+        });
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            var feature=[];
+            $("input[name='feature']:checked").each(function () {
+                feature=feature+","+this.value;
+            })
+            data.field['feature']=feature;
+            $.post(rootPath+"secondHandHouse/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    if(data.id!=0){
+                        setTimeout(function () {
+                            closeI();
+                        },alertTime)
+                    }else{
+                        setTimeout(function () {
+                            closeI();
+                        },alertTime)
+                    }
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+    });
+    function closeI() {
+        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+        parent.layer.close(index); //再执行关闭
+    }
+    function delXg(a,b) {
+        var id=a;
+        if(id){
+            $.post(rootPath + "secondHandHouseImg/delete", {"id":id}, function (data) {
+                if (data.code == 0) {
+                    b.parentElement.remove()
+                }
+            });
+        }else{
+            b.parentElement.remove()
+        }
+    }
+    function previewImg(obj) {
+        /*var img = new Image();
+        img.src = obj.src;
+        var height = 700; //获取图片高度
+        var width = 600; //获取图片宽度
+        var src=obj.src.replace(imgsl1,imgsl2);
+        var imgHtml = "<img src='" + src + "' />";
+        //弹出层
+        layer.open({
+            type: 1,
+            shade: 0.8,
+            offset: 'auto',
+            area: [width + 'px',height+'px'],
+            shadeClose:true,//点击外围关闭弹窗
+            scrollbar: false,//不现实滚动条
+            title: "图片预览", //不显示标题
+            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+            cancel: function () {
+                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
+            }
+        });*/
+        var galley = document.getElementById("imageWatchJt");
+        if(viewer){
+            viewer.destroy();
+        }
+        viewer = new Viewer(galley, {
+            toolbar: {
+                oneToOne: true,
+
+                prev: function() {
+                    viewer.prev(true);
+                },
+                play: true,
+                next: function() {
+                    viewer.next(true);
+                },
+                download: function() {
+                    var a = document.createElement('a');
+                    var src=viewer.image.src.replace(imgsl1,imgsl2);
+                    a.href = src;
+                    a.download = viewer.image.alt;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                },
+            },
+            url:'data'
+        });
+        viewer.update();
+    }
+</script>
+
+</body>
+</html>

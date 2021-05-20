@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${sys_newhouse_brokerage.id }" />
+        <input type="hidden" name="newHouseId" th:value="${sys_newhouse_brokerage.newHouseId}">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">业务类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="type" value="1" lay-verify="required" title="代理佣金" th:checked="${sys_newhouse_brokerage.type==0 ||sys_newhouse_brokerage.type==null}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">佣金类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="brokerageType" value="1" lay-verify="required" title="结佣" th:checked="${sys_newhouse_brokerage.brokerageType==1 ||sys_newhouse_brokerage.brokerageType==null}">
+                <input type="radio" name="brokerageType" value="2" lay-verify="required" title="现佣" th:checked="${sys_newhouse_brokerage.brokerageType==2}">
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">佣金模式</label>
+            <div class="layui-input-block">
+                <input type="radio" name="brokerageModel" value="1" lay-verify="required" title="固定佣金" th:checked="${sys_newhouse_brokerage.brokerageModel==1 ||sys_newhouse_brokerage.brokerageModel==null}">
+                <input type="radio" name="brokerageModel" value="2" lay-verify="required" title="固定金额" th:checked="${sys_newhouse_brokerage.brokerageModel==2}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">佣金金额(元)</label>
+            <div class="layui-input-inline">
+                <input type="number" name="brokerageMoney" id="brokerageMoney" maxlength="50"  autocomplete="off"
+                       placeholder="请输入佣金金额" class="layui-input" th:value="${sys_newhouse_brokerage.brokerageMoney}" oninput="if(value<0)value=0" >
+            </div>
+            <label class="layui-form-label">佣金点数</label>
+            <div class="layui-input-inline">
+                <input type="number" name="brokerageScale" id="brokerageScale" maxlength="50"  autocomplete="off"
+                       placeholder="请输入佣金点数（%）" class="layui-input" th:value="${sys_newhouse_brokerage.brokerageScale}" oninput="if(value<0)value=0">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">删除状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isDel" value="0" lay-verify="required" title="正常" th:checked="${sys_newhouse_brokerage.isDel==0 ||sys_newhouse_brokerage.isDel==null}">
+                <input type="radio" name="isDel" value="1" lay-verify="required" title="删除" th:checked="${sys_newhouse_brokerage.isDel==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                        <textarea placeholder="请输入备注" class="layui-textarea"
+                                  th:text="${sys_newhouse_brokerage.remark}" name="remarks" id="remarks"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysNewHouseBrokerage/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate,
+            upload=layui.upload;
+        form.render();
+
+        laydate.render({
+            elem: '#createTime'
+            , type: 'datetime'
+        });
+        laydate.render({
+            elem: '#updateTime'
+            , type: 'datetime'
+        });
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+
+            $.post(rootPath+"sysNewHouseBrokerage/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+    });
+</script>
+
+</body>
+</html>

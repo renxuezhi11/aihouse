@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserFeedbackDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserFeedback">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="content" jdbcType="VARCHAR" property="content"/>
+		<result column="reason" jdbcType="VARCHAR" property="reason"/>
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+		<result column="status" jdbcType="INTEGER" property="status"/>
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_feedback(
+		user_id,
+		content,
+		reason
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{content,jdbcType=VARCHAR},
+		 #{reason,jdbcType=VARCHAR}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_feedback
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_user_feedback
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="content!=null and content!=''">content = #{content,jdbcType=VARCHAR}, </if>
+			<if test="reason!=null and reason!=''" >reason = #{reason,jdbcType=VARCHAR}, </if>
+			<if test="status!=null">status = #{status,jdbcType=INTEGER}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		content,
+		reason,
+		createtime,
+		status
+		from ahs_user_feedback
+		where id = #{id,jdbcType=INTEGER}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		content,
+		reason,
+		createtime,
+		status
+		from ahs_user_feedback
+		<where>
+		<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="status!=null"> and status = #{status,jdbcType=INTEGER}</if>
+		<if test="startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		content,
+		reason,
+		createtime,
+		status
+		from ahs_user_feedback
+		<where>
+		<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="status!=null"> and status = #{status,jdbcType=INTEGER}</if>
+		<if test="startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+
+</mapper>

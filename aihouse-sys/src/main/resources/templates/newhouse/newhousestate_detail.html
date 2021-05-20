@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${newhousestate.id }" />
+        <input type="hidden" name="newHouseId" th:value="${newhousestate.newHouseId }" />
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">动态类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="type" value="0" lay-verify="required" title="预售证" th:checked="${newhousestate.type==0 ||newhousestate.type==null}">
+                <input type="radio" name="type" value="1" lay-verify="required" title="开盘" th:checked="${newhousestate.type==1}">
+                <input type="radio" name="type" value="2" lay-verify="required" title="交房" th:checked="${newhousestate.type==2}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" id="title" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入标题" class="layui-input" th:value="${newhousestate.title}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">详情</label>
+            <div class="layui-input-block">
+                <input type="text" name="content" id="content" lay-verify="required" autocomplete="off"
+                       placeholder="请输入详情" class="layui-input" th:value="${newhousestate.content}" >
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">楼栋</label>
+            <div class="layui-input-block">
+                <input type="text" name="building" id="building"  lay-verify="required" autocomplete="off"
+                       placeholder="请输入楼栋" class="layui-input" th:value="${newhousestate.building}" >
+            </div>
+        </div>
+
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">日期</label>
+            <div class="layui-input-block">
+                <input type="text" name="publictime" id="publictime" lay-verify="required" autocomplete="off"
+                       placeholder="" class="layui-input" th:value="${newhousestate.publictime}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span style="color: red">*</span>状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isDel" value="0" lay-verify="required" title="正常" th:checked="${newhousestate.isDel==0}">
+                <input type="radio" name="isDel" value="1" lay-verify="required" title="删除" th:checked="${newhousestate.isDel==1}">
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysNewHouseType/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate','upload'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , layedit = layui.layedit
+            , laydate = layui.laydate;
+        form.render();
+
+
+        laydate.render({
+            elem: '#publictime'
+            , type: 'date'
+        });
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"newhousestate/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback();
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+    });
+
+</script>
+
+</body>
+</html>

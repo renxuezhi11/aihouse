@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.AppAskDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.AppAsk">
+
+		<id column="id" jdbcType="BIGINT" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="ask_title" jdbcType="VARCHAR" property="askTitle" />
+
+		<result column="ask_content" jdbcType="LONGVARCHAR" property="askContent" />
+
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+
+		<result column="thumbs_up" jdbcType="INTEGER" property="thumbsUp" />
+
+		<result column="comment_count" jdbcType="INTEGER" property="commentCount" />
+
+		<result column="is_checked" jdbcType="VARCHAR" property="isChecked" />
+
+		<result column="status" jdbcType="INTEGER" property="status" />
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_ask (
+		user_id,
+		ask_title,
+		ask_content,
+		thumbs_up,
+		comment_count
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{askTitle,jdbcType=VARCHAR},
+		 #{askContent,jdbcType=LONGVARCHAR},
+		 #{thumbsUp,jdbcType=INTEGER},
+		 #{commentCount,jdbcType=INTEGER}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_ask 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_ask
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="askTitle!=null and askTitle!=''">ask_title = #{askTitle,jdbcType=VARCHAR}, </if>
+			<if test="askContent!=null and askContent!=''">ask_content = #{askContent,jdbcType=LONGVARCHAR}, </if>
+			<if test="createTime!=null">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+			<if test="thumbsUp!=null">thumbs_up = #{thumbsUp,jdbcType=INTEGER}, </if>
+			<if test="isChecked!=null">is_checked = #{isChecked,jdbcType=VARCHAR}, </if>
+			<if test="commentCount!=null">comment_count = #{commentCount,jdbcType=INTEGER}, </if>
+			<if test="status!=null">status = #{status,jdbcType=INTEGER},</if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_title,
+		ask_content,
+		create_time,
+		is_checked,
+		thumbs_up,
+		comment_count,
+		status
+		from ahs_ask
+		where id = #{id,jdbcType=BIGINT}
+
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_title,
+		ask_content,
+		create_time,
+		is_checked,
+		thumbs_up,
+		comment_count,
+		status
+		from ahs_ask
+		<where>
+		<if test="id!=null "> and ahs_ask.id = #{id,jdbcType=BIGINT}</if>
+		<if test="userId!=null "> and ahs_ask.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="askTitle!=null and askTitle!=''"> and ahs_ask.ask_title = #{askTitle,jdbcType=VARCHAR}</if>
+		<if test="askContent!=null and askContent!=''"> and ahs_ask.ask_content = #{askContent,jdbcType=LONGVARCHAR}</if>
+		<if test="createTime!=null "> and ahs_ask.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="isChecked!=null">and ahs_ask.is_checked = #{isChecked,jdbcType=VARCHAR}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask.create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="thumbsUp!=null "> and ahs_ask.thumbs_up = #{thumbsUp,jdbcType=INTEGER}</if>
+		<if test="commentCount!=null "> and ahs_ask.comment_count = #{commentCount,jdbcType=INTEGER}</if>
+		<if test="status!=null"> and ahs_ask.status = #{status,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+
+
+
+
+
+
+
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_title,
+		ask_content,
+		is_checked,
+		create_time,
+		thumbs_up,
+		comment_count,
+		status
+		from ahs_ask
+		<where>
+		<if test="id!=null "> and ahs_ask.id = #{id,jdbcType=BIGINT}</if>
+		<if test="userId!=null "> and ahs_ask.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="askTitle!=null and askTitle!=''"> and ahs_ask.ask_title = #{askTitle,jdbcType=VARCHAR}</if>
+		<if test="askContent!=null and askContent!=''"> and ahs_ask.ask_content = #{askContent,jdbcType=LONGVARCHAR}</if>
+		<if test="createTime!=null "> and ahs_ask.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+		<if test="isChecked!=null">and ahs_ask.is_checked = #{isChecked,jdbcType=VARCHAR}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask.create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="thumbsUp!=null "> and ahs_ask.thumbs_up = #{thumbsUp,jdbcType=INTEGER}</if>
+		<if test="commentCount!=null "> and ahs_ask.comment_count = #{commentCount,jdbcType=INTEGER}</if>
+		<if test="status!=null"> and ahs_ask.status = #{status,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+	</select>
+
+	<select id="queryByCondition" resultMap="BaseResultMap">
+        select
+		id,
+		user_id,
+		ask_title,
+		ask_content,
+		is_checked,
+		create_time,
+		thumbs_up,
+		comment_count,
+		status
+		from ahs_ask
+		<where>
+			<if test="id!=null "> and ahs_ask.id = #{id,jdbcType=BIGINT}</if>
+			<if test="userId!=null "> and ahs_ask.user_id = #{userId,jdbcType=INTEGER}</if>
+			<if test="askTitle!=null and askTitle!=''"> and ahs_ask.ask_title = #{askTitle,jdbcType=VARCHAR}</if>
+			<if test="askContent!=null and askContent!=''"> and ahs_ask.ask_content = #{askContent,jdbcType=LONGVARCHAR}</if>
+			<if test="createTime!=null "> and ahs_ask.create_time = #{createTime,jdbcType=TIMESTAMP}</if>
+			<if test="isChecked!=null">and ahs_ask.is_checked = #{isChecked,jdbcType=VARCHAR}</if>
+			<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and ahs_ask.create_time BETWEEN #{startDate} and #{endDate}</if>
+			<if test="thumbsUp!=null "> and ahs_ask.thumbs_up = #{thumbsUp,jdbcType=INTEGER}</if>
+			<if test="commentCount!=null "> and ahs_ask.comment_count = #{commentCount,jdbcType=INTEGER}</if>
+			<if test="status!=null"> and ahs_ask.status = #{status,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+			<if test="page!=null and pageSize!=null">
+				limit #{page,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+			</if>
+	</select>
+
+	<select id="selectListByKey" resultMap="BaseResultMap">
+     select ask_title FROM ahs_ask WHERE ask_title LIKE
+     CONCAT(CONCAT('%', #{askTitle,jdbcType=VARCHAR}), '%')
+     ORDER BY create_time LIMIT 10
+	</select>
+
+	<select id="showListByKey" resultMap="BaseResultMap">
+     select
+        id,
+		user_id,
+		ask_title,
+		ask_content,
+		is_checked,
+		create_time,
+		thumbs_up,
+		comment_count,
+		status
+		FROM ahs_ask WHERE ask_title LIKE
+     CONCAT(CONCAT('%', #{askTitle,jdbcType=VARCHAR}), '%')
+     ORDER BY create_time
+     <if test="page!=null and pageSize!=null">
+		limit #{page,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	 </if>
+	</select>
+
+	<select id="countUnCheckQuestion" resultType="Integer">
+		SELECT count(*) FROM ahs_ask ask LEFT JOIN ahs_ask_comment aac ON ask.id = aac.ask_id
+		WHERE aac.is_main_checked = 0
+		AND ask.user_id = #{userId,jdbcType=INTEGER}
+	</select>
+
+
+	<select id="selectListByScreen" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		ask_title,
+		ask_content,
+		is_checked,
+		create_time,
+		thumbs_up,
+		comment_count,
+		status
+		from ahs_ask
+		<where>
+			<if test="userId!=null "> and ahs_ask.user_id NOT  IN (select screen_user_id from ahs_user_screen where user_id=#{userId,jdbcType=INTEGER})</if>
+			<if test="status!=null"> and ahs_ask.status = #{status,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+			<when test="orderByString!=null and orderByString!=''">
+				${orderByString}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</select>
+
+</mapper>

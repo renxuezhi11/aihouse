@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.SysIndexDao">
+
+  <select id="getTongjiInfo" resultType="map">
+      select (select count(DISTINCT user_id) from ahs_user_login_log where DATE_FORMAT(createtime,'%Y-%m-%d') = CURDATE()) as hyUser,
+      (select count(id) from ahs_users where DATE_FORMAT(register_time,'%Y-%m-%d') = CURDATE()) as xzUser,
+      (select count(*) from ahs_second_house where status=0) as secondcnt,
+      (select count(*) from ahs_rent_house where status=0) as rentcnt,
+      (select count(*) from ahs_shop where check_status=0) as shopcnt,
+      (select count(*) from ahs_office where check_status=0) as officecnt,
+      (select count(*) from ahs_appointment where status=0) as appointcnt,
+       (select count(*) from ahs_house_report where status=0) as reportcnt,
+       (select count(*) from ahs_user_certification where status=0) as certcnt,
+       (select count(*) from ahs_community_report where status=0) as reportcomcnt,
+       (select count(*) from ahs_ask_report where status=0) as reportaskcnt
+      from dual
+  </select>
+
+    <select id="getNewUserOfWeek" resultType="map">
+        select time ,count(*) as cnt from (select DATE_FORMAT(register_time,'%Y-%m-%d') as time  from ahs_users where DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= date(register_time)
+        )tmp group by time order by time asc
+    </select>
+
+
+    <select id="getActiveUserOfWeek" resultType="map">
+        select time ,count(*) as cnt from (select DISTINCT DATE_FORMAT(createtime,'%Y-%m-%d') as time,user_id  from ahs_user_login_log where DATE_SUB(CURDATE(), INTERVAL 30 DAY) &lt;= date(createtime)
+        )tmp group by time order by time asc
+    </select>
+</mapper>

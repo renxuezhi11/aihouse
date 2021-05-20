@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.SysAuthDao">
+  <resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.SysAuth">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_auth_id" jdbcType="INTEGER" property="parentAuthId" />
+    <result column="parent_auth_ids" jdbcType="VARCHAR" property="parentAuthIds" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="href" jdbcType="VARCHAR" property="href" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="shows" jdbcType="INTEGER" property="shows" />
+    <result column="create_user_id" jdbcType="INTEGER" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user_id" jdbcType="INTEGER" property="updateUserId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ahs_sys_auth
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteUnlinked">
+      DELETE FROM ahs_sys_auth WHERE `parent_auth_id` NOT IN (SELECT id FROM (SELECT id FROM ahs_sys_auth) a)
+      AND (parent_auth_id!=0 OR parent_auth_id!=NULL)
+    </delete>
+    <select id="queryByRole" resultMap="BaseResultMap">
+        SELECT   a.`id`,
+          a.`parent_auth_id`,
+          a.`parent_auth_ids`,
+          a.`name`,
+          a.`sort`,
+          a.`href`,
+          a.`icon`,
+          a.`shows`,
+          a.`create_user_id`,
+          a.`create_time`,
+          a.`update_user_id`,
+          a.`update_time` FROM `ahs_sys_auth` a,`ahs_sys_role_auth` ra,`ahs_sys_role` r
+          WHERE a.`id`=ra.`sys_auth_id` AND ra.`sys_role_id`=r.`id`
+          AND r.`id`=#{id}
+    </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, parent_auth_id, parent_auth_ids, name, sort, href, icon, shows, create_user_id, 
+    create_time, update_user_id, update_time
+    from ahs_sys_auth
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <insert id="insertBatch">
+        INSERT INTO `ahs_sys_role_auth` (
+          `sys_auth_id`,
+          `sys_role_id`,
+          `create_time`
+        )
+        VALUES
+        <foreach collection="auths" item="a" separator=",">
+            (
+            #{a},
+            #{roleId},
+            NOW()
+            )
+        </foreach>
+
+    </insert>
+    <select id="queryByUser" resultMap="BaseResultMap">
+        SELECT DISTINCT
+          a.`id`,
+          a.`parent_auth_id`,
+          a.`parent_auth_ids`,
+          a.`name`,
+          a.`sort`,
+          a.`href`,
+          a.`icon`,
+          a.`shows`,
+          a.`create_user_id`,
+          a.`create_time`,
+          a.`update_user_id`,
+          a.`update_time`
+        FROM
+          `ahs_sys_auth` a,`ahs_sys_role_auth` ra,`ahs_sys_role` sr,`ahs_sys_user_role` us
+          WHERE a.`id`=ra.`sys_auth_id` AND ra.`sys_role_id`=sr.`id` AND sr.`id`=us.`sys_role_id`
+          AND us.`sys_user_id`=#{value}
+          order by a.sort asc
+    </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, parent_auth_id, parent_auth_ids, name, sort, href, icon, shows, create_user_id, 
+    create_time, update_user_id, update_time
+    from ahs_sys_auth
+      <where>
+		<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+		<if test="parentAuthId!=null "> and parent_auth_id = #{parentAuthId,jdbcType=INTEGER}</if>
+		<if test="parentAuthIds!=null and parentAuthIds!=''"> and parent_auth_ids = #{parentAuthIds,jdbcType=VARCHAR}</if>
+		<if test="name!=null and name!=''"> and name = #{name,jdbcType=VARCHAR}</if>
+		<if test="sort!=null "> and sort = #{sort,jdbcType=INTEGER}</if>
+		<if test="href!=null and href!=''"> and href = #{href,jdbcType=VARCHAR}</if>
+		<if test="icon!=null and icon!=''"> and icon = #{icon,jdbcType=VARCHAR}</if>
+		<if test="shows!=null "> and shows = #{shows,jdbcType=INTEGER}</if>
+		<if test="createUserId!=null "> and create_user_id = #{createUserId,jdbcType=INTEGER}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="updateUserId!=null "> and update_user_id = #{updateUserId,jdbcType=INTEGER}</if>
+		<if test="updateTime!=null "> and update_time = #{updateTime,jdbcType=TIMESTAMP}</if>
+ 	</where> 
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+  </select>
+  <select id="queryByCondition" resultMap="BaseResultMap">
+    select id,parent_auth_id,parent_auth_ids,name,sort,href,icon,shows,create_user_id,create_time,update_user_id,update_time
+ 	from  ahs_sys_auth
+	<where>
+		<if test="id!=null "> and id = #{id,jdbcType=INTEGER}</if>
+		<if test="parentAuthId!=null "> and parent_auth_id = #{parentAuthId,jdbcType=INTEGER}</if>
+		<if test="parentAuthIds!=null and parentAuthIds!=''"> and parent_auth_ids = #{parentAuthIds,jdbcType=VARCHAR}</if>
+		<if test="name!=null and name!=''"> and name = #{name,jdbcType=VARCHAR}</if>
+		<if test="sort!=null "> and sort = #{sort,jdbcType=INTEGER}</if>
+		<if test="href!=null and href!=''"> and href = #{href,jdbcType=VARCHAR}</if>
+		<if test="icon!=null and icon!=''"> and icon = #{icon,jdbcType=VARCHAR}</if>
+		<if test="shows!=null "> and shows = #{shows,jdbcType=INTEGER}</if>
+		<if test="createUserId!=null "> and create_user_id = #{createUserId,jdbcType=INTEGER}</if>
+		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and create_time BETWEEN #{startDate} and #{endDate}</if>
+		<if test="updateUserId!=null "> and update_user_id = #{updateUserId,jdbcType=INTEGER}</if>
+		<if test="updateTime!=null "> and update_time = #{updateTime,jdbcType=TIMESTAMP}</if>
+ 	</where> 
+ <if test="orderByString!=null and orderByString!=''"> 
+	 ${orderByString} 
+ </if>
+  </select>
+  <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    insert into ahs_sys_auth (parent_auth_id,parent_auth_ids,name,sort,href,icon,shows,create_user_id,create_time,update_user_id,update_time)
+ values ( #{parentAuthId,jdbcType=INTEGER}, #{parentAuthIds,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{href,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, #{shows,jdbcType=INTEGER},
+ #{createUserId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="update">
+    update  	ahs_sys_auth
+	<set>
+		<if test="parentAuthId!=null ">parent_auth_id = #{parentAuthId,jdbcType=INTEGER}, </if>
+		<if test="parentAuthIds!=null and parentAuthIds!=''">parent_auth_ids = #{parentAuthIds,jdbcType=VARCHAR}, </if>
+		<if test="name!=null and name!=''">`name` = #{name,jdbcType=VARCHAR}, </if>
+		<if test="sort!=null ">sort = #{sort,jdbcType=INTEGER}, </if>
+		<if test="icon!=null and icon!=''">icon = #{icon,jdbcType=VARCHAR}, </if>
+		<if test="shows!=null ">shows = #{shows,jdbcType=INTEGER}, </if>
+		<if test="createUserId!=null ">create_user_id = #{createUserId,jdbcType=INTEGER}, </if>
+		<if test="createTime!=null ">create_time = #{createTime,jdbcType=TIMESTAMP}, </if>
+		<if test="updateUserId!=null ">update_user_id = #{updateUserId,jdbcType=INTEGER}, </if>
+		<if test="updateTime!=null ">update_time = #{updateTime,jdbcType=TIMESTAMP}, </if>
+        href = #{href,jdbcType=VARCHAR}
+ 	</set>
+	where id=#{id}
+  </update>
+</mapper>

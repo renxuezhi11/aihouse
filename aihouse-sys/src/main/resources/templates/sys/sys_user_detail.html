@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${sys_user.id }" />
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">登录名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="loginName" id="loginName" maxlength="50" lay-verify="required" autocomplete="off"
+                               placeholder="请输入登录名" class="layui-input" th:value="${sys_user.loginName}" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" id="password" maxlength="32"  autocomplete="new-password"
+                               placeholder="请输入密码(修改时不填写密码则不修改)" class="layui-input"  >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <input type="hidden" name="icon" id="icon" th:src="${sys_user.icon}">
+                    <input type="button" class="layui-btn" value="选择头像" onclick="selectIcon()" />
+                    <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                        头像：
+                        <div class="layui-upload-list" id="imageWatch">
+                            <img th:if="${!#strings.isEmpty(sys_user.icon)}" th:src="@{/fileImages/watch(path=${sys_user.icon})}" />
+                        </div>
+                    </blockquote>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">工号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="no" id="no" maxlength="100" lay-verify="required" autocomplete="off"
+                               placeholder="请输入工号" class="layui-input" th:value="${sys_user.no}" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" id="name" maxlength="50" lay-verify="required" autocomplete="off"
+                               placeholder="请输入姓名" class="layui-input" th:value="${sys_user.name}" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="email" id="email" maxlength="50" lay-verify="required" autocomplete="off"
+                               placeholder="请输入邮箱" class="layui-input" th:value="${sys_user.email}" >
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="mobile" id="mobile" maxlength="11" lay-verify="required" autocomplete="off"
+                               placeholder="请输入手机" class="layui-input" th:value="${sys_user.mobile}" >
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="0" lay-verify="required" title="启用" th:checked="${sys_user.status==0 ||sys_user.status==null}">
+                        <input type="radio" name="status" value="1" lay-verify="required" title="禁用" th:checked="${sys_user.status==1}">
+                    </div>
+                </div>
+                <div class="layui-form-item" pane="">
+                    <label class="layui-form-label">角色</label>
+                    <div class="layui-input-block" >
+                        <input type="checkbox" th:each="s : ${sr}" th:name="roles"  th:value="${s.id}" th:title="${s.name}" th:checked="${#arrays.contains(usr,s.id)}">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注信息</label>
+                    <div class="layui-input-block">
+                        <textarea placeholder="请输入备注信息" class="layui-textarea" lay-verify="required"
+                                  th:text="${sys_user.remarks}" name="remarks" id="remarks"></textarea>
+                    </div>
+                </div>
+        <div class="layui-form-item" style="text-align: center">
+            <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'sysUser/save')}">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
+            </span>
+            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form
+                , layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
+        form.render();
+
+
+           laydate.render({
+               elem: '#createTime'
+               , type: 'datetime'
+           });
+           laydate.render({
+               elem: '#updateTime'
+               , type: 'datetime'
+           });
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            var roles=[];
+            $("input[name='roles']:checked").each(function () {
+                roles.push(this.value);
+            })
+            data.field['roles']=roles;
+            $.post(rootPath+"sysUser/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback("sysUser/gotoList");
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+
+    });
+    var laert
+    function selectIcon() {
+        laert=layer.open({
+            type: 2,
+            title: '选择头像',
+            shadeClose: true,
+            maxmin: true,
+            shade: 0.8,
+            area: ['1000px', '700px'],
+            content: rootPath+'fileImages/selectList'
+        });
+    }
+
+    function imageWatch(urls) {
+        $("#icon").val(urls)
+        $("#imageWatch").html("<img src='"+rootPath+"fileImages/watch?path="+urls+"'>")
+        layer.close(laert)
+    }
+</script>
+
+</body>
+</html>

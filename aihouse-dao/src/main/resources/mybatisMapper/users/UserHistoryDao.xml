@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aihouse.aihousedao.dao.users.UserHistoryDao">
+
+	<resultMap id="BaseResultMap" type="com.aihouse.aihousedao.bean.UserHistory">
+
+		<id column="id" jdbcType="INTEGER" property="id" />
+
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+
+		<result column="history_type" jdbcType="INTEGER" property="historyType" />
+
+		<result column="house_id" jdbcType="INTEGER" property="houseId" />
+
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+		<result column="is_del" jdbcType="INTEGER" property="isDel" />
+
+		<result column="house_picture" jdbcType="VARCHAR" property="housePicture"/>
+
+		<result column="house_price" jdbcType="DECIMAL" property="housePrice"/>
+
+		<result column="house_unit" jdbcType="VARCHAR" property="houseUnit"/>
+		<result column="house_area" jdbcType="VARCHAR" property="houseArea"/>
+		<result column="house_street" jdbcType="VARCHAR" property="houseStreet"/>
+		<result column="house_title" jdbcType="VARCHAR" property="houseTitle"/>
+		<result column="house_content" jdbcType="VARCHAR" property="houseContent"/>
+		<result column="house_flag" jdbcType="INTEGER" property="houseFlag"/>
+
+	</resultMap>
+
+	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
+		insert into ahs_user_history (
+		user_id,
+		history_type,
+		house_id,
+		is_del,
+		house_picture,house_price,house_unit,house_area,house_street,house_title,house_content
+		)
+ 	   values (
+		 #{userId,jdbcType=INTEGER},
+		 #{historyType,jdbcType=INTEGER},
+		 #{houseId,jdbcType=INTEGER},
+		 #{isDel,jdbcType=INTEGER},#{housePicture,jdbcType=VARCHAR},#{housePrice,jdbcType=DECIMAL}
+		 ,#{houseUnit,jdbcType=VARCHAR},#{houseArea,jdbcType=VARCHAR},#{houseStreet,jdbcType=VARCHAR},
+		 #{houseTitle,jdbcType=VARCHAR},#{houseContent,jdbcType=VARCHAR}
+		)
+
+
+	</insert>
+
+	<delete id="deleteByPrimaryKey" >
+		delete from  ahs_user_history 
+
+		where id = #{id} 
+ 
+
+	</delete>
+
+	<update id="update" >
+		update ahs_user_history
+		<set>
+			<if test="userId!=null">user_id = #{userId,jdbcType=INTEGER}, </if>
+			<if test="historyType!=null">history_type = #{historyType,jdbcType=INTEGER}, </if>
+			<if test="houseId!=null">house_id = #{houseId,jdbcType=INTEGER}, </if>
+			<if test="housePrice!=null">house_price = #{housePrice,jdbcType=DECIMAL}, </if>
+			<if test="housePicture!=null">house_picture = #{housePicture,jdbcType=VARCHAR}, </if>
+			<if test="createtime!=null">createtime = #{createtime,jdbcType=TIMESTAMP}, </if>
+			<if test="isDel!=null">is_del = #{isDel,jdbcType=INTEGER}, </if>
+		</set>
+		where id=#{id}
+
+	</update>
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		history_type,
+		house_id,
+		createtime,
+		is_del,house_picture,house_price,house_unit,house_area,house_street,house_title,house_content,
+		(CASE history_type  WHEN 1 THEN (select status from ahs_new_house where id=ahs_user_history.house_id )
+		WHEN 2 THEN (select flag from ahs_second_house where id=ahs_user_history.house_id)
+		WHEN 3 THEN  (select flag from ahs_rent_house where id=ahs_user_history.house_id)
+		WHEN 4 THEN (select flag from ahs_shop where id=ahs_user_history.house_id)
+		WHEN 5 THEN (SELECT flag from ahs_office where id=ahs_user_history.house_id) END) as house_flag
+		from ahs_user_history
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="selectAll" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		history_type,
+		house_id,
+		createtime,
+		is_del,house_picture,house_price,house_unit,house_area,house_street,house_title,house_content,
+		(CASE history_type  WHEN 1 THEN (select status from ahs_new_house where id=ahs_user_history.house_id )
+		WHEN 2 THEN (select flag from ahs_second_house where id=ahs_user_history.house_id)
+		WHEN 3 THEN  (select flag from ahs_rent_house where id=ahs_user_history.house_id)
+		WHEN 4 THEN (select flag from ahs_shop where id=ahs_user_history.house_id)
+		WHEN 5 THEN (SELECT flag from ahs_office where id=ahs_user_history.house_id) END) as house_flag
+		from ahs_user_history
+		<where>
+		<if test="id!=null "> and ahs_user_history.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_history.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="historyType!=null "> and ahs_user_history.history_type = #{historyType,jdbcType=INTEGER}</if>
+		<if test="houseId!=null "> and ahs_user_history.house_id = #{houseId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_user_history.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="isDel!=null "> and ahs_user_history.is_del = #{isDel,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<select id="selectByCondition" resultMap="BaseResultMap" >
+		select
+		id,
+		user_id,
+		history_type,
+		house_id,
+		createtime,
+		is_del,house_picture,house_price,house_unit,house_area,house_street,house_title，house_content,
+		(CASE history_type  WHEN 1 THEN (select status from ahs_new_house where id=ahs_user_history.house_id )
+		WHEN 2 THEN (select flag from ahs_second_house where id=ahs_user_history.house_id)
+		WHEN 3 THEN  (select flag from ahs_rent_house where id=ahs_user_history.house_id)
+		WHEN 4 THEN (select flag from ahs_shop where id=ahs_user_history.house_id)
+		WHEN 5 THEN (SELECT flag from ahs_office where id=ahs_user_history.house_id) END) as house_flag
+		from ahs_user_history
+		<where>
+		<if test="id!=null "> and ahs_user_history.id = #{id,jdbcType=INTEGER}</if>
+		<if test="userId!=null "> and ahs_user_history.user_id = #{userId,jdbcType=INTEGER}</if>
+		<if test="historyType!=null "> and ahs_user_history.history_type = #{historyType,jdbcType=INTEGER}</if>
+		<if test="houseId!=null "> and ahs_user_history.house_id = #{houseId,jdbcType=INTEGER}</if>
+		<if test="createtime!=null "> and ahs_user_history.createtime = #{createtime,jdbcType=TIMESTAMP}</if>
+		<if test="isDel!=null "> and ahs_user_history.is_del = #{isDel,jdbcType=INTEGER}</if>
+		</where>
+		<choose>
+          <when test="orderByString!=null and orderByString!=''">
+              ${orderByString}
+          </when>
+          <otherwise>
+              order by id desc
+          </otherwise>
+      </choose>
+
+	</select>
+
+	<delete id="deleteUserHistoryByUsers" >
+		delete from  ahs_user_history
+		where user_id=#{userId}
+	</delete>
+<delete id="deleteUserHistory" >
+	delete from ahs_user_history
+	where user_id=#{userId,jdbcType=INTEGER} and id in
+	<foreach collection="ids" item="arr" index="no" open="("
+			 separator="," close=")">
+		#{arr}
+	</foreach>
+</delete>
+
+</mapper>

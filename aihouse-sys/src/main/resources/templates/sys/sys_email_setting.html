@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{common/common-head.html::common-head}"></div>
+</head>
+<body class="body-common">
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="id" th:value="${email.id }" />
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">名称</label>
+            <div class="layui-input-inline" style="width: 300px">
+                <input type="text" name="emailName" id="emailName" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入名称" class="layui-input" th:value="${email.emailName}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">SMTP服务器</label>
+            <div class="layui-input-inline" style="width: 300px">
+                <input type="text" name="smtpHost" id="smtpHost" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入邮箱服务器" class="layui-input" th:value="${email.smtpHost}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">服务器端口</label>
+            <div class="layui-input-inline" style="width: 300px">
+                <input type="text" name="smtpPort" id="smtpPort" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入邮箱服务器端口" class="layui-input" th:value="${email.smtpPort}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">邮箱账号</label>
+            <div class="layui-input-inline" style="width: 300px">
+                <input type="text" name="emailAccount" id="emailAccount" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入邮箱账号" class="layui-input" th:value="${email.emailAccount}" >
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">授权码</label>
+            <div class="layui-input-inline" style="width: 300px">
+                <input type="text" name="emailPassword" id="emailPassword" maxlength="50" lay-verify="required" autocomplete="off"
+                       placeholder="请输入邮箱授权码" class="layui-input" th:value="${email.emailPassword}" >
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="text-align: center">
+            <button class="layui-btn" lay-submit="" lay-filter="save-data">保存</button>
+        </div>
+    </form>
+</div>
+<!--
+<script src="//res.layui.com/layui/dist/layui.js" charset="utf-8"></script>-->
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit'], function () {
+        var form = layui.form
+            , layer = layui.layer
+        form.render();
+
+        //自定义验证规则
+        form.verify({});
+
+        //监听提交
+        form.on('submit(save-data)', function (data) {
+            $.post(rootPath+"emailSetting/save",data.field,function (data) {
+                if(data.code==0){
+                    myAlert("保存成功");
+                    setTimeout(function () {
+                        myback("emailSetting/gotoList");
+                    },alertTime)
+                }else{
+                    myAlert("保存失败->"+data.message)
+                }
+            });
+            return false
+        });
+    });
+</script>
+
+</body>
+</html>
