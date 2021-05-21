@@ -8,6 +8,7 @@ import com.aihouse.aihousedao.bean.SysUser;
 import com.aihouse.aihouseservice.SysAuthService;
 import com.aihouse.aihouseservice.SysRoleService;
 import com.aihouse.aihouseservice.SysUserService;
+import com.aihouse.aihousesys.utils.SessionConstant;
 import com.aihouse.aihousesys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -140,5 +141,11 @@ public class SystemRoleController {
         });
         map.put("ck",ck);
         return DataRes.success(map);
+    }
+
+    @RequestMapping("sysRole/updateStatus")
+    @ResponseBody
+    public DataRes updateStatus(SysRole sysRole, HttpServletRequest request, HttpServletResponse response){
+        return DataRes.success(sysRoleService.update(sysRole));
     }
 }

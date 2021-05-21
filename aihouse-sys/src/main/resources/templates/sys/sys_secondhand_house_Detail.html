@@ -74,6 +74,7 @@
                 <input type="text" name="address" id="address" maxlength="50" lay-verify="required" autocomplete="off"
                        placeholder="请输入地址" class="layui-input" th:value="${sys_secondhand_house.address}" >
             </div>
+            <span class="layui-btn" id="map">地图选址</span>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">经度</label>
@@ -378,26 +379,6 @@
         }
     }
     function previewImg(obj) {
-        /*var img = new Image();
-        img.src = obj.src;
-        var height = 700; //获取图片高度
-        var width = 600; //获取图片宽度
-        var src=obj.src.replace(imgsl1,imgsl2);
-        var imgHtml = "<img src='" + src + "' />";
-        //弹出层
-        layer.open({
-            type: 1,
-            shade: 0.8,
-            offset: 'auto',
-            area: [width + 'px',height+'px'],
-            shadeClose:true,//点击外围关闭弹窗
-            scrollbar: false,//不现实滚动条
-            title: "图片预览", //不显示标题
-            content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
-            cancel: function () {
-                //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 });
-            }
-        });*/
         var galley = document.getElementById("imageWatchJt");
         if(viewer){
             viewer.destroy();
@@ -427,6 +408,29 @@
         });
         viewer.update();
     }
+    //监听提交
+    $(document).on('click','#map',function(){
+        layer.open({
+            type:2,
+            area:["1200px","700px"],
+            title:"地图选址",
+            content:'/common/gotoMap',
+            btn: ['确定','关闭'],
+            yes: function(index){
+                var res = window["layui-layer-iframe" + index].callbackdata();
+                console.log(res);
+                $("#lng").val(res.lng);
+                $("#lat").val(res.lat);
+                $("#address").val(res.address);
+                layer.close(index);
+            },
+            success:function(){
+
+            },
+            cancel:function(){
+            }
+        });
+    });
 </script>
 
 </body>

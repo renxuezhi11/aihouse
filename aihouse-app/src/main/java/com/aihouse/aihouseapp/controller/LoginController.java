@@ -178,28 +178,19 @@ public class LoginController {
                     String userId=request.getParameter("token").split(SessionUser.FLAG)[1];
                     if(redisUtil.get(RedisConstants.USER_TOKEN+userId)!=null){
                         SessionUser sessionUser=(SessionUser) redisUtil.get(RedisConstants.USER_TOKEN+userId);
-//                        System.out.println(sessionUser.getToken());
-                        if(request.getParameter("deviceId")!=null){
-                            //System.out.println(sessionUser.getDeviceId());
-                            //System.out.println(request.getParameter("deviceId"));
-                            if(sessionUser.getDeviceId().equals(request.getParameter("deviceId"))||request.getParameter("deviceId").equals("1111111111111111111111111111111")){
-                                Users users=new Users();
-                                users.setId(Integer.parseInt(userId));
-                                users=usersService.selectByPrimaryKey(users);
-                                if(users.getStatus()==1){
-                                    return DataRes.error(ResponseCode.USER_LOGIN_ERROR);
-                                }
-                                Map<String,Object> map=new HashMap<>();
-                                map.put("token",sessionUser.getToken());
-                                map.put("role",sessionUser.getUsers().getRole());
-                                //map.put("imcount",sessionUser.getUsers().getImAccount());
-                                //map.put("impassword",sessionUser.getUsers().getImPassword());
-                                userLoginLogService.insertLog(users.getId(),IpUtils.getRealIp(request),request.getParameter("deviceId")!=null?request.getParameter("deviceId"):"");
-                                return DataRes.success(map);
-                            }else{
-                                return DataRes.error(ResponseCode.LOGIN_TOKEN_DEVICEID_ERRROR);
-                            }
+                        Users users=new Users();
+                        users.setId(Integer.parseInt(userId));
+                        users=usersService.selectByPrimaryKey(users);
+                        if(users.getStatus()==1){
+                            return DataRes.error(ResponseCode.USER_LOGIN_ERROR);
                         }
+                        Map<String,Object> map=new HashMap<>();
+                        map.put("token",sessionUser.getToken());
+                        map.put("role",sessionUser.getUsers().getRole());
+                        //map.put("imcount",sessionUser.getUsers().getImAccount());
+                        //map.put("impassword",sessionUser.getUsers().getImPassword());
+                        userLoginLogService.insertLog(users.getId(),IpUtils.getRealIp(request),request.getParameter("deviceId")!=null?request.getParameter("deviceId"):"");
+                        return DataRes.success(map);
                     }else{
                         return DataRes.error(ResponseCode.LOGIN_TOKEN_ERRROR);
                     }
