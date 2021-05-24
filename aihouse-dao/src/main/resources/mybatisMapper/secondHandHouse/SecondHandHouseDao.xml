@@ -484,7 +484,7 @@
 		where id=#{id}
 	</select>
 	<select id="queryDetail" parameterType="java.lang.Integer" resultType="map">
-		select id,room,hall,toilet,price,covered_area,orientations,fixture,house_desc,house_real,house_type,is_lift,title,feature,village_name,address,DATE_FORMAT(createtime,'%Y-%m-%d') as createtime,house_number,
+		select id,room,hall,toilet,price,covered_area,orientations,fixture,house_desc,house_real,house_type,is_lift,title,feature,village_name,address,DATE_FORMAT(createtime,'%Y-%m-%d') as createtime,house_number,telephone,
 		(select shortname from ahs_area where id=ahs_second_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_second_house.streesid) as streesname,lat,lng,floor,total_floor,user_id,flag,is_sale,
 		(select im_account from ahs_users where id=ahs_second_house.user_id) as im_account,
 		(select nickname from ahs_users where id=ahs_second_house.user_id) as nickname,

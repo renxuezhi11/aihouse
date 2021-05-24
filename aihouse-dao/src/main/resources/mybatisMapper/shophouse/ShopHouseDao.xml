@@ -155,7 +155,7 @@
     
     <select id="queryDetail" parameterType="java.lang.Integer" resultType="map">
         select id,title,covered_area,is_fee,property_fee,face_width,standard_tall,floor_longth,floor_levels,total_floor,status,adress,if_transfer,description
-        ,monthly_rent,transfer_fee,mortgage_payment,type,fixture,support,operation,shop_name,feature,lease_minimum ,longitude,latitude,flag,create_by,
+        ,monthly_rent,transfer_fee,mortgage_payment,type,fixture,support,operation,shop_name,feature,lease_minimum ,longitude,latitude,flag,create_by,telephone,
         (select shortname from ahs_area where id=ahs_shop.district_id) as areaname,(select shortname from ahs_area where id=ahs_shop.area_id) as streesname
         ,(select img_url from ahs_shop_img where shop_id=ahs_shop.id limit 0,1) as img_url,
         (select count(*) from ahs_shop_img where shop_id=ahs_shop.id ) as img_count,

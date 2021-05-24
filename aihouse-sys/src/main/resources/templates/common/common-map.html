@@ -46,6 +46,10 @@
         function select(e) {
             placeSearch.setCity(e.poi.adcode);
             placeSearch.search(e.poi.name)
+            console.log(e)
+            lng=e.poi.location.lng;
+            lat=e.poi.location.lat;
+            regeoCode(lng + ',' + lat);
         }
     })
     map.on('click', function (e) {
