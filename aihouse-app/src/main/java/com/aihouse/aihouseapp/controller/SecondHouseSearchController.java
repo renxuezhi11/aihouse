@@ -111,7 +111,7 @@ public class SecondHouseSearchController {
             if(map!=null) {
                 s.setCountCellect(Integer.parseInt(map.get("collect_view").toString()));
                 s.setPageView(Integer.parseInt(map.get("page_view").toString()));
-                s.setPicture(map.get("picture").toString());
+                s.setPicture(ObjectUtils.isEmpty(map.get("picture"))?"":map.get("picture").toString());
                 if (map.get("nickname") != null) {
                     s.setUserName(map.get("nickname").toString());
                 }
