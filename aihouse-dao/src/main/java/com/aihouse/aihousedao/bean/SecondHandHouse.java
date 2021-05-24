@@ -119,7 +119,7 @@ public class SecondHandHouse   extends Page {
 	/**
 	 * 楼层
 	 */
-	private Integer floor;
+	private String floor;
 	/**
 	 * 总楼层
 	 */
@@ -345,12 +345,12 @@ public class SecondHandHouse   extends Page {
 	}
 
 
-	public Integer getFloor(){
+	public String getFloor(){
 		return floor;
 	}
 
 
-	public void setFloor(Integer floor){
+	public void setFloor(String floor){
 		this.floor=floor;
 	}
 

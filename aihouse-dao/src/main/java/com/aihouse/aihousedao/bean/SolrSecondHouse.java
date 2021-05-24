@@ -36,7 +36,7 @@ public class SolrSecondHouse implements Serializable {
 
     private String houseType;
 
-    private Integer floor;
+    private String floor;
 
     private String fixture;
 
@@ -178,11 +178,11 @@ public class SolrSecondHouse implements Serializable {
         this.houseType = houseType;
     }
 
-    public Integer getFloor() {
+    public String getFloor() {
         return floor;
     }
 
-    public void setFloor(Integer floor) {
+    public void setFloor(String floor) {
         this.floor = floor;
     }
 

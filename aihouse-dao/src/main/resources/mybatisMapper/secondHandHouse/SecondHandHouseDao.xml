@@ -12,7 +12,7 @@
 		<result column="address" jdbcType="VARCHAR" property="address" />
 		<result column="lng" jdbcType="VARCHAR" property="lng" />
 		<result column="lat" jdbcType="VARCHAR" property="lat" />
-		<result column="floor" jdbcType="INTEGER" property="floor" />
+		<result column="floor" jdbcType="VARCHAR" property="floor" />
 		<result column="total_floor" jdbcType="INTEGER" property="totalFloor" />
 		<result column="covered_type" jdbcType="VARCHAR" property="coveredType" />
 		<result column="covered_area" jdbcType="DOUBLE" property="coveredArea" />
@@ -102,7 +102,7 @@
 		 #{address,jdbcType=VARCHAR},
 		 #{lng,jdbcType=VARCHAR},
 		 #{lat,jdbcType=VARCHAR},
-		 #{floor,jdbcType=INTEGER},
+		 #{floor,jdbcType=VARCHAR},
 		 #{totalFloor,jdbcType=INTEGER},
 		 #{coveredType,jdbcType=VARCHAR},
 		 #{coveredArea,jdbcType=DOUBLE},
@@ -157,7 +157,7 @@
 			<if test="address!=null and address!=''">address = #{address,jdbcType=VARCHAR}, </if>
 			<if test="lng!=null and lng!=''">lng = #{lng,jdbcType=VARCHAR}, </if>
 			<if test="lat!=null and lat!=''">lat = #{lat,jdbcType=VARCHAR}, </if>
-			<if test="floor!=null">floor = #{floor,jdbcType=INTEGER}, </if>
+			<if test="floor!=null">floor = #{floor,jdbcType=VARCHAR}, </if>
 			<if test="totalFloor!=null">total_floor = #{totalFloor,jdbcType=INTEGER}, </if>
 			<if test="coveredType!=null and coveredType!=''">covered_type = #{coveredType,jdbcType=VARCHAR}, </if>
 			<if test="coveredArea!=null">covered_area = #{coveredArea,jdbcType=DOUBLE}, </if>
@@ -308,7 +308,7 @@
 		<if test="address!=null and address!=''"> and ahs_second_house.address = #{address,jdbcType=VARCHAR}</if>
 		<if test="lng!=null and lng!=''"> and ahs_second_house.lng = #{lng,jdbcType=VARCHAR}</if>
 		<if test="lat!=null and lat!=''"> and ahs_second_house.lat = #{lat,jdbcType=VARCHAR}</if>
-		<if test="floor!=null "> and ahs_second_house.floor = #{floor,jdbcType=INTEGER}</if>
+		<if test="floor!=null "> and ahs_second_house.floor = #{floor,jdbcType=VARCHAR}</if>
 		<if test="totalFloor!=null "> and ahs_second_house.total_floor = #{totalFloor,jdbcType=INTEGER}</if>
 		<if test="coveredType!=null and coveredType!=''"> and ahs_second_house.covered_type = #{coveredType,jdbcType=VARCHAR}</if>
 		<if test="coveredArea!=null "> and ahs_second_house.covered_area = #{coveredArea,jdbcType=DOUBLE}</if>
@@ -414,7 +414,7 @@
 		<if test="address!=null and address!=''"> and ahs_second_house.address = #{address,jdbcType=VARCHAR}</if>
 		<if test="lng!=null and lng!=''"> and ahs_second_house.lng = #{lng,jdbcType=VARCHAR}</if>
 		<if test="lat!=null and lat!=''"> and ahs_second_house.lat = #{lat,jdbcType=VARCHAR}</if>
-		<if test="floor!=null "> and ahs_second_house.floor = #{floor,jdbcType=INTEGER}</if>
+		<if test="floor!=null "> and ahs_second_house.floor = #{floor,jdbcType=VARCHAR}</if>
 		<if test="totalFloor!=null "> and ahs_second_house.total_floor = #{totalFloor,jdbcType=INTEGER}</if>
 		<if test="coveredType!=null and coveredType!=''"> and ahs_second_house.covered_type = #{coveredType,jdbcType=VARCHAR}</if>
 		<if test="coveredArea!=null "> and ahs_second_house.covered_area = #{coveredArea,jdbcType=DOUBLE}</if>
