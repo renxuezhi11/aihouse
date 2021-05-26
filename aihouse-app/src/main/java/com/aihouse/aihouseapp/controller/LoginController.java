@@ -11,8 +11,10 @@ import com.aihouse.aihouseservice.SysLoginRegisterSettingService;
 import com.aihouse.aihouseservice.UserLoginLogService;
 import com.aihouse.aihouseservice.users.UsersService;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -444,5 +446,39 @@ public class LoginController {
         }else{
             return DataRes.error(ResponseCode.DATA_ERROR);
         }
+    }
+
+    @RequestMapping(value = "app/decodeUserInfo", method = RequestMethod.POST)
+    public DataRes decodeUserInfo(String code) {
+
+        Map map = new HashMap();
+        //登录凭证不能为空
+        if (code == null || code.length() == 0) {
+            map.put("status", 0);
+            map.put("msg", "code 不能为空");
+            return DataRes.success(map);
+        }
+        //小程序唯一标识   (在微信小程序管理后台获取)
+        String wxspAppid = "wxa1bf0d1d18854be8";
+        //小程序的 app secret (在微信小程序管理后台获取)
+        String wxspSecret = "6a779ab6ec77468efabe65fdc90a290d";
+        //授权（必填）
+        String grant_type = "authorization_code";
+
+        //向微信服务器 使用登录凭证 code 获取 session_key 和 openid
+        //请求参数
+        String params = "appid=" + wxspAppid + "&secret=" + wxspSecret + "&js_code=" + code + "&grant_type=" + grant_type;
+        //发送请求
+        String sr = HttpClient.doPost("https://api.weixin.qq.com/sns/jscode2session", params);
+        //解析相应内容（转换成json对象）
+        JSONObject json = JSONObject.parseObject(sr);
+        //获取会话密钥（session_key）
+        String session_key = json.get("session_key").toString();
+        //用户的唯一标识（openid）
+        String openid = (String) json.get("openid");
+
+        map.put("openId", openid);
+        map.put("sessionKey", session_key);
+        return DataRes.success(map);
     }
 }

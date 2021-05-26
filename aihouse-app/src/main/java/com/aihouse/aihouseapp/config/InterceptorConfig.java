@@ -26,7 +26,7 @@ public class InterceptorConfig extends WebMvcConfigurerAdapter {
                 ,"/app/getRentHouseDetail/**","/app/getRentHouseImg/**","/app/newhouse/conditionList","/app/secondhandhouse/conditionList","/app/jointrent/conditionList","/app/officepremises/conditionList"
                 ,"/app/store/conditionList","/app/searchOfficeHouse","/app/getOfficeHouseHotSearch","/app/officehouse/getKeywordComplet","/app/getOfficeHouseDetail/**","/app/getOfficeHouseImg/**"
                 ,"/app/searchShopHouse","/app/shophouse/getKeywordComplet","/app/getShopHouseHotSearch","/app/getShopHouseDetail/**","/app/getShopHouseImg/**","/app/getAllBroker","/app/searchVillage","/app/getAllSearchHistory"
-                ,"/app/getAllKeywordComplet","/app/getNewHouseAllBroker/**","/app/getNewHouseTypeDetail/**","/app/getNewHouseMoreDetail/**","/app/getSettingInfo","/app/sendRegisterCode");//排除请求
+                ,"/app/getAllKeywordComplet","/app/getNewHouseAllBroker/**","/app/getNewHouseTypeDetail/**","/app/getNewHouseMoreDetail/**","/app/getSettingInfo","/app/sendRegisterCode","/app/decodeUserInfo","/app/register");//排除请求
 
         super.addInterceptors(registry);
     }
