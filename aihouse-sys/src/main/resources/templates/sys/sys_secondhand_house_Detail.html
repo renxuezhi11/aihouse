@@ -345,13 +345,13 @@
             $.post(rootPath+"secondHandHouse/save",data.field,function (data) {
                 if(data.code==0){
                     myAlert("保存成功");
-                    if(data.id!=0){
+                    if(data.id&&data.id!=0){
                         setTimeout(function () {
                             closeI();
                         },alertTime)
                     }else{
                         setTimeout(function () {
-                            closeI();
+                            myback();
                         },alertTime)
                     }
                 }else{

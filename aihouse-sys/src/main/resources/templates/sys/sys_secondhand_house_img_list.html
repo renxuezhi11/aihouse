@@ -107,6 +107,7 @@
             $.post(rootPath+"secondHandHouseImg/save",data.field,function (data) {
                 if(data.code==0){
                     myAlert("保存成功");
+                    myback();
                     window.location.reload();
                 }else{
                     myAlert("保存失败->"+data.message)
