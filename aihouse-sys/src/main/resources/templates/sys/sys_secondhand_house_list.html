@@ -95,30 +95,30 @@
 </div>
 <script type="text/html" id="barDemo">
     {{#  if(d.flag_ =='上架'){ }}
-    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/checkFlag')}">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" ><i class="layui-icon layui-icon-delete"></i>下架</a>
         </span>
     {{# } else { }}
-    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/checkFlag')}">
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="nodel" ><i class="layui-icon layui-icon-delete"></i>上架</a>
         </span>
     {{# } }}
     {{#  if(d.isTop_ =='已置顶'){ }}
-    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/checkTop')}">
             <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="nisTop" ><i class="layui-icon layui-icon-delete"></i>取消置顶</a>
         </span>
     {{# } else { }}
-    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/checkTop')}">
             <a class="layui-btn layui-bg-blue layui-btn-xs" lay-event="isTop" ><i class="layui-icon layui-icon-top"></i>置顶</a>
         </span>
     {{# } }}
-    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/check')}">
         <a class="layui-btn layui-btn-xs " lay-event="edit"><i class="layui-icon layui-icon-edit"></i>审核</a>
     </span>
     <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
             <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="picture"><i class="layui-icon layui-icon-file"></i>图片</a>
         </span>
-    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
+    <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/userHistory')}">
         <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="history"><i class="layui-icon layui-icon-edit"></i>浏览记录</a>
     </span>
 </script>

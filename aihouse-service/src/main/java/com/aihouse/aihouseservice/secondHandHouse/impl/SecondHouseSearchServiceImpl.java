@@ -11,6 +11,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -83,10 +84,10 @@ public class SecondHouseSearchServiceImpl implements SecondHouseSearchService {
                         feature.add(str);
                     }
                 }
-                if(map.get("userType").toString().equals("0")){
+                if(!ObjectUtils.isEmpty(map.get("userType"))&&map.get("userType").toString().equals("0")){
                     feature.add("业主直卖");
                 }
-                if(map.get("isLift").toString().equals(0)){
+                if(!ObjectUtils.isEmpty(map.get("isLift"))&&map.get("isLift").toString().equals(0)){
                     feature.add("有电梯");
                 }
                 map.put("feature",feature);

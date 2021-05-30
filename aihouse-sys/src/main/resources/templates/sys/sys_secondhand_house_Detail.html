@@ -305,7 +305,7 @@
             <span th:if="${session.userAuth==null || #maps.containsKey(session.userAuth,'secondHandHouse/save')}">
             <button class="layui-btn" lay-submit="" lay-filter="save-data">提交</button>
             </span>
-            <input type="button" class="layui-btn"  onclick="myback()" value="返回" />
+            <input type="button" class="layui-btn"  onclick="closeOrBack()" value="返回" />
         </div>
     </form>
 </div>
@@ -345,15 +345,7 @@
             $.post(rootPath+"secondHandHouse/save",data.field,function (data) {
                 if(data.code==0){
                     myAlert("保存成功");
-                    if(data.id&&data.id!=0){
-                        setTimeout(function () {
-                            closeI();
-                        },alertTime)
-                    }else{
-                        setTimeout(function () {
-                            myback();
-                        },alertTime)
-                    }
+                    closeOrBack();
                 }else{
                     myAlert("保存失败->"+data.message)
                 }
@@ -362,6 +354,17 @@
         });
 
     });
+    function closeOrBack() {
+        console.log($("input[name='id']").val())
+        if($("input[name='id']").val()){
+            setTimeout(function () {
+                closeI();
+            },alertTime)
+        }else{
+            myback();
+        }
+
+    }
     function closeI() {
         var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
         parent.layer.close(index); //再执行关闭
