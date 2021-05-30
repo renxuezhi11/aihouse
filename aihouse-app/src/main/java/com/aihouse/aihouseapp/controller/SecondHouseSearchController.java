@@ -247,7 +247,7 @@ public class SecondHouseSearchController {
                     } else {
                         map.put("isNotice", false);
                     }
-                    String picture = map.get("img_url").toString();
+                    String picture = ObjectUtils.isEmpty(map.get("img_url"))?"":map.get("img_url").toString();
                     double price = (double) map.get("price");
                     String unit = "万";
                     String area="";
