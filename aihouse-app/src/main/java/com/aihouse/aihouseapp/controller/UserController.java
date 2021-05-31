@@ -12,6 +12,7 @@ import com.aihouse.aihousedao.bean.Users;
 import com.aihouse.aihouseservice.CommunityService;
 import com.aihouse.aihouseservice.users.UsersService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -254,6 +255,12 @@ public class UserController {
         }
         if(users.getParentId()!=null){
             map.put("isSetSpread",true);
+            Users users1=new Users();
+            users1.setId(users.getParentId());
+            users1=usersService.selectByPrimaryKey(users1);
+            if(!ObjectUtils.isEmpty(users1)) {
+                map.put("parentSpreadCode", users1.getSpreadCode());
+            }
         }else{
             map.put("isSetSpread",false);
         }
