@@ -45,7 +45,7 @@ public class SecondHouseSearchServiceImpl implements SecondHouseSearchService {
     @Override
     public ResultInfo<SolrSecondHouse> recommendSecondHouse(String lng, String lat, Integer start, Integer rows,Integer sale) {
         SolrQuery solrQuery=new SolrQuery();
-        solrQuery.set("q","*:*");
+        solrQuery.set("q","houseReal:1");
         if(lng!=null &&lat!=null){
             solrQuery.set("pt",lat+","+lng);//当前经纬度
             solrQuery.set("sfield", "loc"); //经纬度的字段
