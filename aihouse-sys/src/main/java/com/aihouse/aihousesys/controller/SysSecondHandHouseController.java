@@ -107,9 +107,11 @@ public class SysSecondHandHouseController  {
 				secondHouseSearchService.addSecondHouseIndex(secondHandHouse.getId());
 			}
 		}
-		if(secondHandHouse1.getIsSale()!=secondHandHouse.getIsSale() && secondHandHouse1.getFlag()==1){
-			secondHouseSearchService.deleteSecondHouseIndex(secondHandHouse.getId());
-			secondHouseSearchService.addSecondHouseIndex(secondHandHouse.getId());
+		if(secondHandHouse.getIsSale()!=null){
+			if(secondHandHouse1.getIsSale()!=secondHandHouse.getIsSale() && secondHandHouse1.getFlag()==1) {
+				secondHouseSearchService.deleteSecondHouseIndex(secondHandHouse.getId());
+				secondHouseSearchService.addSecondHouseIndex(secondHandHouse.getId());
+			}
 		}
 		return DataRes.success(i);
 	}
