@@ -10,6 +10,7 @@ import com.aihouse.aihousecore.utils.keyword.BadWord;
 import com.aihouse.aihousedao.bean.UserSpreadLog;
 import com.aihouse.aihousedao.bean.Users;
 import com.aihouse.aihouseservice.CommunityService;
+import com.aihouse.aihouseservice.users.UserSpreadLogService;
 import com.aihouse.aihouseservice.users.UsersService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ObjectUtils;
@@ -37,6 +38,9 @@ public class UserController {
 
     @Resource
     CommunityService communityService;
+
+    @Resource
+    private UserSpreadLogService userSpreadLogService;
 
     @Value("${auto.code.filePath}")
     private String filePath;
@@ -420,6 +424,7 @@ public class UserController {
                 UserSpreadLog userSpreadLog=new UserSpreadLog();
                 userSpreadLog.setUserId(users.getId());
                 userSpreadLog.setParentId(users.getParentId());
+                userSpreadLogService.insert(userSpreadLog);
                 return DataRes.success("设置成功");
             }else{
                 return DataRes.error(ResponseCode.SPREAD_CODE_ERROR);

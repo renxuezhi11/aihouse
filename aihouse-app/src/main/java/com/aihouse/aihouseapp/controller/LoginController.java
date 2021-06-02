@@ -6,9 +6,11 @@ import com.aihouse.aihouseapp.utils.RedisUtil;
 import com.aihouse.aihouseapp.utils.SessionUser;
 import com.aihouse.aihousecore.utils.*;
 import com.aihouse.aihousedao.bean.SysLoginRegisterSetting;
+import com.aihouse.aihousedao.bean.UserSpreadLog;
 import com.aihouse.aihousedao.bean.Users;
 import com.aihouse.aihouseservice.SysLoginRegisterSettingService;
 import com.aihouse.aihouseservice.UserLoginLogService;
+import com.aihouse.aihouseservice.users.UserSpreadLogService;
 import com.aihouse.aihouseservice.users.UsersService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -52,6 +54,9 @@ public class LoginController {
 
     @Autowired
     private SysLoginRegisterSettingService loginRegisterSettingService;
+
+    @Autowired
+    private UserSpreadLogService userSpreadLogService;
 
     @RequestMapping("app/getSettingInfo")
     public DataRes getLoginRegisterSet(){
@@ -413,6 +418,13 @@ public class LoginController {
                         users.setParentId(parents.get(0).getId());
                     }
                     usersService.insert(users);
+                    if(users.getParentId()!=null){
+                        //添加用户的推广记录
+                        UserSpreadLog userSpreadLog=new UserSpreadLog();
+                        userSpreadLog.setUserId(users.getId());
+                        userSpreadLog.setParentId(users.getParentId());
+                        userSpreadLogService.insert(userSpreadLog);
+                    }
                     String token="";
                     SessionUser sessionUser=null;
                     if(redisUtil.get(RedisConstants.USER_TOKEN+users.getId())!=null){
