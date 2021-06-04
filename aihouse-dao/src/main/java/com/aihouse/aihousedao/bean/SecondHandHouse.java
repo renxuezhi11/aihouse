@@ -755,9 +755,9 @@ public class SecondHandHouse   extends Page {
 		}else if(status.equals(AUDIT_STATUS_FORMAL)){
 			return "未审核";
 		}else if(status.equals(AUDIT_STATUS_PASS)){
-			return "审核通过";
+			return "通过";
 		}else if(status.equals(AUDIT_STATUS_FAIL)){
-			return "审核不通过";
+			return "不通过";
 		}
 		return "";
 	}
