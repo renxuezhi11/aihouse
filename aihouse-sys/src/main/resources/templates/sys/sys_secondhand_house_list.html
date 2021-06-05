@@ -216,7 +216,7 @@
                     }
                 });
             }else if(obj.event=='nodel') {
-                if (data.status_=='审核通过'&&data.isDel_=="正常") {
+                if (data.status_=='通过'&&data.isDel_=="正常") {
                     var text = "确定要上架该房源吗?";
                     myConfirm(text, function (index) {
                         $.post(rootPath + "secondHandHouse/save", {"id": data.id, "flag": 1}, function (data) {
@@ -243,7 +243,7 @@
                     layer.close(index);
                 })
             }else if(obj.event=='isTop') {
-                if (data.status_=='审核通过'&&data.isDel_=="正常") {
+                if (data.status_=='通过'&&data.isDel_=="正常") {
                     var text = "确定要置顶该房源吗?";
                     myConfirm(text, function (index) {
                         $.post(rootPath + "secondHandHouse/save", {"id": data.id, "isTop": 1}, function (data) {
