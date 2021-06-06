@@ -343,6 +343,7 @@
 		<if test="statusContent!=null and statusContent!=''"> and ahs_second_house.status_content = #{statusContent,jdbcType=VARCHAR}</if>
 		<if test="flag!=null "> and ahs_second_house.flag = #{flag,jdbcType=INTEGER}</if>
 		<if test="isDel!=null "> and ahs_second_house.is_del = #{isDel,jdbcType=INTEGER}</if>
+		<if test="isSale!=null"> and ahs_second_house.is_sale=#{isSale,jdbcType=INTEGER} </if>
 			<if test="isTop!=null "> and ahs_second_house.is_top = #{isTop,jdbcType=INTEGER}</if>
 		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
 		</where>
