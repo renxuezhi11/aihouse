@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -58,17 +55,21 @@ public class SearchAllController {
 //                list.add(map);
 //            }
             ResultInfo<SolrSecondHouse> data1=secondHouseSearchService.getKeywordComplet(keyword);
+            Set<String> aa=new HashSet<>();
             for(SolrSecondHouse s:data1.getList()) {
                 Map map=secondHouseSearchService.queryInfo(s.getId());
-                Map<String,Object> map1=new HashMap<>();
-                map1.put("areaname", ObjectUtils.isEmpty(map.get("areaname"))?"":map.get("areaname").toString());
-                map1.put("streesname",ObjectUtils.isEmpty(map.get("streesname"))?"":map.get("streesname").toString());
-                map1.put("name",s.getVillageName());
-                map1.put("price",s.getPrice());
-                map1.put("type",2);
-                map1.put("isSale",s.getIsSale());
-                map1.put("id",s.getId());
-                list.add(map1);
+                if(!aa.contains(s.getVillageName()+s.getIsSale())){
+                    Map<String,Object> map1=new HashMap<>();
+                    map1.put("areaname", ObjectUtils.isEmpty(map.get("areaname"))?"":map.get("areaname").toString());
+                    map1.put("streesname",ObjectUtils.isEmpty(map.get("streesname"))?"":map.get("streesname").toString());
+                    map1.put("name",s.getVillageName());
+                    map1.put("price",s.getPrice());
+                    map1.put("type",2);
+                    map1.put("isSale",s.getIsSale());
+                    map1.put("id",s.getId());
+                    list.add(map1);
+                    aa.add(s.getVillageName()+s.getIsSale());
+                }
             }
 //            ResultInfo<SolrRentHouse> data3=rentHouseSearchService.getkeywordComplet(keyword);
 //            for(SolrRentHouse s:data3.getList()){
