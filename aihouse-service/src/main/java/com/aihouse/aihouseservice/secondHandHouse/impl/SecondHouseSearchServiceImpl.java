@@ -275,9 +275,13 @@ public class SecondHouseSearchServiceImpl implements SecondHouseSearchService {
            // solrQuery.set("fq",stringBuffer.toString());
             fq.add(stringBuffer.toString());
         }
-        if(request.getParameter("sale")!=null){
+        if(!ObjectUtils.isEmpty(request.getParameter("sale"))){
             StringBuffer stringBuffer=new StringBuffer();
             stringBuffer.append("isSale:").append(request.getParameter("sale"));
+            fq.add(stringBuffer.toString());
+        }else{
+            StringBuffer stringBuffer=new StringBuffer();
+            stringBuffer.append("isSale:").append(0);
             fq.add(stringBuffer.toString());
         }
         if(request.getParameter("sort")!=null){// createtime desc,price asc,price desc,coveredArea asc,coveredArea desc

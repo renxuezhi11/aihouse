@@ -479,7 +479,7 @@
 		select (select count(*) from ahs_user_collect where house_id=ahs_second_house.id and collect_type=2) as collect_view,
 		(select count(*) from ahs_user_history where house_id=ahs_second_house.id and history_type=2) as page_view,
 		(select img_url from ahs_second_house_img where second_house= ahs_second_house.id and img_type=1 limit 0,1) as picture,
-		(select nickname from ahs_users where id=ahs_second_house.user_id) as nickname,
+		 ahs_second_house.contacts as nickname,
 		(select shortname from ahs_area where id=ahs_second_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_second_house.streesid) as streesname
 		from ahs_second_house
 		where id=#{id}
