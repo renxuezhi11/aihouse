@@ -275,6 +275,7 @@ public class SecondHouseSearchServiceImpl implements SecondHouseSearchService {
            // solrQuery.set("fq",stringBuffer.toString());
             fq.add(stringBuffer.toString());
         }
+        System.out.println("11111111111111sale=="+(ObjectUtils.isEmpty(request.getParameter("sale"))?"null":request.getParameter("sale")));
         if(!ObjectUtils.isEmpty(request.getParameter("sale"))){
             StringBuffer stringBuffer=new StringBuffer();
             stringBuffer.append("isSale:").append(request.getParameter("sale"));
