@@ -4,17 +4,24 @@ import javax.annotation.Resource;
 
 import com.aihouse.aihousecore.utils.DataRes;
 import com.aihouse.aihousecore.utils.ExcelUtils;
+import com.aihouse.aihousecore.utils.HttpClient;
+import com.aihouse.aihousedao.bean.Area;
 import com.aihouse.aihousedao.bean.SecondHandHouseImg;
 import com.aihouse.aihousedao.bean.Users;
+import com.aihouse.aihouseservice.AreaService;
 import com.aihouse.aihouseservice.VillageService;
 import com.aihouse.aihouseservice.secondHandHouse.SecondHandHouseImgService;
 import com.aihouse.aihouseservice.secondHandHouse.SecondHandHouseService;
 import com.aihouse.aihouseservice.secondHandHouse.SecondHouseSearchService;
 import com.aihouse.aihouseservice.users.UsersService;
+import com.alibaba.fastjson.JSON;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -39,6 +46,14 @@ public class SysSecondHandHouseController  {
 
 	@Resource
 	private SecondHouseSearchService secondHouseSearchService;
+
+	@Value("${amap.key}")
+	private String ak;
+
+	@Resource
+	private AreaService areaService;
+
+	private static final String mapUrl="https://restapi.amap.com/v3/geocode/regeo";
 
 
 	/*
@@ -83,6 +98,31 @@ public class SysSecondHandHouseController  {
 	@RequestMapping("secondHandHouse/save")
 	public DataRes save(SecondHandHouse secondHandHouse,HttpServletRequest request,HttpServletResponse response){
 		if(secondHandHouse.getId()==null){
+			StringBuilder str = new StringBuilder();
+			str.append(mapUrl).append("?").append("location=").append(secondHandHouse.getLng()).append(",");
+			str.append(secondHandHouse.getLat()).append("&radius=1000&extensions=all&key=");
+			str.append(ak);
+			String result = HttpClient.doGet(str.toString());
+			System.out.println(result);
+			Map resil = JSON.parseObject(result, HashMap.class);
+			Map map = (Map) ((Map) resil.get("regeocode")).get("addressComponent");
+			Area area = new Area();
+
+			secondHandHouse.setCityid(441300);
+			if(!ObjectUtils.isEmpty(map.get("district"))) {
+				area.setAreaname(map.get("district").toString());
+				area.setParentId(secondHandHouse.getCityid());
+				List<Area> list1 = areaService.queryByCondition(area);
+				if (list1.size() > 0) {
+					secondHandHouse.setAreaid(list1.get(0).getId());
+				}
+				area.setAreaname(map.get("township").toString());
+				area.setParentId(secondHandHouse.getAreaid());
+				list1 = areaService.queryByCondition(area);
+				if (list1.size() > 0) {
+					secondHandHouse.setStreesid(list1.get(0).getId());
+				}
+			}
 			return DataRes.success(secondHandHouseService.insert(secondHandHouse));
 		}
 		//查询旧数据
