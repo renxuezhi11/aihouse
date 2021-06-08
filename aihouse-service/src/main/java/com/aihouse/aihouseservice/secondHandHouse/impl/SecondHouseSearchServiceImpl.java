@@ -84,8 +84,11 @@ public class SecondHouseSearchServiceImpl implements SecondHouseSearchService {
                         feature.add(str);
                     }
                 }
-                if(!ObjectUtils.isEmpty(map.get("userType"))&&map.get("userType").toString().equals("0")){
-                    feature.add("业主直卖");
+                if(!ObjectUtils.isEmpty(map.get("isSchoolHouse"))&&map.get("isSchoolHouse").toString().equals("1")){
+                    feature.add("学区房");
+                }
+                if(!ObjectUtils.isEmpty(map.get("isHotSale"))&&map.get("isHotSale").toString().equals("1")){
+                    feature.add("笋盘急售");
                 }
                 if(!ObjectUtils.isEmpty(map.get("isLift"))&&map.get("isLift").toString().equals(0)){
                     feature.add("有电梯");

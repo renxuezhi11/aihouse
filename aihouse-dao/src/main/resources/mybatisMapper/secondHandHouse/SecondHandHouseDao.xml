@@ -50,6 +50,9 @@
 		<result column="is_del" jdbcType="INTEGER" property="isDel" />
 		<result column="is_top" jdbcType="INTEGER" property="isTop"/>
 		<result column="is_sale" jdbcType="INTEGER" property="isSale"/>
+		<result column="is_school_house" jdbcType="INTEGER" property="isSchoolHouse"/>
+		<result column="school_name" jdbcType="VARCHAR" property="schoolName"/>
+		<result column="is_hot_sale" property="isHotSale" jdbcType="INTEGER"/>
 	</resultMap>
 
 	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
@@ -92,7 +95,10 @@
 		telephone,
 		sign_name,
 		broker,
-		createtime
+		createtime,
+		is_school_house,
+		school_name,
+		is_hot_sale
 		)
  	   values (
 		 #{feature,jdbcType=VARCHAR},
@@ -133,7 +139,10 @@
 		 #{telephone,jdbcType=VARCHAR},
 		 #{signName,jdbcType=VARCHAR},
 		 #{broker,jdbcType=INTEGER},
-		 NOW()
+		 NOW(),
+		 #{isSchoolHouse,jdbcType=INTEGER},
+		 #{schoolName,jdbcType=VARCHAR},
+		 #{isHotSale,jdbcType=INTEGER}
 		)
 
 
@@ -193,6 +202,9 @@
 			<if test="isDel!=null">is_del = #{isDel,jdbcType=INTEGER}, </if>
 			<if test="isTop!=null">is_top=#{isTop,jdbcType=INTEGER},</if>
 			<if test="isSale!=null">is_sale =#{isSale,jdbcType=INTEGER},</if>
+			<if test="isSchoolHouse!=null">is_school_house =#{isSchoolHouse,jdbcType=INTEGER},</if>
+			<if test="schoolName!=null">school_name =#{schoolName,jdbcType=VARCHAR},</if>
+			<if test="isHotSale!=null">is_hot_sale =#{isHotSale,jdbcType=INTEGER},</if>
 			updatetime = NOW()
 		</set>
 		where id=#{id}
@@ -244,7 +256,9 @@
 		house_real,
 		status_content,
 		flag,
-		is_del,is_sale
+		is_del,is_sale,is_school_house,
+		school_name,
+		is_hot_sale
 		from ahs_second_house
 		where id = #{id,jdbcType=INTEGER}
 
@@ -297,7 +311,9 @@
 		flag,
 		is_del,
 		is_top,
-		is_sale
+		is_sale,is_school_house,
+		school_name,
+		is_hot_sale
 		from ahs_second_house
 		<where>
 		<if test="id!=null "> and ahs_second_house.id = #{id,jdbcType=INTEGER}</if>
@@ -344,7 +360,7 @@
 		<if test="flag!=null "> and ahs_second_house.flag = #{flag,jdbcType=INTEGER}</if>
 		<if test="isDel!=null "> and ahs_second_house.is_del = #{isDel,jdbcType=INTEGER}</if>
 		<if test="isSale!=null"> and ahs_second_house.is_sale=#{isSale,jdbcType=INTEGER} </if>
-			<if test="isTop!=null "> and ahs_second_house.is_top = #{isTop,jdbcType=INTEGER}</if>
+		<if test="isTop!=null "> and ahs_second_house.is_top = #{isTop,jdbcType=INTEGER}</if>
 		<if test=" startDate!=null and startDate!='' and endDate!=null and endDate!='' "> and createtime BETWEEN #{startDate,jdbcType=VARCHAR} and #{endDate,jdbcType=VARCHAR}</if>
 		</where>
 		<choose>
@@ -470,7 +486,9 @@
 	<select id="selectByIdForSolr" parameterType="java.lang.Integer" resultType="map">
 		select	 id,village_name as villageName,feature,cityid as cityId,areaid as areaId,streesid as streesId,price,room,hall,toilet,
 		orientations,house_type as houseType,floor,fixture,title,is_top as houseReal,DATE_FORMAT(createtime,'%Y-%m-%d %H:%i:%s') as createtime,user_type as userType,is_lift as isLift,
-		covered_area as coveredArea,CONCAT_WS(',',lat,lng) as loc,is_sale as isSale
+		covered_area as coveredArea,CONCAT_WS(',',lat,lng) as loc,is_sale as isSale,is_school_house as isSchoolHouse,
+		school_name as schoolName,
+		is_hot_sale as isHotSale
 		 from ahs_second_house
 		where id=#{id}
 	</select>
@@ -479,14 +497,16 @@
 		select (select count(*) from ahs_user_collect where house_id=ahs_second_house.id and collect_type=2) as collect_view,
 		(select count(*) from ahs_user_history where house_id=ahs_second_house.id and history_type=2) as page_view,
 		(select img_url from ahs_second_house_img where second_house= ahs_second_house.id and img_type=1 limit 0,1) as picture,
-		 ahs_second_house.contacts as nickname,
+		 ahs_second_house.contacts as nickname,ahs_second_house.school_name as schoolName,
 		(select shortname from ahs_area where id=ahs_second_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_second_house.streesid) as streesname
 		from ahs_second_house
 		where id=#{id}
 	</select>
 	<select id="queryDetail" parameterType="java.lang.Integer" resultType="map">
 		select id,room,hall,toilet,price,covered_area,orientations,fixture,house_desc,house_real,house_type,is_lift,title,feature,village_name,address,DATE_FORMAT(createtime,'%Y-%m-%d') as createtime,house_number,telephone,
-		(select shortname from ahs_area where id=ahs_second_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_second_house.streesid) as streesname,lat,lng,floor,total_floor,user_id,flag,is_sale,
+		(select shortname from ahs_area where id=ahs_second_house.areaid) as areaname,(select shortname from ahs_area where id=ahs_second_house.streesid) as streesname,lat,lng,floor,total_floor,user_id,flag,is_sale,is_school_house as isSchoolHouse,
+		school_name as schoolName,
+		is_hot_sale as isHotSale,
 		(select im_account from ahs_users where id=ahs_second_house.user_id) as im_account,
 		(select nickname from ahs_users where id=ahs_second_house.user_id) as nickname,
 		(select userphoto from ahs_users where id=ahs_second_house.user_id) as userphoto,

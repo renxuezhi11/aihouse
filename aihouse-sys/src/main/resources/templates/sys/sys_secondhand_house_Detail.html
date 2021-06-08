@@ -280,6 +280,28 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">是否学区房</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isSchoolHouse" value="0" lay-verify="required" title="否" th:checked="${sys_secondhand_house.isSchoolHouse==0 ||sys_secondhand_house.isSchoolHouse==null}">
+                <input type="radio" name="isSchoolHouse" value="1" lay-verify="required" title="是" th:checked="${sys_secondhand_house.isSchoolHouse==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">学区名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="schoolName" id="schoolName" maxlength="50" autocomplete="off"
+                       placeholder="请输入学区名称" class="layui-input" th:value="${sys_secondhand_house.schoolName}" >
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">是否笋盘急售</label>
+            <div class="layui-input-block">
+                <input type="radio" name="isHotSale" value="0" lay-verify="required" title="否" th:checked="${sys_secondhand_house.isHotSale==0 ||sys_secondhand_house.isHotSale==null}">
+                <input type="radio" name="isHotSale" value="1" lay-verify="required" title="是" th:checked="${sys_secondhand_house.isHotSale==1}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">审核回复</label>
             <div class="layui-input-block">
                 <input type="text" name="statusContent" id="statusContent" maxlength="50" autocomplete="off"

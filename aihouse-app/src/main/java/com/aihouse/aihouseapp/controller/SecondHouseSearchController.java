@@ -90,6 +90,9 @@ public class SecondHouseSearchController {
                     Double ss=s.getPrice() * 10000/s.getCoveredArea();
                     s.setUnitPrice(ss.intValue());
                 }
+                if(map.get("schoolName")!=null){
+                    s.setSchoolName(map.get("schoolName").toString());
+                }
             }
 
         }
@@ -124,6 +127,9 @@ public class SecondHouseSearchController {
                 if (s.getPrice() != null && s.getCoveredArea() != null) {
                     Double ss=s.getPrice() * 10000/s.getCoveredArea();
                     s.setUnitPrice(ss.intValue());
+                }
+                if(map.get("schoolName")!=null){
+                    s.setSchoolName(map.get("schoolName").toString());
                 }
             }
         }

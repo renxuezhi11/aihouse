@@ -135,12 +135,12 @@ public class SysSecondHandHouseController  {
 				secondHouseSearchService.deleteSecondHouseIndex(secondHandHouse.getId());
 			}
 		}
-		if(secondHandHouse.getStatus()!=null) {
+		/*if(secondHandHouse.getStatus()!=null) {
 			if (secondHandHouse1.getStatus() == 0&&secondHandHouse.getStatus()!=secondHandHouse1.getStatus()) {
 				//更改了审核状态，已审核，异步短信通知，1：通过2不通过
 				secondHandHouseService.sendSms(secondHandHouse.getStatus(),secondHandHouse1.getTelephone(),secondHandHouse.getStatusContent());
 			}
-		}
+		}*/
 		if(secondHandHouse.getIsTop()!=null){
 			secondHandHouse1=secondHandHouseService.selectByPrimaryKey(secondHandHouse);
 			if(secondHandHouse1.getFlag()==1) {
@@ -148,7 +148,8 @@ public class SysSecondHandHouseController  {
 			}
 		}
 		if(secondHandHouse.getIsSale()!=null){
-			if(secondHandHouse1.getIsSale()!=secondHandHouse.getIsSale() && secondHandHouse1.getFlag()==1) {
+			if((secondHandHouse1.getIsSale()!=secondHandHouse.getIsSale() ||secondHandHouse1.getIsSchoolHouse()!=secondHandHouse.getIsSchoolHouse()
+			||secondHandHouse1.getIsHotSale()!=secondHandHouse.getIsHotSale())&& secondHandHouse1.getFlag()==1) {
 				secondHouseSearchService.deleteSecondHouseIndex(secondHandHouse.getId());
 				secondHouseSearchService.addSecondHouseIndex(secondHandHouse.getId());
 			}

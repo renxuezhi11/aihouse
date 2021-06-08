@@ -66,6 +66,8 @@ public class SolrSecondHouse implements Serializable {
 
     private Integer isSale;
 
+    private String schoolName;
+
     public Integer getUnitPrice() {
         return unitPrice;
     }
@@ -288,5 +290,13 @@ public class SolrSecondHouse implements Serializable {
 
     public void setIsSale(Integer isSale) {
         this.isSale = isSale;
+    }
+
+    public String getSchoolName() {
+        return schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
     }
 }
