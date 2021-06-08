@@ -66,6 +66,9 @@ public class SecondHouseSearchController {
     @RequestMapping(value = "app/getRecommendSecondHouse",method = RequestMethod.POST)
     public DataRes recommendSecondHouse(HttpServletRequest request, HttpServletResponse response,String lng,String lat,Integer start,Integer rows,Integer sale){
         ResultInfo<SolrSecondHouse> data=secondHouseSearchService.recommendSecondHouse(lng, lat, start, rows,sale);
+        if(ObjectUtils.isEmpty(data.getList())){
+            return DataRes.success(data);
+        }
         //待完善动态信息
         for(SolrSecondHouse s:data.getList()){
             Map map=secondHouseSearchService.queryInfo(s.getId());
@@ -105,6 +108,9 @@ public class SecondHouseSearchController {
     @RequestMapping(value = "app/searchSecondHouse",method = RequestMethod.POST)
     public DataRes searchSecondHouse(HttpServletRequest request,HttpServletResponse response){
         ResultInfo<SolrSecondHouse> data=secondHouseSearchService.searchSecondHouse(request);
+        if(ObjectUtils.isEmpty(data.getList())){
+            return DataRes.success(data);
+        }
         //待完善动态信息
         for(SolrSecondHouse s:data.getList()){
             Map map=secondHouseSearchService.queryInfo(s.getId());
