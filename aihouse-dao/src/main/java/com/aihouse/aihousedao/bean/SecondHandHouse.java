@@ -264,6 +264,12 @@ public class SecondHandHouse   extends Page {
 	private Integer isTop;
 
 	private Integer isSale;
+	
+	private Integer isSchoolHouse;
+
+	private String schoolName;
+
+	private Integer isHotSale;
 
 	public Integer getId(){
 		return id;
@@ -870,5 +876,51 @@ public class SecondHandHouse   extends Page {
 
 	public void setIsSale(Integer isSale) {
 		this.isSale = isSale;
+	}
+
+	public Integer getIsSchoolHouse() {
+		return isSchoolHouse;
+	}
+
+	public void setIsSchoolHouse(Integer isSchoolHouse) {
+		this.isSchoolHouse = isSchoolHouse;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
+	public Integer getIsHotSale() {
+		return isHotSale;
+	}
+
+	public void setIsHotSale(Integer isHotSale) {
+		this.isHotSale = isHotSale;
+	}
+
+	public String getIsSchoolHouse_(){
+		if(this.isSchoolHouse!=null){
+			if(isSchoolHouse==0){
+				return "否";
+			}else{
+				return "是";
+			}
+		}
+		return "";
+	}
+
+	public String getIsHotSale_(){
+		if(this.isHotSale!=null){
+			if(isHotSale==0){
+				return "否";
+			}else{
+				return "是";
+			}
+		}
+		return "";
 	}
 }

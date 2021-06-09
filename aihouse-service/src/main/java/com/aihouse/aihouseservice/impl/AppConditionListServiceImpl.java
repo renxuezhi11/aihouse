@@ -1801,15 +1801,20 @@ public class AppConditionListServiceImpl implements AppConditionListService {
         //房源特色标签列表
         List<Map<String,Object>> featureList = new ArrayList<Map<String,Object>>();
         Map<String,Object> featurep = new HashMap<String,Object>();
-        featurep.put("id","业主直卖");
-        featurep.put("value","业主直卖");
+        featurep.put("id","学区房");
+        featurep.put("value","学区房");
         featurep.put("checked",false);
         featureList.add(featurep);
         Map<String,Object> featurep1 = new HashMap<String,Object>();
-        featurep1.put("id","有电梯");
-        featurep1.put("value","有电梯");
+        featurep1.put("id","笋盘急售");
+        featurep1.put("value","笋盘急售");
         featurep1.put("checked",false);
         featureList.add(featurep1);
+        Map<String,Object> featurep2 = new HashMap<String,Object>();
+        featurep2.put("id","有电梯");
+        featurep2.put("value","有电梯");
+        featurep2.put("checked",false);
+        featureList.add(featurep2);
         featureMap.put("lists",featureList);
         moreList.add(featureMap);
         //更多集合里的朝向集合
