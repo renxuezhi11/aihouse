@@ -9,6 +9,7 @@ import com.aihouse.aihousecore.utils.ResponseCode;
 import com.aihouse.aihousecore.utils.keyword.BadWord;
 import com.aihouse.aihousedao.bean.UserSpreadLog;
 import com.aihouse.aihousedao.bean.Users;
+import com.aihouse.aihousedao.vo.UserSpreadLogVO;
 import com.aihouse.aihouseservice.CommunityService;
 import com.aihouse.aihouseservice.users.UserSpreadLogService;
 import com.aihouse.aihouseservice.users.UsersService;
@@ -257,6 +258,9 @@ public class UserController {
         }else{
             map.put("isPassword",false);
         }
+        if(users.getIsSpread()!=null && users.getIsSpread()==1){
+            map.put("isSpread",true);
+        }
         if(users.getParentId()!=null){
             map.put("isSetSpread",true);
             Users users1=new Users();
@@ -271,6 +275,19 @@ public class UserController {
         map.put("username",users.getUsername());
         return DataRes.success(map);
     }
+
+    /**
+     * 推广记录
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "app/user/getSpreadLog",method = RequestMethod.POST)
+    public DataRes getPersonSpreadLog(HttpServletRequest request){
+        String userId=request.getHeader("token").split(SessionUser.FLAG)[1];
+        List<UserSpreadLogVO> list = userSpreadLogService.getPersonSpreadLog(userId);
+        return DataRes.success(list);
+    }
+
 
     /**
      * 获取用户信息

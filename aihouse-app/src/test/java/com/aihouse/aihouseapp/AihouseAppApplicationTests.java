@@ -3,9 +3,12 @@ package com.aihouse.aihouseapp;
 import com.aihouse.aihousecore.utils.HttpClient;
 import com.aihouse.aihousedao.bean.Area;
 import com.aihouse.aihousedao.bean.SecondHandHouse;
+import com.aihouse.aihousedao.bean.UserSpreadLog;
+import com.aihouse.aihousedao.vo.UserSpreadLogVO;
 import com.aihouse.aihouseservice.AreaService;
 import com.aihouse.aihouseservice.secondHandHouse.SecondHandHouseService;
 import com.aihouse.aihouseservice.secondHandHouse.SecondHouseSearchService;
+import com.aihouse.aihouseservice.users.UserSpreadLogService;
 import com.alibaba.fastjson.JSON;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +37,9 @@ public class AihouseAppApplicationTests {
 
 	@Resource
 	private AreaService areaService;
+
+	@Resource
+	private UserSpreadLogService userSpreadLogService;
 
 	private static final String mapUrl="https://restapi.amap.com/v3/geocode/regeo";
 
@@ -79,4 +85,10 @@ public class AihouseAppApplicationTests {
 		}
 	}
 
+
+	@Test
+	public void  testSpreadLog(){
+		List<UserSpreadLogVO> list = userSpreadLogService.getPersonSpreadLog("12");
+		System.out.println(list);
+	}
 }

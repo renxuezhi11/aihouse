@@ -13,6 +13,34 @@
 		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
 
 	</resultMap>
+	<resultMap id="UserSpreadLogMap" type="com.aihouse.aihousedao.vo.UserSpreadLogVO">
+		<result column="userId" property="userId"/>
+		<result column="total" property="total"/>
+		<result column="yearAndMonth" property="yearAndMonth"/>
+		<collection property="spreadLogList" select="com.aihouse.aihousedao.dao.users.UserSpreadLogDao.selectLog" column="{userId=userId,yearAndMonth=yearAndMonth}"/>
+	</resultMap>
+	<resultMap id="SpreadLogsMap" type="com.aihouse.aihousedao.vo.UserSpreadLogVO$SpreadLog">
+		<result column="name" property="name"/>
+		<result column="phone" property="phone"/>
+		<result column="createTime" property="createTime"/>
+	</resultMap>
+
+	<select id="getPersonSpreadLog" resultMap="UserSpreadLogMap">
+		select date_format(log.createtime,'%Y-%m')  as yearAndMonth,count(*) as total,#{userId} as userId
+		from ahs_user_spread_log log
+		where log.parent_id =#{userId}
+		group by date_format(log.createtime,'%Y-%m')
+		order by date_format(log.createtime,'%Y-%m') desc
+	</select>
+
+	<select id="selectLog" resultMap="SpreadLogsMap">
+		select DATE_FORMAT(log.createtime,'%Y-%m-%d %H:%i:%s')  as createTime,user.telephone as phone,user.nickname as name
+		from ahs_user_spread_log log
+		left join ahs_users user on log.user_id = user.id
+		 where log.parent_id =#{userId} and
+		date_format(log.createtime,'%Y-%m') =#{yearAndMonth}
+		order by log.createtime desc
+	</select>
 
 	<insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true" >
 		insert into ahs_user_spread_log (
