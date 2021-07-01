@@ -19,7 +19,7 @@
 		<result column="yearAndMonth" property="yearAndMonth"/>
 		<collection property="spreadLogList" select="com.aihouse.aihousedao.dao.users.UserSpreadLogDao.selectLog" column="{userId=userId,yearAndMonth=yearAndMonth}"/>
 	</resultMap>
-	<resultMap id="SpreadLogsMap" type="com.aihouse.aihousedao.vo.UserSpreadLogVO$SpreadLog">
+	<resultMap id="SpreadLogsMap" type="com.aihouse.aihousedao.vo.SpreadLog">
 		<result column="name" property="name"/>
 		<result column="phone" property="phone"/>
 		<result column="createTime" property="createTime"/>

@@ -1,5 +1,8 @@
 package com.aihouse.aihousedao.vo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -7,7 +10,8 @@ import java.util.List;
  * @description：用户推广记录
  * @date ：Created in 2021/6/10 10:54
  */
-public class UserSpreadLogVO {
+@JsonIgnoreProperties(value = {"handler"})
+public class UserSpreadLogVO implements Serializable {
 
     private String userId;
 
@@ -49,36 +53,4 @@ public class UserSpreadLogVO {
         this.userId = userId;
     }
 
-    public static class SpreadLog{
-
-        private String name;
-
-        private String phone;
-
-        private String createTime;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public String getCreateTime() {
-            return createTime;
-        }
-
-        public void setCreateTime(String createTime) {
-            this.createTime = createTime;
-        }
-    }
 }
