@@ -4,6 +4,7 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 import org.apache.shiro.mgt.SecurityManager;
@@ -79,7 +80,18 @@ public class ShiroConfig {
         System.err.println("--------------shiro已经加载----------------");
         DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
+        securityManager.setSessionManager(getDefaultWebSessionManager());
         return securityManager;
+    }
+
+    @Bean
+    public DefaultWebSessionManager getDefaultWebSessionManager() {
+        DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
+        // 会话过期时间，单位：毫秒(在无操作时开始计时)
+        defaultWebSessionManager.setGlobalSessionTimeout(1000 * 60 * 60 * 2);
+        defaultWebSessionManager.setSessionValidationSchedulerEnabled(true);
+        defaultWebSessionManager.setSessionIdCookieEnabled(true);
+        return defaultWebSessionManager;
     }
 
     /**

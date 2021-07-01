@@ -103,8 +103,8 @@ public class SecondHouseImgController {
         List<MultipartFile> files =((MultipartHttpServletRequest)request).getFiles("file");
         if(files!=null&&files.size()>0){
             List<String> list=new ArrayList<>();
+            OSSClientUtil ossClientUtil=new OSSClientUtil();
             for(MultipartFile file:files){
-                OSSClientUtil ossClientUtil=new OSSClientUtil();
                 try {
                     String name=ossClientUtil.uploadImg2Oss(file);
                     list.add(name);
@@ -112,6 +112,7 @@ public class SecondHouseImgController {
                     System.out.println("上传失败");
                 }
             }
+            ossClientUtil.destory();
             return DataRes.success(list);
         }else{
             return DataRes.success(null);
